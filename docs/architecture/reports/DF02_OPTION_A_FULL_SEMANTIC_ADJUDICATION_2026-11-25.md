@@ -778,3 +778,62 @@ The 56 lower-specificity candidate-absent tokens left after the 21 manually prom
 The 51 code-context tokens include short cognitive-runtime feedback/queue APIs (`submit_feedback`, `pending_feedback`, `process_feedback`, `wait_for_feedback`, `publish_result`, `execute_actions`), engineering ledger/message-bus functions (`requeue`, `dispatch_tracked`, `delivery_key`, `same_content`, `commit_record`, `append_record`, `load_locked`, `execvp`), developmental-world APIs (`add_action`, `reset_episode`, `available_actions`, `step_count`, `set_state`, `true_state`), causal/adaptation (`predictor`, `observe_outcome`, `integer_value`, `learning_rate`, `modulate`), and memory/learning/test helpers (`for_key`, `record_prediction`, `record_experience`, `latest_unresolved`, `copy_file`, `serialize`, `parse_double`, `replayed_behavior`, `strategy_brain`, `concept_brain`, etc.). Generic words `changed`, `direct`, `learner`, `resolve`, `accumulated` and `generalized` require careful semantic context despite code-context occurrence.
 
 Thus the 77 lower-specificity candidate-absent identifiers are fully partitioned by exact context: 21 manually prioritized API/type names (1,486 rows; 1,262 code-context/224 comments), 51 additional code-context names (502 rows), and five text-only names (116 rows). This is a context filter, not dependency/authority closure.
+
+
+## 33. Exact-content reverse-consumer cross-map — complete identifier partition
+
+The frozen artifact's 502-symbol set was re-partitioned by **symbol presence on the frozen candidate tip**, correcting the row-level distinction between candidate-present symbols with historical rows and genuinely candidate-absent identifiers. The complete partition reconciles to all 40,048 discovery rows:
+
+| Cohort | Symbols | Match rows | Consumer paths | Exact consumer blobs | Donor paths |
+|---|---:|---:|---:|---:|---:|
+| Candidate-present identifiers (candidate + historical matches) | 352 | 35,534 | 346 | 1,135 | 111 |
+| Candidate-absent identifiers (historical-only) | 150 | 4,514 | 148 | 480 | 75 |
+| **Total** | **502** | **40,048** | **346** | **1,135** | **118** |
+
+Candidate-present rows split into 3,441 candidate-tip and 32,093 historical rows. Candidate-absent rows are all historical-only. These are unique symbol/path/blob discovery dimensions, not unique dependencies. Exact blob SHA, owner tips and full consumer contents are available in the scan artifact and were re-read locally for this cross-map.
+
+### 33.1 Candidate-absent, high-priority exact-context findings
+
+The candidate-absent cohort is 2,894 source rows, 1,594 test rows and 26 workflow-text rows. It is concentrated in the cognitive Brain/evolution lifecycle and its historical tests. Selected exact-context API/type evidence:
+
+| Identifier | Rows | Consumer paths | Exact blobs | Role split | Exact-context interpretation |
+|---|---:|---:|---:|---|---|
+| `run_isolated_command` | 416 | 8 | 82 | source 161 / test 255 | Coordinator/runner and integration tests call isolated experiment execution |
+| `consolidate` | 212 | 8 | 212 | source/test | Memory consolidation APIs and test scenarios |
+| `observe_canary_for_brain` | 138 | 5 | 77 | source 108 / test 30 | Brain-to-controller canary observation integration |
+| `attest_isolated` | 122 | 5 | 122 | source/test | Isolation-attestation APIs and test evidence |
+| `replay_adoption` | 108 | 5 | 108 | source/test | Adoption journal replay lifecycle |
+| `replay_rollback` | 108 | 5 | 108 | source/test | Rollback journal replay lifecycle |
+| `replay_evaluation` | 100 | 4 | 100 | source/test | Evaluation-record replay lifecycle |
+| `preview` | 98 | 5 | 98 | source/test | Canary preview interfaces/scenarios |
+| `restore_previous` | 92 | 5 | 92 | source/test | Previous-value compensation/restore paths |
+| `observe_strategy` | 86 | 8 | 86 | source/test | Developmental strategy observation |
+| `preview_canary_for_brain` | 84 | 4 | 50 | source 54 / test 30 | Brain-facing preview API consumer |
+| `observe_association` | 74 | 5 | 74 | source/test | Developmental/association learning consumer |
+| `validate_adoption_for_brain` | 74 | 5 | 45 | source 72 / test 2 | Brain-level adoption validation call |
+| `has_valid_isolation_attestation` | 74 | 11 | 74 | source 29 / test 45 | Evidence-validation and serialized attestation validity |
+| `compensate_adoption_for_brain` | 62 | 4 | 39 | source 54 / test 8 | Brain/controller compensation contract |
+| `await_result` | 62 | 8 | 62 | source/test | Isolated runner result handling |
+| `resolve_prediction_feedback` | 59 | 10 | 59 | source 45 / test 14 | Sequence-bound prediction feedback consumer |
+| `apply_prediction_feedback` | 59 | 3 | 31 | source | Association/model feedback assimilation |
+| `record_evaluation_for_brain` | 56 | 4 | 36 | source 54 / test 2 | Evaluation-record lifecycle integration |
+| `rollback_for_brain` | 56 | 4 | 36 | source 54 / test 2 | Journaled rollback integration |
+| `attest_isolated_result` | 47 | 4 | 47 | source | Experiment attestation creation |
+| `PredictionFeedbackStatus` | 39 | 8 | 39 | source 25 / test 14 | Prediction-feedback status contract |
+| `DevelopmentalLearning` | 28 | 8 | 28 | source 18 / test 10 | Brain developmental-learning subsystem |
+| `EngineeringTaskLedger` | 15 | 6 | 6 | source 9 / test 6 | Durable workforce-task ledger declarations/uses |
+| `decode_causal_side` | 15 | 4 | 5 | source 12 / test 3 | Typed causal-side codec call sites |
+
+The catalog also contains the remaining 125 candidate-absent identifiers, including affective/developmental/world APIs, prediction-context and sequence-cursor contracts, engineering-ledger APIs, and test-only target names. Candidate absence alone is not a semantic gap: names can be renamed, private, branch-specific, test-only or false-positive. The above exact contexts establish historical use, not ownership or adoption authority.
+
+### 33.2 Candidate-present symbol partition
+
+The 352 candidate-present identifiers account for 35,534 discovery rows: 21,054 source, 13,380 test, 835 workflow, 237 build and 28 other. Historical rows for these identifiers must not be misclassified as absent dependencies. The high-frequency tokens are lexical over-approximations and remain context review targets: `restored` (3,143 rows), `observe` (2,232), `evaluate` (1,625), `rollback` (1,177), `policy` (1,038), `confidence` (827), `journal` (733), `append` (569), `isolated` (505), `records` (484), `predict` (422), `parameter` (402), `associations` (370), `observe_capability` (333), `resolve_prediction` (306), and `EvolutionExperiment` (301).
+
+The most concentrated exact consumer paths remain `brain.cpp` (4,836 candidate-present rows), `brain.hpp` (3,063), `brain_restored_api.cpp` (2,934), evolution Brain integration (1,371), `evolution_controller.cpp` (1,345), developmental Brain integration (1,098), canary-controller tests (1,066), memory-learning-evolution persistence (934), cognitive cycle (913), and memory architecture (427). This list is prioritization only; generic identifiers require declaration/call and dependency semantics before classification.
+
+### 33.3 What this slice closes and what it does not
+
+Closed for the frozen scan: symbol-presence partition, exact consumer-path/blob counts, owner-tip metadata cross-map, and candidate-absent token set. The discovery-row totals reconcile (35,534 + 4,514 = 40,048). It reduces ambiguity in the audit queue and makes the historical-only API cohort reproducible.
+
+Still open: exact semantic dependency classification across the 1,135 blobs, complete per-symbol declaration/call/include/build/test edge dispositions, competing-owner/capability equivalence, branch authority and provenance/retention. This slice is evidence-index completion—not DF-02 closure, adoption, retirement, or baseline selection.
