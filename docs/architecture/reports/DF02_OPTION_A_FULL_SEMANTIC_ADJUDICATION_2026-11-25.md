@@ -1,9 +1,19 @@
 # DF-02 Full Option A Semantic Adjudication — Execution Record
 
-**Date:** 2026-11-25  
-**Project Director decision:** D2 = B — reopen and complete full Option A semantic adjudication.  
-**Scope:** frozen PR #192 review target `caf87986dfea7aca75728818651c8687e9f5faf0`; donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Status:** OPEN — Phase 0 evidence acquisition/integrity is complete. Semantic and authority adjudication is not complete.
+**Status updated:** 2026-11-26  
+**Project Director decision:** D2 = B — full Option A semantic and authority adjudication required.  
+**Frozen review target:** PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0`; donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+
+## Controlling phase disposition (2026-11-26)
+
+- **Phase 0 — evidence acquisition/integrity: COMPLETE.**
+- **Phase 1 — targeted triage coverage: COMPLETE** across 88 donor-path clusters / 544 alternate blobs. This is coverage triage, not per-version semantic closure.
+- **Phase 2 — consumer graph/evidence indexing: PARTIALLY COMPLETE.** Candidate CMake/include reachability, consumer blob/ref-owner cross-map, identifier partitions and context filtering reconciled. Exact semantic API/dependency edges remain unresolved.
+- **Phase 3 — duplicate capabilities/owners, branch authority, provenance and retention/retirement: NOT COMPLETE.**
+- **Phase 4 — sourced 159-path closure ledger and independent scrutiny: NOT COMPLETE.**
+- **DF-02: OPEN.** No historical version selected, adopted, baseline-authorized, retired or deleted.
+
+Planning scope is frozen against expansion; the consolidated status and handoff is in `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`. This freeze does not substitute for DF-02 completion or Foundation acceptance.
 
 ## 1. Director's instruction and boundary
 
