@@ -853,3 +853,22 @@ Recomputed from the downloaded artifact tables and full consumer-blob source cor
 - Report, planning index and continuity checkpoint were synchronized on the same PR #203 branch. Compare against its base confirms only those three documentation paths changed; no runtime source or frozen PR #192 file changed.
 
 **Self-review result:** §33's arithmetic and scope boundaries are consistent. Remaining semantic work is accurately marked OPEN. This is Builder self-review only; it is not independent review, DF-02 closure, DF-09 CLEAR, or Director acceptance.
+
+
+## 35. 2026-11-26 — planning foundation freeze and phase disposition
+
+The documentation/planning package has been consolidated into `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`. The planning index and Builder continuity checkpoint are synchronized on the same follow-up branch. Planning is frozen against expansion: no competing roadmap, architecture rewrite or optional review loop is authorized absent a material contradiction, required gate finding or Project Director decision.
+
+This freeze is a churn-control disposition, **not** Foundation acceptance and not a shortcut around Director decision D2=B (full DF-02 Option A). Phase dispositions:
+
+| Phase | Disposition | Exact boundary |
+|---|---|---|
+| 0 — evidence acquisition/integrity | COMPLETE | Frozen all-ref artifact/hash and donor/candidate/alternate content verified |
+| 1 — targeted path/version triage | COMPLETE for coverage | All 88 path clusters / 544 alternate blobs enumerated and targeted-triaged; not individual semantic disposition |
+| 2 — consumer graph/indexing | PARTIALLY COMPLETE | Candidate CMake/include reachability, blob/ref owner cross-map, symbol cohort and context partition reconciled; semantic API/dependency edge dispositions incomplete |
+| 3 — duplicate capability/owner and authority/provenance/retention | NOT COMPLETE | No complete ownership/authority/retention/retirement ledger |
+| 4 — closure matrix and independent scrutiny | NOT COMPLETE | No fully sourced 159-path closure ledger or independent scrutiny |
+
+The package contains evidence of substantial candidate-vs-historical differences, API/trust-policy variants, build/test registration differences and consumer contexts. The counts and lexical partitions do not answer which branch/version is authoritative, semantically equivalent, superseded, retained or eligible for retirement. No donor implementation is adopted; no source baseline is selected.
+
+**Current closeout:** documentation/planning is consolidated and frozen for scope control; Foundation acceptance remains pending. The remaining named foundation blockers are DF-02 semantic closure, exact blind-reader DF-09 CLEAR, final terminal inventory/status synchronization after the last writes, and Director-only DF-12 acceptance. PR #173 whole-architecture acceptance/CF-26/CF-27, PR #174 current 54-scenario proposal acceptance/provenance, Gate A and Gate B remain open in the planning lineage. Stage A remains HELD. No merge, source baseline, donor adoption, runtime implementation, training or deployment is authorized.
