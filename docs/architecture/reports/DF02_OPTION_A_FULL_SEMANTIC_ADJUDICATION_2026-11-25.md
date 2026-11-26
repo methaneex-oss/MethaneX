@@ -882,3 +882,12 @@ This freeze is a churn-control disposition, **not** Foundation acceptance and no
 The package contains evidence of substantial candidate-vs-historical differences, API/trust-policy variants, build/test registration differences and consumer contexts. The counts and lexical partitions do not answer which branch/version is authoritative, semantically equivalent, superseded, retained or eligible for retirement. No donor implementation is adopted; no source baseline is selected.
 
 **Current closeout:** documentation/planning is consolidated and frozen for scope control; Foundation acceptance remains pending. The remaining named foundation blockers are DF-02 semantic closure, exact blind-reader DF-09 CLEAR, final terminal inventory/status synchronization after the last writes, and Director-only DF-12 acceptance. PR #173 whole-architecture acceptance/CF-26/CF-27, PR #174 current 54-scenario proposal acceptance/provenance, Gate A and Gate B remain open in the planning lineage. Stage A remains HELD. No merge, source baseline, donor adoption, runtime implementation, training or deployment is authorized.
+
+
+## 36. 2026-11-26 canonicalization and gate-status correction
+
+The planning index has been replaced with a concise canonical status page; the duplicated prior status snapshots are preserved verbatim in `docs/architecture/archive/JARVIS_PLANNING_INDEX_HISTORICAL_SNAPSHOTS_2026-11-26.md` and explicitly marked historical/non-controlling. This reduces status drift without deleting provenance.
+
+**DF-11 correction:** D3=A records the Project Director's instruction to retain the prior waiver/provenance residual and avoid reconstruction. However, accepted governance Rules 17.3 and 20.1 require genuine independent review and prohibit silently waiving required gates; the waiver request is therefore not effective as a gate closure under the current governance. DF-11 is **BLOCKED** unless a genuine independent review is completed or a formal governance amendment resolves the conflict. Builder self-review is not independent. This correction supersedes earlier report wording that described DF-11 as waived/closed.
+
+Planning consolidation/freeze is administratively completed by Builder, but acceptance remains pending. This does not close DF-02 phases 3–4, DF-09, DF-11 governance compliance, terminal inventory, or DF-12. The exact current scope and exit criteria are in the canonical index and 2026-11-26 finalization snapshot. No donor adoption, baseline selection, runtime work, Stage A or merge authority is granted.
