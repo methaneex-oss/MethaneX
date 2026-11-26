@@ -2188,3 +2188,22 @@ This is a reproducible evidence/indexing step. It is not semantic dependency clo
 ### 2026-11-26 — §33 arithmetic and scope self-review
 
 Builder independently recomputed §33 cohort/category sums from the frozen scan data: 352+150=502 identifiers; 35,534+4,514=40,048 rows. Category sums agree. Distinct consumer paths/blob/tip counts overlap and are not additive. Artifact digest matches. Three-file report/index/checkpoint change only; no frozen PR #192 files or runtime sources touched. Self-review is not independent review, DF-02 closure, DF-09 CLEAR or Director acceptance.
+
+
+## 2026-11-26 — Documentation/planning foundation freeze
+
+The existing planning lineage is consolidated into one package. To prevent repeated scope expansion and planning churn, **planning is frozen**: no competing roadmap, architecture rewrite or optional review loop is to be opened unless a material contradiction, required gate finding or Project Director decision necessitates it. This is an administrative freeze of planning scope, not engineering acceptance.
+
+Finalization snapshot: `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`. Planning index controlling block updated on the same PR #203 branch.
+
+- Whole-system PR #171: core 00/01 docs recorded as approved at exact revisions; package remains open/draft and full acceptance not claimed.
+- Brain Architecture PR #173: open/draft; whole-architecture acceptance and CF-26/CF-27 remain open.
+- Mechanism Specification PR #174: historical 34-scenario planning baseline accepted at exact SHA; current corrected 54-scenario proposal remains unaccepted; provenance/re-review residuals disclosed.
+- Implementation plan PR #175: non-operative, WP-00–WP-08/R0–R6/I0–I7 planning exists; Gate A NOT CLEARED, Gate B NOT PASSED, source baseline not selected.
+- Documentation Foundation PR #192: frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`, open/divergent/non-mergeable. DF-02 full Option A remains OPEN; DF-06 only bounded mechanical scope closed; DF-07 final terminal sync required after branch writes; DF-09 blocked; DF-11 waiver retained; DF-12 Director-only.
+
+DF-02: Phase 0 COMPLETE; Phase 1 targeted triage COMPLETE for all 88 clusters/544 alternate blobs, but not per-version semantic closure; Phase 2 evidence indexing PARTIALLY COMPLETE, exact dependency/edge disposition remains open; Phase 3 duplicate capability/owner and provenance/authority/retention reconciliation NOT COMPLETE; Phase 4 closure ledger and independent scrutiny NOT COMPLETE. All numbers and boundaries are detailed in the report and finalization snapshot.
+
+Current branch PR #203 includes documentation-only report, planning index, checkpoint and foundation-finalization snapshot. No frozen PR #192 file or runtime source is modified. No donor version is selected/adopted/retired/deleted or baseline-authorized.
+
+**Overall:** FOUNDATION DOCUMENTATION CONSOLIDATED / PLANNING FROZEN / ACCEPTANCE PENDING / IMPLEMENTATION NOT AUTHORIZED. Do not report all gates closed. The remaining named blockers are DF-02 semantic closure, exact blind-reader DF-09 CLEAR, final terminal inventory/consistency verification, and Project Director DF-12 acceptance. Do not invent new gates absent a material finding or Director decision.
