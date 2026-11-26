@@ -2207,3 +2207,17 @@ DF-02: Phase 0 COMPLETE; Phase 1 targeted triage COMPLETE for all 88 clusters/54
 Current branch PR #203 includes documentation-only report, planning index, checkpoint and foundation-finalization snapshot. No frozen PR #192 file or runtime source is modified. No donor version is selected/adopted/retired/deleted or baseline-authorized.
 
 **Overall:** FOUNDATION DOCUMENTATION CONSOLIDATED / PLANNING FROZEN / ACCEPTANCE PENDING / IMPLEMENTATION NOT AUTHORIZED. Do not report all gates closed. The remaining named blockers are DF-02 semantic closure, exact blind-reader DF-09 CLEAR, final terminal inventory/consistency verification, and Project Director DF-12 acceptance. Do not invent new gates absent a material finding or Director decision.
+
+
+## 2026-11-26 — canonical planning index and finalization state
+
+Planning/documentation consolidation is Builder-completed as an administrative scope-freeze task. The canonical index now contains one controlling status matrix; repeated prior status snapshots were preserved verbatim in the historical archive and labeled non-controlling. Do not append further duplicated live snapshots.
+
+- Canonical index: `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md`.
+- Historical archive: `docs/architecture/archive/JARVIS_PLANNING_INDEX_HISTORICAL_SNAPSHOTS_2026-11-26.md`.
+- Finalization snapshot: `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`.
+- DF-02 full Option A report: `docs/architecture/reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md`.
+
+**Administrative scope freeze is not technical acceptance.** DF-02 phases 3 and 4 remain incomplete; DF-09 exact blind-reader CLEAR remains blocked; DF-12 remains Director-only. DF-11: D3 recorded the requested waiver retention, but accepted governance Rules 17.3 and 20.1 require genuine independent review and prohibit silent waiver. The status is BLOCKED until genuine independent review or a formal governance amendment resolves it. Builder self-review cannot substitute.
+
+The final terminal inventory/status synchronization must be performed after the last write and pinned to the exact branch HEAD. PR #203 remains draft documentation-only; no frozen PR #192 file or runtime source is changed. Stage A remains HELD; no merge, baseline, donor adoption or implementation authorized.
