@@ -2183,3 +2183,8 @@ The 150 candidate-absent identifiers are now partitioned: 73 higher-specificity 
 Frozen artifact #14956148301 was re-downloaded and SHA-256 reverified (9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38). Reconciled the 502 identifier universe into 352 candidate-present (35,534 rows) and 150 candidate-absent (4,514 rows), with exact consumer path/blob and tip-owner dimensions. Selected high-value absent API contexts include isolated experiment execution, evaluation/adoption/rollback replay and validation, canary preview/observation, prediction feedback, developmental learning, durable task ledger and typed causal codec. Report §33 contains counts and selected exact contexts.
 
 This is a reproducible evidence/indexing step. It is not semantic dependency closure: all 1,135 consumer blobs and historical owner/capability/authority relationships remain subject to contextual disposition. DF-02 remains OPEN. No adoption, retirement, baseline, Stage A, merge or PR #192 target change.
+
+
+### 2026-11-26 — §33 arithmetic and scope self-review
+
+Builder independently recomputed §33 cohort/category sums from the frozen scan data: 352+150=502 identifiers; 35,534+4,514=40,048 rows. Category sums agree. Distinct consumer paths/blob/tip counts overlap and are not additive. Artifact digest matches. Three-file report/index/checkpoint change only; no frozen PR #192 files or runtime sources touched. Self-review is not independent review, DF-02 closure, DF-09 CLEAR or Director acceptance.
