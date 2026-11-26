@@ -839,3 +839,17 @@ The most concentrated exact consumer paths remain `brain.cpp` (4,836 candidate-p
 Closed for the frozen scan: symbol-presence partition, exact consumer-path/blob counts, owner-tip metadata cross-map, and candidate-absent token set. The discovery-row totals reconcile (35,534 + 4,514 = 40,048). It reduces ambiguity in the audit queue and makes the historical-only API cohort reproducible.
 
 Still open: exact semantic dependency classification across the 1,135 blobs, complete per-symbol declaration/call/include/build/test edge dispositions, competing-owner/capability equivalence, branch authority and provenance/retention. This slice is evidence-index completion—not DF-02 closure, adoption, retirement, or baseline selection.
+
+
+## 34. Builder self-review of §33 reconciliation
+
+Recomputed from the downloaded artifact tables and full consumer-blob source corpus:
+
+- Identifier union: 352 candidate-present + 150 candidate-absent = 502 unique identifiers.
+- Discovery-row arithmetic: 35,534 candidate-present + 4,514 candidate-absent = 40,048 rows.
+- Category arithmetic: candidate-present source 21,054 + test 13,380 + workflow 835 + build 237 + other 28 = 35,534; candidate-absent source 2,894 + test 1,594 + workflow 26 = 4,514.
+- Distinct-set counts were checked against the full row table: 346 consumer paths and 1,135 consumer blobs overall; path/blob/tip dimensions overlap between cohorts and are not additive.
+- Artifact ZIP digest recomputed locally and matches the recorded SHA-256.
+- Report, planning index and continuity checkpoint were synchronized on the same PR #203 branch. Compare against its base confirms only those three documentation paths changed; no runtime source or frozen PR #192 file changed.
+
+**Self-review result:** §33's arithmetic and scope boundaries are consistent. Remaining semantic work is accurately marked OPEN. This is Builder self-review only; it is not independent review, DF-02 closure, DF-09 CLEAR, or Director acceptance.
