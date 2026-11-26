@@ -17,7 +17,7 @@
 
 ## 2. Frozen and active revisions
 
-- **PR #192 frozen review target:** `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergent. Do not merge as-is; do not change the review target.
+- **PR #192 frozen review target:** `caf87986dfea7aca75728818651c8687e9f5faf0`. Live branch HEAD is `25265f88f96a42d6e797d04c27ead0a076a378f4`, exactly one commit ahead, adding only the independent-review report; compare confirms the frozen target's source/inventory files are unchanged. Keep DF-09 pinned to `caf87986...`; do not merge PR #192 as-is or change the review target.
 - **PR #203:** documentation-only follow-up branch `docs/df02-option-a-full-semantic-adjudication-20261125`, based on PR #202 report-only successor `a56526ae5896dfd06293ccab64289fd75507dda5`. Use live PR metadata for its exact HEAD; do not duplicate a mutable branch SHA in this canonical page. Changed-path inventory and consistency were checked after the current documentation writes.
 - **PR #203 purpose:** document DF-02 full Option A evidence/phase state and freeze the planning package; it is not a closure or acceptance PR.
 - Frozen PR #192 files and runtime source must remain unchanged.
