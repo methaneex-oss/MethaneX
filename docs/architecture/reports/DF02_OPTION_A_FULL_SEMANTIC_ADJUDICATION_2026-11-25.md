@@ -936,3 +936,38 @@ Source-line and method-pattern counts are indicators of structural divergence, n
 ### 37.4 Phase disposition
 
 **Phase 2 progress:** this selected production/test cohort now has exact candidate/donor blob identities, CMake registration outcomes, and bounded source/test-contract deltas reconciled. This closes the registration classification for these inspected paths only and creates concrete reverse-consumer/build edges. It does **not** close the remaining 159-path matrix, all 1,135 consumer blobs, exact API/dependency edges, branch-owner/authority/provenance/retention decisions, or independent scrutiny. Phase 2 remains **PARTIALLY COMPLETE**; Phase 3 and Phase 4 remain **NOT COMPLETE**. No donor adoption, source baseline selection, retirement, deletion, runtime implementation or Stage A authorization follows from these findings.
+
+
+## 38. 2026-11-26 — candidate-absent donor source/API reverse-consumer evidence
+
+This slice follows the seven donor-only production translation units identified in §37 through exact donor symbol matches, candidate declarations, consumer categories, and registered donor tests. The lexical dataset is used to locate exact source contexts; row counts are not treated as semantic edge counts.
+
+### 38.1 Brain action-execution contract
+
+- Donor `brain_action_execution.cpp` exact blob `3b66bafb438cd28790e6f25611b96c86f1eff05c` is 192 lines and implements `Brain::execute_action`. Donor `brain.hpp` declares the API (blob `671186f4c39879a182f9e511394fc564d86f2988`).
+- The frozen candidate header also declares `execute_action` (candidate `brain.hpp` blob `8268ef84e0b361ead536724ba7761904b30ee58f`), but the candidate has no `brain_action_execution.cpp` path and no matching implementation in the inspected candidate `brain.cpp` / `brain_restored_api.cpp`; its CMake does not register the donor implementation.
+- The scan locates 59 exact identifier rows across 14 consumer paths / 59 blobs: 19 source-context rows and 40 test-context rows. These include the Brain declaration, cognitive runtime, action-execution phase suite, Brain deep/cycle suites, and action-consequence/developmental integration tests. Donor `brain_action_consequence_integration_suite.cpp` is 317 lines and contains four direct `execute_action` call scenarios (lines 67, 144, 173 and 205 of the exact donor blob `7616082579d53e3579cae8e87895bdb3dadba66f`).
+- Candidate does not register the donor's action-consequence integration target. This is a concrete candidate API/implementation/test-registration gap at the frozen refs; unresolved-link risk is conditional on a consumer actually linking/calling the declaration. It is not evidence that donor implementation should be adopted.
+
+### 38.2 Contextual prediction and affective-planning APIs
+
+| Donor-only source | Exact identifiers | Match rows | Consumer paths / blobs | Category | Evidence interpretation |
+|---|---|---:|---:|---|---|
+| `brain_prediction_context.cpp` | `predict_with_context` | 19 | 4 / 19 | 11 source, 8 test | Donor declaration/implementation and association-causality/prediction-feedback tests; candidate frozen source API lacks the matched method |
+| `brain_affective_planning.cpp` | `plan_with_affect`, `choose_with_developmental_learning` | 42 | 5 / 32 | 20 source, 22 test | Donor Brain API and planning/learning integration consumers; candidate lacks these matched API identifiers at the frozen ref |
+
+Exact donor source blobs: contextual prediction `b3ceff150f3fe8223dc3f76f4c298ac264d72dae` (113 lines); affective planning `2a9406257c23f3a66a64071842be7d6448799406` (189 lines). The donor affective-planning source directly defines `plan_with_affect` and overloads of `choose_with_developmental_learning`. These exact API/consumer edges are identified; behavior equivalence, ownership authority, and candidate replacement remain undecided.
+
+### 38.3 Developmental-learning subsystem
+
+- Donor source `developmental_learning.cpp` SHA `dbf5f43271dfa0a3c57236e2faa82eb88d15490d` (445 lines) and header `developmental_learning.hpp` SHA `e3b9bf8af265b67829fd7deb323d88a3a9dd4b75` (104 lines) define `DevelopmentalLearning`, association/strategy observation, strategy retrieval and consolidation.
+- The scan reports 476 identifier rows across 10 identifiers, 40 consumer paths / 177 exact blobs: 354 source, 111 test and 11 workflow-context rows. Concentrated consumers include Brain/Brain restored API, cognitive cycle, memory/association/causal components, developmental Brain integration, developmental-learning tests, persistence and cognitive-cycle suites.
+- Candidate path is absent and candidate CMake does not register this donor translation unit. Donor CMake registers it and registers developmental-learning/Brain-integration suites. Exact donor integration test `developmental_brain_integration_suite.cpp` SHA `760162dd6d1e669162e0bf22223a437491f5e262` has 1,139 lines and directly exercises learned strategy selection, action consequence, persistence/restoration and consolidation (e.g., lines 64–89, 125–139, 223–227, 1032–1067). These are identified consumer/test contracts, not a validated successor decision.
+
+### 38.4 Affective source files with no lexical reverse-consumer hits
+
+Donor `affective_state.cpp` and `affective_learning.cpp` are registered production sources, but the frozen scan yields **zero symbol-consumer rows** for either file. Exact path references are predominantly documentation/inventory/audit references. The scan limitation means this is a **no-symbol-hit cohort**, not a finding of no dependency: indirect, renamed, type-level, generic-token, or unindexed consumers remain possible and require manual include/type/build/behavior tracing before any retirement or non-adoption disposition.
+
+### 38.5 Reconciliation and disposition
+
+This selected slice now identifies concrete API/build/test edges for three candidate-absent production components (action execution, contextual prediction, affective planning), a broad consumer/test cohort for developmental learning, and an explicit no-symbol-hit limitation for the two affective files. Together with §37, it materially improves Phase 2 reverse-consumer evidence. It is **not** semantic closure for these complete paths or versions: declaration/definition ownership, exact include/API edges for every blob, competing versions, branch authority, behavior evidence, provenance and retention dispositions are still pending. Phase 2 remains PARTIALLY COMPLETE; DF-02 remains OPEN. No adoption, retirement, deletion, source-baseline selection, implementation, merge or Stage A authorization.
