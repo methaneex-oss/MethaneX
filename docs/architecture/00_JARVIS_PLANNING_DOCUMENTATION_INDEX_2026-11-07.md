@@ -2947,3 +2947,8 @@ The Director's instruction is honored by not requesting a reviewer. Builder-owne
 ### 2026-11-26 — DF-02 reverse-consumer symbol partition reconciled
 
 Report: [DF-02 Full Option A Semantic Adjudication](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md), §33. The frozen all-ref artifact's 502 symbols partition exactly into 352 candidate-present identifiers (35,534 discovery rows) and 150 candidate-absent identifiers (4,514 rows), reconciling all 40,048 rows. Exact consumer blobs/path counts and owner-tip cross-map were rechecked. Selected historical API contexts are catalogued; lexical matches are not dependencies by themselves. This closes the symbol-presence partition/indexing step only. Exact dependency semantics, 1,135 consumer-blob dispositions, competing ownership/authority/retention, DF-02 and independent scrutiny remain OPEN.
+
+
+### 2026-11-26 — Builder arithmetic/scope self-review
+
+Report §34 rechecks identifier and discovery-row arithmetic against the frozen scan corpus, validates category sums, and explicitly records that consumer-path/blob/tip dimensions overlap and are not additive. Builder self-review found §33 counts consistent. Independent scrutiny and semantic disposition remain pending; this is not a gate closure.
