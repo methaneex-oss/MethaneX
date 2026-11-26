@@ -891,3 +891,48 @@ The planning index has been replaced with a concise canonical status page; the d
 **DF-11 correction:** D3=A records the Project Director's instruction to retain the prior waiver/provenance residual and avoid reconstruction. However, accepted governance Rules 17.3 and 20.1 require genuine independent review and prohibit silently waiving required gates; the waiver request is therefore not effective as a gate closure under the current governance. DF-11 is **BLOCKED** unless a genuine independent review is completed or a formal governance amendment resolves the conflict. Builder self-review is not independent. This correction supersedes earlier report wording that described DF-11 as waived/closed.
 
 Planning consolidation/freeze is administratively completed by Builder, but acceptance remains pending. This does not close DF-02 phases 3–4, DF-09, DF-11 governance compliance, terminal inventory, or DF-12. The exact current scope and exit criteria are in the canonical index and 2026-11-26 finalization snapshot. No donor adoption, baseline selection, runtime work, Stage A or merge authority is granted.
+
+
+## 37. 2026-11-26 — reverse-consumer registration/ownership adjudication: cognitive/evolution slice
+
+This slice moves Phase 2 beyond lexical index counts by checking exact frozen candidate and donor source contents against their production and test build registrations. Refs are frozen candidate `caf87986dfea7aca75728818651c8687e9f5faf0` and donor PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`; no current branch tip is substituted.
+
+### 37.1 Production translation-unit registration
+
+Exact `core/cpp/CMakeLists.txt` comparison:
+- Candidate registers **57** production C++ translation units; donor registers **64**.
+- Seven donor-registered translation units are absent from candidate registration: `brain_restored_api.cpp`, `brain_action_execution.cpp`, `brain_prediction_context.cpp`, `brain_affective_planning.cpp`, `affective_state.cpp`, `affective_learning.cpp`, and `developmental_learning.cpp`. Candidate has no production-only translation unit relative to donor in this exact list.
+- Candidate's `brain_restored_api.cpp` nevertheless exists as an exact candidate blob, but it is **not registered** in candidate `jarvis_core`. Donor registers it. This distinction is confirmed by CMake, not inferred from symbol presence.
+
+Brain source ownership is materially split between revisions: candidate `brain.cpp` is 219 lines / 50 counted method-definition patterns; donor `brain.cpp` is 889 lines / 9, while candidate `brain_restored_api.cpp` is 77 lines / 69 patterns and donor's is 405 lines / 74. The earlier 40-name overlap finding between candidate Brain source files must be interpreted with the registration fact: the restored API translation unit is dormant in candidate CMake, so lexical overlap does not establish a live duplicate-symbol build defect. Donor registers the split files and its exact ownership differs. This is a source/build-graph fact only, not a choice of the donor split.
+
+### 37.2 Test target and CTest registration
+
+Exact `core/cpp/tests/CMakeLists.txt` comparison:
+- Candidate: **45 executable targets / 45 CTest registrations**.
+- Donor: **71 executable targets / 70 CTest registrations** (DLT-002 persistence has separate CTest train/verify entries; long-run targets are intentionally not CTest entries).
+- There are **26 donor-only executable test targets** and no candidate-only targets in the compared lists. Donor-only families cover affective state/decision/evidence/goal outcomes, cognitive-runtime learning and goal feedback, developmental learning/Brain/world/environment, goal-directed cognition/outcomes, experience memory, action-consequence integration, attention-learning, memory-learning-evolution persistence, and DLT trial/persistence/long-run validation.
+- Candidate absence from registration is not proof that a test source or capability is absent everywhere; the classification is specifically the exact frozen CMake target/CTest graph.
+
+### 37.3 Exact source/test blob evidence in the selected lifecycle cohort
+
+| Path | Candidate blob SHA | Donor blob SHA | Candidate lines | Donor lines | Finding bounded to this comparison |
+|---|---|---|---:|---|
+| `core/cpp/src/brain.cpp` | `e9f3758fcc9c0e89b7280ce376db9033d547682d` | `dec9e5442b3ca4b81a7879855c6146b2619934cc` | 219 | 889 | Different Brain method ownership and replay/feedback implementation scope |
+| `core/cpp/src/brain_restored_api.cpp` | `618deb6976eed951eae02b7f0da741e6d730bb0c` | `7155d4d9c8eef527836fb79bf901aa32ddbae38b` | 77 | 405 | Exists but candidate CMake omits it; donor registers it |
+| `core/cpp/src/cognitive_runtime.cpp` | `1a1383cedc42e357dc9efce117328b8d55e30bca` | `cf00acb6abd52308343f3a0e7016e6173b945603` | 188 | 226 | Donor adds runtime/feedback behavior; exact consumer contracts need closure |
+| `core/cpp/src/evolution_controller.cpp` | `01484ebf12fc3902bce749030a1f54610b26236a` | `4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5` | 82 | 316 | Material evaluation/adoption policy and evidence-validation variation |
+| `core/cpp/src/evolution_experiment_runner.cpp` | `83d3c26e589cd16151818774a81ccb62f9d514fc` | `0545662ea0ef865feb0527207fc4c32ecb50566e` | 24 | 60 | Isolation/attestation and run-result validation behavior differs |
+| `core/cpp/src/evolution_experiment_coordinator.cpp` | `c689d16b31c039a7be9ab5c9bde0de49e677b32d` | `93d2e01c785ed4867efec07673cd802afbe27427` | 76 | 85 | Coordinator/runner integration differs; not established as equivalent |
+| `core/cpp/src/evolution_safety.cpp` | `6c930ebbe69ad92fe155e3c169e3e996442f22cf` | `5a4669de9296958eacc77534bad87ce7c30ae52d` | 17 | 27 | Safety gate policy/validation variation |
+| `core/cpp/src/evolution_adoption_journal.cpp` | `a9e141ac0b784466e86575eefdb3260b2e15dfc0` | `d8df30a2902d3dac734fb1a571cbbecdd881b76f` | 72 | 115 | Journal lifecycle/replay/compensation behavior differs |
+| `core/cpp/tests/evolution_brain_integration_suite.cpp` | `3164cbc19bfb056cdccfdd58f0be047226d41a86` | `59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded` | 46 | 298 | Prior assertion-count review: candidate 7, donor 97; donor tests adoption/rollback/replay/isolation/canary lifecycle |
+| `core/cpp/tests/evolution_experiment_runner_suite.cpp` | `08888276d875ce5e55f421e828f1bb4f061d1ea5` | `307fe75b42f804d9bb2b0e8199df1e9cf773e3c6` | 80 | 91 | Prior assertion-count review: candidate 11, donor 43; donor adds isolation/attestation/simulated-run validation cases |
+| `core/cpp/tests/evolution_canary_controller_suite.cpp` | `6acd8aedb7520aebe745b15a2a10c527262f28e0` | `80cac5df347987a9074e1ced43202f8759f797d7` | 39 | 105 | Prior assertion-count review: candidate 9, donor 36; donor expands canary journal/replay/rollback cases |
+| `core/cpp/tests/evolution_adoption_journal_suite.cpp` | `24a1be9541cc038518065724aef1968efc4dc595` | `fc8ae17bb837831fef7bf69873ec0e5243e2bc22` | 5 | 108 | Candidate test source is present but minimal relative to donor suite; exact blobs reviewed |
+
+Source-line and method-pattern counts are indicators of structural divergence, not semantic-quality scores. Test assertion counts cited above are from the already documented exact-content test-history slice; they do not establish test equivalence or quality.
+
+### 37.4 Phase disposition
+
+**Phase 2 progress:** this selected production/test cohort now has exact candidate/donor blob identities, CMake registration outcomes, and bounded source/test-contract deltas reconciled. This closes the registration classification for these inspected paths only and creates concrete reverse-consumer/build edges. It does **not** close the remaining 159-path matrix, all 1,135 consumer blobs, exact API/dependency edges, branch-owner/authority/provenance/retention decisions, or independent scrutiny. Phase 2 remains **PARTIALLY COMPLETE**; Phase 3 and Phase 4 remain **NOT COMPLETE**. No donor adoption, source baseline selection, retirement, deletion, runtime implementation or Stage A authorization follows from these findings.
