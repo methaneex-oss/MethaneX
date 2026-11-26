@@ -20,7 +20,7 @@ Review target `caf87986dfea7aca75728818651c8687e9f5faf0`. Open/unmerged/divergen
 - Candidate/historical identifiers: 347 shared, five candidate-only (10 rows),150 historical-only.
 - Exact path refs: 1,946 rows / 159 donor paths / 76 consumers / 101 blobs;1,930 docs,15 workflows,one other.
 - Phase 2 remains open: exact semantic context, dependency/duplicate-owner, branch authority and provenance/retention review.
-- Latest report commit `87799a4c4d2a451814e3d18503e29bae30f55a20`: [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
+- Latest report commit `4570ef63d9dfef7835285a60727d355a91a0308f` (Builder self-review §34): [DF-02 Full Option A](reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md).
 
 DF-02 remains OPEN. No donor implementation accepted/adopted/baseline-selected/retired/deleted.
 
