@@ -151,3 +151,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Engineering agent/message bus/task ledger adjudication](reports/DF02_ENGINEERING_AGENT_MESSAGE_BUS_AND_TASK_LEDGER_ADJUDICATION_2026-11-27.md): bounded delivery/ledger gains, sender identity and durable-journal/output-artifact gaps; SHA `ee2b72bdc18814dd8e69c6a2b2e6d3fdb28f73a1`.
 
 - [Core C++ source build-registration adjudication](reports/DF02_CORE_CPP_SOURCE_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md): 57→64 source entries, seven donor TUs, C++20/build wiring; no native execution; SHA `4b9266c34f36559071d09d2b00b63e6ab74a613f`.
+
+- [Engineering C++ build/assertion adjudication](reports/DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md): donor task-ledger registration and Release assert gap; SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
