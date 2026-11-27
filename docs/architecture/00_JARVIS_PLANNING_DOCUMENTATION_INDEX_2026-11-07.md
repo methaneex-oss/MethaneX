@@ -121,3 +121,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Brain journal replay/outcome-validation adjudication](reports/DF02_BRAIN_JOURNAL_REPLAY_AND_OUTCOME_VALIDATION_ADJUDICATION_2026-11-27.md): candidate/donor replay, source-bound affective evidence and finite-but-inconsistent consequence-error risk; SHA `2952aaf8719af375e7f4c06f3774b7ff88fabc1e`.
 
 - [Evolution event replay authority-boundary adjudication](reports/DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md): direct API versus replay gate, mismatched rollback key and stale adoption rollback risks; SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
+
+- [Action execution/consequence persistence adjudication](reports/DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md): donor observed-consequence feedback and journal partial-failure/return-contract gap; SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
