@@ -1181,3 +1181,10 @@ Capability registry/evaluator and permission-gated provider callback inspected. 
 Report: [DF02 Evolution Controller Transaction, Idempotency and Rollback Lifecycle Adjudication](DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md), verified SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
 
 Direct adoption lifecycle uses exact evidence and compensation. Gap: record_evaluation idempotent same-ID path returns true without comparing experiment fields (later adoption validation blocks mutation); stale rollback does not require latest active adoption and may reset baseline while newer record remains Adopted. Cross-store compensation is not atomic/durable; failure/crash tests missing. Source only.
+
+
+## 41. ExperienceMemory sequence-identity adjudication (2026-11-27)
+
+Report: [DF02 ExperienceMemory Sequence Identity and Resolution Adjudication](DF02_EXPERIENCE_MEMORY_SEQUENCE_IDENTITY_ADJUDICATION_2026-11-27.md), verified SHA `28adf486781da07bb0f0ea3f88dc34652fb62415`.
+
+Donor-only in-memory sequence store reviewed. Duplicate sequence overwrites map but appends index entries; changed semantic key leaves old-key index pointing to overwritten experience. Resolved predictions accepted without actual; resolve accepts nonfinite error/arbitrary outcome. Direct test covers normal sequence independence only; no tests run.
