@@ -109,3 +109,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 
 - [Cognitive runtime closed-loop variant adjudication](reports/DF02_COGNITIVE_RUNTIME_VARIANT_AND_CLOSED_LOOP_ADJUDICATION_2026-11-27.md): seven runtime variants, donor action/feedback/perception expansion, integration-test contract and stop/drain/starvation risks; SHA `fa192b50437fc7014a4c9c7076d6d77b1f8f6658`.
 - [Cognitive cycle contextual-learning variant adjudication](reports/DF02_COGNITIVE_CYCLE_CONTEXTUAL_LEARNING_VARIANT_ADJUDICATION_2026-11-27.md): ten source and seven test blobs, contextual learning and outcome evidence; SHA `7ec23e8382b789c7ccfe6900c3ee6111130b2c42`.
+
+- [Memory–learning–evolution persistence integration adjudication](reports/DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md): donor-only exact 12-blob test history, integrated behavior contract and CMake registration; SHA `b01fb2a58251fe799d09d7005ee0234dc109af5a`.
