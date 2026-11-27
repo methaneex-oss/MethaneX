@@ -89,3 +89,45 @@ The initial audit's tree pointer was stale after documentation-only commits. Re-
 5. **Hostile review:** Checked report for stale tree pointer, unsupported test claims, blanket capability assertions and scope violations. Found the stale tree pointer and corrected it above; exact file blob identities were revalidated. No source/runtime edits and no acceptance/closure claims added.
 
 **Execution evidence:** GitHub remote source retrieval only. No local checkout, compiler, test runner, workflow dispatch or independent reviewer available in this execution. No tests passed or failed because none were executed.
+
+
+## 2026-11-27 immediate-run: memory recovery and behavioral-test coverage trace
+
+**Exact source blobs re-read at PR #203 head `9d31b61608753c58f1a5e431e45fda21be15e159`:**
+
+- `core/cpp/src/memory.cpp` — `ba72a897306d4761246d0deab2fbab37c49d372f`
+- `core/cpp/include/jarvis/core/memory.hpp` — `f3662038237246efa51155f940d77564f144d6d9`
+- `core/cpp/tests/memory_architecture_suite.cpp` — `2a9eb061427c622260304d09f45089e1debef294`
+- `core/cpp/src/action_execution.cpp` — `c2f8653eb755fa2790a88e49bc8b0b9c3077e439`
+- `core/cpp/tests/action_execution_phase7_suite.cpp` — `b4a0060596c91c67080ac0a2db324f720d760fbe`
+- `core/cpp/include/jarvis/core/cognitive_cycle.hpp` — `28e7af98327956268a769adf7813125be842c1a2`
+- `core/cpp/tests/cognitive_cycle_suite.cpp` — `38ff2c7d6e851b4745e9dc7c01f968b7245400a2`
+
+### Persistence findings refined
+
+1. **Journal tail handling is destructive recovery, not recovery preservation.** `Memory::load()` parses sequential records, tracks `valid_end`, and unconditionally truncates the journal to `valid_end` when the file is longer. A corrupt first record yields `valid_end == 0`, so the entire journal can be truncated to zero. A corrupt later record discards the invalid record and all bytes after it. This may restore a parseable prefix, but there is no quarantine/copy/forensic retention in this code path. No checksum or record framing marker is visible in the inspected format.
+2. **Metadata recovery can silently become partial.** `load_metadata()` validates the magic/count header, then mutates in-memory records as it reads each metadata record. If a later record is malformed/truncated, it returns immediately; earlier metadata mutations remain applied, while later entries are ignored. The function does not report a structured degraded/recovery status or preserve the failing offset in this implementation.
+3. **Metadata snapshot replacement has a portability/durability question.** `persist_metadata_snapshot()` writes a temporary file and renames it to the metadata path. The inspected code does not show explicit file/directory fsync. The exact replacement behavior when the destination already exists is platform-dependent; this needs platform-specific test evidence rather than an assumption that rename always atomically replaces it.
+4. **Append rollback is best-effort.** `persist()` records original file size and attempts resize rollback if a write/flush fails. It does not establish durable crash consistency or power-loss guarantees; the stream flush is not equivalent to fsync. This is a bounded observation, not a claim that append rollback always fails.
+
+### Existing tests versus missing failure evidence
+
+The current `memory_architecture_suite.cpp` verifies normal append, recall ranking, promotion, working-memory forgetting, reload and metadata restoration. It does not inject a truncated/corrupt first record, corruption after a valid prefix, invalid metadata header, truncated metadata payload, duplicate/non-monotonic journal sequence, or persistence failure. The test's happy-path reload therefore does not establish recovery behavior.
+
+The current `action_execution_phase7_suite.cpp` verifies success, execution rejection/failure, verification failure and successful rollback using in-process callbacks. It does not demonstrate a real adapter, process crash recovery, idempotency, timeout/cancellation, concurrent action arbitration, or durable action/outcome reconciliation. The test proves callback orchestration under its fixtures, not end-to-end device/software control.
+
+The cognitive-cycle suite supplies its observation, candidate actions, goal, resource budget and constraints as input. It verifies a synthetic integrated path through observation, planning, decisions and assessments. It does not demonstrate autonomous perception acquisition, goal discovery from open-ended context, external execution, or outcome-triggered unattended loop continuation.
+
+### Test/build graph reconciliation
+
+At the current PR #203 head, static parsing of `core/cpp/tests/CMakeLists.txt` found 45 `add_executable` declarations and 45 `add_test(NAME ...)` registrations; every executable has exactly one matching registration, with no unmatched or duplicate names. Root `core/cpp/CMakeLists.txt` includes CTest and conditionally adds the tests directory under `BUILD_TESTING`. This is static registration evidence only. No CMake configure, compilation, CTest execution, sanitizer, or fault-injection run was performed in this environment.
+
+### Prioritized technical work (implementation not authorized)
+
+- P0: Add corruption/failure-injection tests for journal first-record and mid-stream corruption, metadata partial reads, append failure and snapshot replacement on supported platforms.
+- P0: Specify recovery policy before changing behavior: preserve original bytes, quarantine damaged tails, surface structured recovery status, and avoid silently destroying the only copy of user history.
+- P1: Define journal record framing/versioning/checksum and explicit durability guarantees; test migration and replay determinism across versions.
+- P1: Add action adapter contract tests for timeout, cancellation, idempotency, duplicate invocation, process restart and outcome reconciliation.
+- P1: Distinguish cognitive-cycle completion from action completion and closed-loop task completion in API/status contracts.
+
+**Disposition:** these are static-source findings and test-gap analysis. No implementation change, test execution, baseline selection, adoption/retirement decision, DF-02 closure or gate acceptance. Implementation remains unauthorized under the active scope.
