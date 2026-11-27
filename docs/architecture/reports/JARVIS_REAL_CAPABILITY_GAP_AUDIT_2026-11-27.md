@@ -146,3 +146,8 @@ The preceding immediate-run section correctly records that no local checkout/com
 The exact ten source/test/CMake blob SHAs listed in this audit were re-fetched at commit `15976103cc39b066d3de258fad414028460fef05` and match the recorded identities. This verifies those inspected file contents at that commit; it is not a full-tree equivalence claim.
 
 **Corrected evidence classification:** CMake configure and compilation/build are CI-verified for PR #203 HEAD `15976103...`. CTest, runtime behavioral tests, sanitizer runs, persistence fault-injection tests, and independent review remain **NOT EXECUTED / NOT VERIFIED**. The build result does not close DF-02, establish real-world autonomy, or authorize implementation, baseline selection, Stage A, or acceptance.
+
+
+## Current PR-head revalidation (2026-11-27)
+
+The previous pointer `fc628a1c5eb84659861082fb8ad3649635dcf4cd` is now superseded by the documentation-only head `8a733d20b86fe349c38f04b473632cbe7ce27eb5`. Re-fetched all ten source/test/CMake files listed above at that head; every blob SHA matches the listed identity. This confirms those inspected contents remain unchanged at that commit, not whole-tree equivalence. This audit update itself is documentation-only.
