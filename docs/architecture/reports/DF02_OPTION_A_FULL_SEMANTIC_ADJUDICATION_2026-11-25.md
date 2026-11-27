@@ -1034,3 +1034,10 @@ Exact ten source variants compared. Candidate records evaluation attempts but ma
 Report: [DF02 Canary Isolation, Evidence Semantics and Operational-Canary Adjudication](DF02_EVOLUTION_CANARY_STATE_AND_OPERATIONAL_EVIDENCE_ADJUDICATION_2026-11-27.md), verified SHA `98b3ae70b4ed21d55cef45ce030762c2c0c679e1`.
 
 Candidate canary uses a single shared accumulator and mean regression; donor uses per-experiment canary state, worst-observation regression and preview. Donor tests check cross-experiment isolation. However, orchestrator feeds the same historical baseline/candidate fitness pair three times, so the canary-retention step is not independent live operational monitoring. Controller returns the rollback decision even if rollback transaction fails; orchestrator marks RolledBack without checking transaction success. Canary accumulators are in-memory and restart persistence is not demonstrated. No tests executed; path open.
+
+
+## 20. Brain journal replay and outcome-validation adjudication (2026-11-27)
+
+Report: [DF02 Brain Journal Replay, Outcome-Validation and Derived-Learning Adjudication](DF02_BRAIN_JOURNAL_REPLAY_AND_OUTCOME_VALIDATION_ADJUDICATION_2026-11-27.md), verified SHA `2952aaf8719af375e7f4c06f3774b7ff88fabc1e`.
+
+Candidate/donor replay compared. Donor adds sequence-bound predictions, validation-before-mutation, prediction-error recomputation, action outcome validation, source-sequence binding for derived affective learning, external-observation/novelty persistence and replay/consolidation improvements. Donor deep and action-consequence integration test contracts inspected. Gap: action consequence error is only finite-checked, not recomputed against expected/actual, allowing a finite inconsistent outcome to pass validation and affect learning; regression test missing. Invalid historic events can advance cycle metadata before validation. No tests run; 35-source full semantic closure remains open.
