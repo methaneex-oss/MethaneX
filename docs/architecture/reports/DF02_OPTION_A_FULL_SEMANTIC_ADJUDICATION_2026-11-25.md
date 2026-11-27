@@ -1125,3 +1125,10 @@ Donor continuous affective state and adaptive appraisal/calibration model inspec
 Report: [DF02 Goal Lifecycle, Intent Selection and Self-Capability Model Adjudication](DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md), verified SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
 
 Donor goal lifecycle, momentum/deadline intent, affective intent and capability availability/performance/isolation separation inspected. Gaps: prerequisite cycles/self-dependencies; progress/complete can bypass Active/prerequisite checks; intent/self-model clamp NaN; empty capability name; health averages isolated performance. Tests inspected, not run; SelfModel test mapping incomplete.
+
+
+## 33. Knowledge/adaptation/representation/reflection adjudication (2026-11-27)
+
+Report: [DF02 Knowledge, Adaptation, Representation and Reflection Adjudication](DF02_KNOWLEDGE_ADAPTATION_REPRESENTATION_REFLECTION_ADJUDICATION_2026-11-27.md), verified SHA `ef9038472f4112a152af2e07f7a0b5841f720f27`.
+
+Donor numeric adaptation, deterministic representation IDs/metadata filtering/finite validation and reflection evidence averaging inspected. Frozen KnowledgeModel remains simple; richer feedback/calibration alternatives are historical, not integrated. Adaptation metric global by key, surprise streak fixed, reflection coherence heuristic, metadata exclusion schema fixed. Tests inspected, not run.
