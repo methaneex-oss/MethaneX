@@ -971,3 +971,14 @@ Donor `affective_state.cpp` and `affective_learning.cpp` are registered producti
 ### 38.5 Reconciliation and disposition
 
 This selected slice now identifies concrete API/build/test edges for three candidate-absent production components (action execution, contextual prediction, affective planning), a broad consumer/test cohort for developmental learning, and an explicit no-symbol-hit limitation for the two affective files. Together with §37, it materially improves Phase 2 reverse-consumer evidence. It is **not** semantic closure for these complete paths or versions: declaration/definition ownership, exact include/API edges for every blob, competing versions, branch authority, behavior evidence, provenance and retention dispositions are still pending. Phase 2 remains PARTIALLY COMPLETE; DF-02 remains OPEN. No adoption, retirement, deletion, source-baseline selection, implementation, merge or Stage A authorization.
+
+
+## 12. Exact process-isolation variant adjudication (2026-11-27)
+
+Report: [DF02 Process-Isolation Variant Adjudication](DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md), verified blob SHA `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`.
+
+The exact candidate/donor source and public header were fetched at the frozen refs. Fifteen distinct `process_isolation.cpp` blobs were grouped (candidate + donor + 13 alternates), with the full owner metadata preserved in the report. Candidate and donor core implementation are close; donor's concrete corrections include preparing argv before fork (avoiding child-side allocation in a multithreaded fork context) and selecting `execv` for path-qualified executable names. One later historical variant resolves path-containing executables before chroot/working-directory changes and has a guarded descriptor-close path; another adds a Linux-only callable evaluator isolation route.
+
+The audit also found important assurance limits common to the candidate/donor core: `isolated` is set before requested child controls are verified; RLIMIT return values are ignored; network syscall filtering is a bounded syscall list and optional; process-group cleanup, inherited descriptors, path/fingerprint races and OS sandbox robustness lack adversarial tests. Candidate/donor process-isolation test source blobs are identical and cover only basic success/output, timeout, output-cap, requested-control fail-closed behavior and socket denial. Both CMake graphs register the two suites; **CTest was not executed**.
+
+Disposition: source-level cohort comparison completed; historical owner/authority/retention, full reverse-consumer trace and OS-level verification remain open. No implementation preference/adoption or path closure is inferred.
