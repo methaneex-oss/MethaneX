@@ -1083,3 +1083,10 @@ Association donor adds contradiction-aware co-change, contextual graph inference
 Report: [DF02 Causal-Link Typed Codec Compatibility Adjudication](DF02_CAUSAL_LINK_TYPED_CODEC_COMPATIBILITY_ADJUDICATION_2026-11-27.md), verified SHA `c23780d44acafa6543e28dcf1b167c93fc36894e`.
 
 Donor-only codec adds length-prefixed typed scalar encoding and V1 legacy decode. Source review identifies empty-key encode/decode asymmetry, legacy `@2|` prefix misclassification, nonfinite double acceptance, default-locale float encoding/decoding, and inherent V1 type ambiguity. No dedicated codec tests located; source only.
+
+
+## 27. Developmental-learning/context-transfer adjudication (2026-11-27)
+
+Report: [DF02 Developmental Learning Context Similarity and Strategy-Transfer Adjudication](DF02_DEVELOPMENTAL_LEARNING_CONTEXT_TRANSFER_ADJUDICATION_2026-11-27.md), verified SHA `b2a029df2d7dde256ab1937e63e627c546fa7dd9`.
+
+Donor-only source provides reliability-weighted signed strategy learning, exact/related-context scoring, schema/negation/numeric guards and deterministic ranking. Donor learning and Brain integration tests specify action-choice change, numeric transfer, replay and evidence handling. Identity keys concatenate a unit separator without escaping (possible collisions); categorical token Jaccard and numeric bands can false-transfer. Candidate source path absent. Tests inspected, not executed.
