@@ -1,7 +1,7 @@
 # JARVIS Real-Capability Gap Audit — 2026-11-27
 
 **Disposition:** bounded static-source evidence; not implementation, acceptance, or DF-02 closure.  
-**Reviewed PR #203 source tree:** `a7d9d735fd516b984314f037224b4827fbbf9c26` (documentation-only head; runtime files match the candidate source tree reviewed).  
+**Initial reviewed PR #203 source tree:** `a7d9d735fd516b984314f037224b4827fbbf9c26`. **Revalidated at current PR #203 head:** `fc628a1c5eb84659861082fb8ad3649635dcf4cd` (docs-only successor; every source/test/CMake blob listed below re-fetches with the same blob SHA at the current head).  
 **Scope:** compare the existing cognitive core's demonstrated mechanisms and control flow against the intended real JARVIS capability—not its class names or design documents.
 
 ## Source evidence examined
@@ -74,3 +74,18 @@ Human-cognition-grounded architecture comparisons also emphasize integrated perc
 Under the current governance, implementation remains unauthorized. Continue the DF-02 semantic/authority audit: trace candidate/donor variants for the cognitive cycle, memory integrity, capability execution and action control into exact registered tests and consumer/build edges; source each variant and owner; record unresolved disposition. If/when implementation is authorized, the first high-value engineering milestone should be a failure-injection test suite for journal corruption and multi-event feedback append failures, then a versioned/integrity-preserving journal design with recovery semantics—not more interface scaffolding.
 
 **Status:** static audit evidence produced; no tests executed; no source change; no DF-02 closure; no Gate A/B acceptance; Stage A held.
+
+
+## 2026-11-27 current-head reconciliation and review rerun
+
+The initial audit's tree pointer was stale after documentation-only commits. Re-fetched PR #203 at current head `fc628a1c5eb84659861082fb8ad3649635dcf4cd`. All ten source/test/build files listed in the evidence table above were re-fetched by exact PR head; their blob SHAs match the audit's listed SHAs. Therefore the technical source observations remain tied to identical file content, while the audit's PR-tree pointer is now current. This establishes content identity for those files, not a full-tree equivalence claim.
+
+### Five focused review passes (performed against this audit and source evidence)
+
+1. **Semantic/traceability:** Verified claims remain scoped to exact source behavior; caller-provided observation/actions and first-eligible goal fallback are described as externally driven, not autonomous. PASS for claim boundaries; autonomy gap remains.
+2. **Build/test evidence:** Inspected CMake registration and test source at the current PR head. GitHub fetch cannot compile or execute locally; runtime tests remain NOT RUN. This pass is evidence-labeling only; execution verification BLOCKED.
+3. **Security/persistence/failure:** Static source inspection confirms journal loader stops at invalid event/sequence and truncates trailing bytes to the last valid boundary. No quarantine/forensic preservation is visible in this loader. Failure-injection tests are NOT RUN. Finding remains OPEN, no patch authorized.
+4. **Architecture/capability benchmark:** Compared source-level loop and interfaces to integrated cognition and the fictional MCU benchmark. It has memory/belief/reasoning/prediction/planning/decision/assessment mechanisms but not demonstrated environment acquisition, built-in concrete adapters, or autonomous task orchestration. PASS for candid capability classification; integration gap remains.
+5. **Hostile review:** Checked report for stale tree pointer, unsupported test claims, blanket capability assertions and scope violations. Found the stale tree pointer and corrected it above; exact file blob identities were revalidated. No source/runtime edits and no acceptance/closure claims added.
+
+**Execution evidence:** GitHub remote source retrieval only. No local checkout, compiler, test runner, workflow dispatch or independent reviewer available in this execution. No tests passed or failed because none were executed.
