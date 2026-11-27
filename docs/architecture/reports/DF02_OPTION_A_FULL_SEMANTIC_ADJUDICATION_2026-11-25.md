@@ -1118,3 +1118,10 @@ Donor adds prediction-error/internal-activation salience and persisted policy fe
 Report: [DF-02 Affective-State and Appraisal-Learning Adjudication](DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md), verified SHA `039f269037fec426949596409e923b5edfdc69ac`.
 
 Donor continuous affective state and adaptive appraisal/calibration model inspected; tests specify positive/negative evidence, decay, calibration, modulation, persistence, reliability and goal outcome. Limitations: calibration depends on event-supplied consequence error (cross-report validation gap), weak evidence relevance floor 0.25, modulation ratio floor 0.25, fixed heuristic equations, no long-term calibration/stability or wall-clock timing tests. No tests run.
+
+
+## 32. Goal/intent/self-capability adjudication (2026-11-27)
+
+Report: [DF02 Goal Lifecycle, Intent Selection and Self-Capability Model Adjudication](DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md), verified SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
+
+Donor goal lifecycle, momentum/deadline intent, affective intent and capability availability/performance/isolation separation inspected. Gaps: prerequisite cycles/self-dependencies; progress/complete can bypass Active/prerequisite checks; intent/self-model clamp NaN; empty capability name; health averages isolated performance. Tests inspected, not run; SelfModel test mapping incomplete.
