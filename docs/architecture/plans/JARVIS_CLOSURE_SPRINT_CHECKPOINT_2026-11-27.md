@@ -131,3 +131,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_EVOLUTION_CANARY_STATE_AND_OPERATIONAL_EVIDENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `98b3ae70b4ed21d55cef45ce030762c2c0c679e1`.
 - Donor adds experiment-keyed canary state, worst-delta regression and preview; tests include cross-experiment isolation.
 - Orchestrator's three canary observations repeat the same evaluation pair, not live telemetry; controller decision may be returned even when rollback fails, and lifecycle may falsely say RolledBack. Canary state not durable/restart-resolved. These are open verification/design obligations.
+
+
+## Immediate continuation — Brain journal replay/outcome validation (2026-11-27)
+
+- Report `DF02_BRAIN_JOURNAL_REPLAY_AND_OUTCOME_VALIDATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2952aaf8719af375e7f4c06f3774b7ff88fabc1e`.
+- Candidate/donor replay delta: sequence predictions, pre-mutation validation, prediction error recomputation, action outcome checks, derived affective-source binding, external observation/novelty persistence and replay/consolidation. Donor deep and action consequence tests inspected.
+- Material open gap: action consequence error is finite-checked but not recomputed from expected/actual; malformed finite event can pass and influence learning. Invalid historical records may advance cycle before validation. Tests not executed; all 35 Brain-source variants not closed.
