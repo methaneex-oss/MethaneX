@@ -131,3 +131,18 @@ At the current PR #203 head, static parsing of `core/cpp/tests/CMakeLists.txt` f
 - P1: Distinguish cognitive-cycle completion from action completion and closed-loop task completion in API/status contracts.
 
 **Disposition:** these are static-source findings and test-gap analysis. No implementation change, test execution, baseline selection, adoption/retirement decision, DF-02 closure or gate acceptance. Implementation remains unauthorized under the active scope.
+
+
+## 2026-11-27 — CI evidence follow-up at PR #203 HEAD
+
+The preceding immediate-run section correctly records that no local checkout/compiler/test runner was available during its static-source inspection. A GitHub Actions run subsequently completed for the exact PR #203 commit `15976103cc39b066d3de258fad414028460fef05`:
+
+- Workflow: [Native Brain Build #2697](https://github.com/methaneex-oss/MethaneX/actions/runs/45956482214)
+- Trigger: `pull_request`; workflow file: `.github/workflows/build.yml`
+- Job `cpp`: **SUCCESS**
+- Steps: checkout, CMake configure (`cmake -S core/cpp -B build -DCMAKE_BUILD_TYPE=Release`), and build (`cmake --build build --parallel`) all completed successfully.
+- The build log shows the registered C++ test executables were compiled and linked. **No CTest command or behavioral test execution is present in this workflow.**
+
+The exact ten source/test/CMake blob SHAs listed in this audit were re-fetched at commit `15976103cc39b066d3de258fad414028460fef05` and match the recorded identities. This verifies those inspected file contents at that commit; it is not a full-tree equivalence claim.
+
+**Corrected evidence classification:** CMake configure and compilation/build are CI-verified for PR #203 HEAD `15976103...`. CTest, runtime behavioral tests, sanitizer runs, persistence fault-injection tests, and independent review remain **NOT EXECUTED / NOT VERIFIED**. The build result does not close DF-02, establish real-world autonomy, or authorize implementation, baseline selection, Stage A, or acceptance.
