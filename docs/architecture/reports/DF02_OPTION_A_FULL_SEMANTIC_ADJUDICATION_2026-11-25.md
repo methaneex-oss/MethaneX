@@ -1048,3 +1048,10 @@ Candidate/donor replay compared. Donor adds sequence-bound predictions, validati
 Report: [DF02 Evolution Event Replay Authority-Boundary Adjudication](DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md), verified SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
 
 Direct adoption API enforces matching durable evaluation, outcome recomputation, journal identity, safety policy and attestation. Brain replay `evolution_adopt` instead requires only experiment ID, reconstructs and re-attests claimed isolation, then directly model-adopts and journal-replays without matching evaluation/history validation. Public `observe(Event)` can append event kinds without evolution-specific prevalidation. Replay rollback checks adopted state but not event key versus adoption-record key. Direct rollback also does not require latest active experiment for that parameter; stale canary could reset baseline while newer adoption remains marked adopted. Donor tests cover unversioned legacy rejection and direct API cases, not versioned forged/mismatched events. Source only; no tests run.
+
+
+## 22. Action execution/consequence persistence adjudication (2026-11-27)
+
+Report: [DF02 Action Execution and Consequence-Persistence Contract Adjudication](DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md), verified SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
+
+Donor adds observed consequence, prediction sequence/context binding and feedback learning. Phase-7 tests assert consequence evidence can change later planning and survive reconstruction. Material gap: Brain returns execution status even if journal append fails; prediction remains unresolved and outcome/learning may be lost. Separate outcome/affective/learning appends can partially fail; no transactional batch or persistence-failure status. Tests inspected, not executed.
