@@ -165,3 +165,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Process-isolation child/control adjudication](reports/DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md): descendant cleanup, process-group/limit enforcement and sandbox-boundary gaps; SHA `6d89b9fd922dc4f3c74797838be67c26e34d76ce`.
 
 - [Action assessment/workspace/developmental-world adjudication](reports/DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md): action confidence/risk defect, snapshot semantics and world reset/callback gaps; SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
+
+- [Action assessment/workspace/developmental-world adjudication](reports/DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md): action confidence/risk defect, snapshot semantics and world reset/callback gaps; SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
