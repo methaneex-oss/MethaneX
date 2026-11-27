@@ -1090,3 +1090,10 @@ Donor-only codec adds length-prefixed typed scalar encoding and V1 legacy decode
 Report: [DF02 Developmental Learning Context Similarity and Strategy-Transfer Adjudication](DF02_DEVELOPMENTAL_LEARNING_CONTEXT_TRANSFER_ADJUDICATION_2026-11-27.md), verified SHA `b2a029df2d7dde256ab1937e63e627c546fa7dd9`.
 
 Donor-only source provides reliability-weighted signed strategy learning, exact/related-context scoring, schema/negation/numeric guards and deterministic ranking. Donor learning and Brain integration tests specify action-choice change, numeric transfer, replay and evidence handling. Identity keys concatenate a unit separator without escaping (possible collisions); categorical token Jaccard and numeric bands can false-transfer. Candidate source path absent. Tests inspected, not executed.
+
+
+## 28. Contextual prediction/numeric calibration adjudication (2026-11-27)
+
+Report: [DF02 Contextual Prediction, Numeric Calibration and Evidence-Confidence Adjudication](DF02_CONTEXTUAL_PREDICTION_NUMERIC_CALIBRATION_ADJUDICATION_2026-11-27.md), verified SHA `d402b3dca026155b6961cc3ad8ca30a5b879e44d`.
+
+Donor-only prediction-context source derives concept evidence from association graph, optionally calibrates numeric predictions by key, stores provenance and increases confidence via a noisy-or-like formula. Global metric is not context-scoped, so cross-context calibration leakage is possible; graph coherence is uncalibrated confidence evidence. Concept IDs joined with unit separator without escaping. Donor phase-10 tests cover nonfinite, sequence, context and replay cases; cross-context metric contamination/calibration/fuzz gaps remain. No tests executed.
