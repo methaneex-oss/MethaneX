@@ -1006,3 +1006,10 @@ Static risks recorded: in-flight action feedback can be rejected during `stop()`
 Report: [DF02 Cognitive Cycle Semantic and Contextual-Learning Variant Adjudication](DF02_COGNITIVE_CYCLE_CONTEXTUAL_LEARNING_VARIANT_ADJUDICATION_2026-11-27.md), verified SHA `7ec23e8382b789c7ccfe6900c3ee6111130b2c42`.
 
 Exact ten source blobs and seven test blobs compared. Donor adds inferred collision-resistant contexts, action-specific episodic recall, developmental strategy transfer, evidence-weighted action-value influence, exploration and affect-aware decision inputs, plus sequence-bound prediction and goal feedback. The donor's expanded behavioral suite specifies context collision prevention, action-choice change, context isolation, persistence and regime-change adaptation. Source/tests inspected only; not executed. Duplicate feature-label ordering and other adversarial context cases remain open. No authority or closure decision.
+
+
+## 16. Memory–learning–evolution persistence integration test adjudication (2026-11-27)
+
+Report: [DF02 Memory–Learning–Evolution Persistence Integration Variant Adjudication](DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md), verified SHA `b01fb2a58251fe799d09d7005ee0234dc109af5a`.
+
+The donor-only test path has 12 exact blobs, no frozen-candidate version. Donor test source exercises prediction error → learning/evolution evidence; positive/negative action consequences → strategy/decision; proposal → isolation-attested evaluation → adoption; and journal replay across a reconstructed Brain. Donor CMake registers the executable and CTest entry; candidate CMake does not. It reconstructs in the same process, not a process crash/restart; source was inspected, not run. Path/authority/retention remains open.
