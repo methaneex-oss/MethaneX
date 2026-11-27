@@ -141,3 +141,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Attention salience/feedback/persistence adjudication](reports/DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md): donor attention expansion, NaN contamination and constant-focus novelty gaps; SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
 
 - [Affective-state/appraisal-learning adjudication](reports/DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md): state/calibration semantics, evidence dependence and long-run stability gaps; SHA `039f269037fec426949596409e923b5edfdc69ac`.
+
+- [Goal/intent/self-capability adjudication](reports/DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md): lifecycle, intent, capability model and prerequisite/nonfinite/health gaps; SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
