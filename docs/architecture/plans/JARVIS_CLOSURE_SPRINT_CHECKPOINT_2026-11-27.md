@@ -170,3 +170,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md`, fetched back SHA `8bed402fc935f9a7d99be27d58b122d087ab5725`.
 - Donor association/context/concept/prediction-feedback delta and causal-transition hypothesis code/test contract reviewed. Public reliability/evidence inputs do not reject NaN before clamp; potential model-weight poisoning. Causal links are temporal co-change hypotheses, no interventions or confounder controls. Tests inspected, not executed.
+
+
+## Immediate continuation — causal-link codec compatibility (2026-11-27)
+
+- Report `DF02_CAUSAL_LINK_TYPED_CODEC_COMPATIBILITY_ADJUDICATION_2026-11-27.md`, fetched back SHA `c23780d44acafa6543e28dcf1b167c93fc36894e`.
+- Donor-only typed length-prefix codec improves delimiter/type handling but has empty-key asymmetry, V1-prefix collision, nonfinite acceptance and locale concerns; no dedicated test path located. Source only; full codec consumer/authority remains open.
