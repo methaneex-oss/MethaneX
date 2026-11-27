@@ -125,3 +125,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Action execution/consequence persistence adjudication](reports/DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md): donor observed-consequence feedback and journal partial-failure/return-contract gap; SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
 
 - [Memory journal/metadata/consolidation adjudication](reports/DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md): nine source/eight test blobs; quarantine and metadata improvements, raw-journal integrity/durability gaps; SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
+
+- [Evolution runner/isolation-attestation adjudication](reports/DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md): callback distrust, snapshot attestation and direct-path metric/execution gaps; SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
