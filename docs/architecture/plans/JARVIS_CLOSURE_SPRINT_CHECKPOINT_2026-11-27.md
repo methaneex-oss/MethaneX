@@ -200,3 +200,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
 - Donor adds prediction error/internal activation and policy feedback. Nonfinite public inputs can contaminate policy; focus uses constant novelty=1 for all events, so ranking lacks per-event novelty. Tests inspected, not executed.
+
+
+## Immediate continuation — affective state/appraisal learning (2026-11-27)
+
+- Report `DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md`, fetched back SHA `039f269037fec426949596409e923b5edfdc69ac`.
+- Continuous state and adaptive appraisal/calibration inspected; synthetic test contracts include persistence and goal outcome. Evidence depends on supplied consequence error, weak evidence relevance floor and modulator floor; no long-run calibration/stability or wall-clock decay tests. No native execution.
