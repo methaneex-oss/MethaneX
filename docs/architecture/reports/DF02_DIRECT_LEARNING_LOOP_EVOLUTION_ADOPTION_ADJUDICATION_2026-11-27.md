@@ -30,7 +30,7 @@ This path is distinct from the experiment-based controller, canary and Brain ado
 
 ## 4. Test contract
 
-The donor test runs eight repeated feedback samples, asserts adaptation observations/estimate/confidence/proposals and that `adopted <= 1`, then only asserts parameter remains ≥ initial value. Confidence after eight observations is (1-e^{-1}approx0.632), below the hardcoded 0.75 LearningLoop threshold, so this test does **not** exercise successful direct adoption. It does test invalid key and NaN prediction leave adaptation unchanged.
+The donor test runs eight repeated feedback samples, asserts adaptation observations/estimate/confidence/proposals and that `adopted <= 1`, then only asserts parameter remains ≥ initial value. Confidence after eight observations is approximately 0.632, below the hardcoded 0.75 LearningLoop threshold, so this test does **not** exercise successful direct adoption. It does test invalid key and NaN prediction leave adaptation unchanged.
 
 No test directly fabricates an EvolutionProposal, exercises successful direct adoption at ≥12 observations, verifies proposal/gain recomputation, bounds clamping, rollback semantics, or compares direct path against experiment-gated controller. Tests were inspected, not executed.
 
