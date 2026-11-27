@@ -1209,3 +1209,10 @@ ActionModel ignores CandidateAction confidence and treats nonfinite risk as zero
 Report: [JARVIS Real-Capability Gap Audit](JARVIS_REAL_CAPABILITY_GAP_AUDIT_2026-11-27.md), verified SHA `dc45009074599b9dd51d14fa807807848b3f1507`.
 
 Re-fetched its ten source/test/CMake files at PR #203 head `8a733d20b86fe349c38f04b473632cbe7ce27eb5`; all listed blob SHAs match. This is content identity for the reviewed files, not whole-tree equivalence. No CTest execution; capability/autonomy gaps remain open.
+
+
+## 46. Direct LearningLoop/EvolutionModel adoption adjudication (2026-11-27)
+
+Report: [DF02 Direct LearningLoop/EvolutionModel Adoption Path Adjudication](DF02_DIRECT_LEARNING_LOOP_EVOLUTION_ADOPTION_ADJUDICATION_2026-11-27.md), verified SHA `53c657ec5fe8465c93944e2342c40ebc45d91132`.
+
+A separate scalar-feedback path directly mutates EvolutionModel parameters without experiment isolation/controller gate. Public adopt accepts caller-supplied proposal/gain without recomputation from fitness. The donor test's eight observations yield confidence ≈0.632, below hardcoded 0.75, so successful adoption is not exercised; assertion `adopted<=1` is non-acceptance evidence. No Brain consumer found. OPEN.
