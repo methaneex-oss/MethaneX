@@ -104,3 +104,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 
 ### New bounded evidence slice (2026-11-27)
 - [Process-isolation variant adjudication](reports/DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md): exact 15-blob source cohort, candidate/donor differences, historical path-resolution/FD/evaluator variants, and test/build registration. SHA-verified report blob `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`. Static inspection only; process-isolation adversarial testing, reverse-consumer closure, authority/retention, and DF-02 remain open.
+
+- [Restored Brain API ownership/variant adjudication](reports/DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md): 20 exact blobs, API surface and candidate-orphan/donor-registered translation-unit ownership; unresolved AST/signature count and semantic/authority obligations. SHA-verified report `e8fd69edde496c89eba84d7a25ee2c1eb02e3cc0`.
