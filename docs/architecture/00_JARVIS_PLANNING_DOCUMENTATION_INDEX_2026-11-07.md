@@ -157,3 +157,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Native CI/learning-trial workflow adjudication](reports/DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md): CI/sanitizer/soak/probe configuration, statistical-control limits and workflow security; SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
 
 - [Capability registry/evaluator/execution adjudication](reports/DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md): execution-gate bypass, provider result validation, in-process/no-timeout and audit persistence gaps; SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
+
+- [Evolution controller transaction/rollback adjudication](reports/DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md): exact lifecycle/compensation, same-ID status and stale rollback risks; SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
