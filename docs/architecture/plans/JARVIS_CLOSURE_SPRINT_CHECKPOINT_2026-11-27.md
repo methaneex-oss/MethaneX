@@ -152,3 +152,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
 - Donor adds consequence observer, forecast sequence binding and learning. Tests specify real observed consequence despite verification failure, choice change and replay.
 - Gap: execution status returned despite action-outcome journal append failure; prediction/evidence may be lost, later learning appends are non-transactional. No persistence-failure injection or test execution. Adapter/execution/authority scope remains open.
+
+
+## Immediate continuation — memory journal/metadata audit (2026-11-27)
+
+- Report `DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
+- Nine source and eight test blobs. Donor adds corrupt-tail quarantine, V2 metadata consolidation/migration, staged validation, tier/cursor reconstruction, exact/kind-filtered retrieval and consolidation ranking. Main donor journal is raw/unframed/no checksum; framed historical variant is separate/not integrated. Append flush/metadata rename not fsync-durable. Tests inspected, not executed.
