@@ -129,3 +129,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Evolution runner/isolation-attestation adjudication](reports/DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md): callback distrust, snapshot attestation and direct-path metric/execution gaps; SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
 
 - [Association/contextual generalization/causal-hypothesis adjudication](reports/DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md): donor association expansion, non-finite evidence poisoning gap and causal inference limitation; SHA `8bed402fc935f9a7d99be27d58b122d087ab5725`.
+
+- [Causal-link typed codec compatibility adjudication](reports/DF02_CAUSAL_LINK_TYPED_CODEC_COMPATIBILITY_ADJUDICATION_2026-11-27.md): donor-only codec, legacy-prefix/empty-key/nonfinite/locale gaps; SHA `c23780d44acafa6543e28dcf1b167c93fc36894e`.
