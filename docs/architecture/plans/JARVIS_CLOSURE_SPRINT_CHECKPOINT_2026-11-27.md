@@ -194,3 +194,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_DECISION_PLANNING_REASONING_PIPELINE_ADJUDICATION_2026-11-27.md`, fetched back SHA `3d1f24e62752465b5ab9b3944a14c98c7eda22f3`.
 - Donor affective decision/planning and disputed-premise reasoning compared. Open risks: NaN policy weights break ordering, negative plan value omitted, nonfinite reasoning link/premise confidence, inferred conflict order dependence. Tests inspected, not run.
+
+
+## Immediate continuation — attention salience audit (2026-11-27)
+
+- Report `DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
+- Donor adds prediction error/internal activation and policy feedback. Nonfinite public inputs can contaminate policy; focus uses constant novelty=1 for all events, so ranking lacks per-event novelty. Tests inspected, not executed.
