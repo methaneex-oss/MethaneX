@@ -123,3 +123,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Evolution event replay authority-boundary adjudication](reports/DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md): direct API versus replay gate, mismatched rollback key and stale adoption rollback risks; SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
 
 - [Action execution/consequence persistence adjudication](reports/DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md): donor observed-consequence feedback and journal partial-failure/return-contract gap; SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
+
+- [Memory journal/metadata/consolidation adjudication](reports/DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md): nine source/eight test blobs; quarantine and metadata improvements, raw-journal integrity/durability gaps; SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
