@@ -1104,3 +1104,10 @@ Donor-only prediction-context source derives concept evidence from association g
 Report: [DF02 Decision, Planning and Reasoning Pipeline Variant Adjudication](DF02_DECISION_PLANNING_REASONING_PIPELINE_ADJUDICATION_2026-11-27.md), verified SHA `3d1f24e62752465b5ab9b3944a14c98c7eda22f3`.
 
 Donor decision/planning adds affective and consequence-aware score modulation; reasoning handles disputed premises and typed causal-link decoding. Gaps: planning policy weights not finite-validated (NaN may break sort comparator), expected-value summary omits negative values, reasoning accepts nonfinite link/premise confidence and may propagate malformed evidence, conflicting inferred values and duplicate premise confidence are input-order-dependent. Tests inspected, not run; broader test mapping open.
+
+
+## 30. Attention salience/feedback/persistence adjudication (2026-11-27)
+
+Report: [DF02 Attention Salience, Feedback and Persistence Adjudication](DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md), verified SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
+
+Donor adds prediction-error/internal-activation salience and persisted policy feedback. Public score/reinforce methods do not reject nonfinite values; NaN can contaminate scores/policy. `focus(events)` passes novelty=1.0 for every event, so no per-event novelty ranking. Tests cover basic feedback, ranking, persistence; no adversarial nonfinite/focus utility tests. Source inspected, not run.
