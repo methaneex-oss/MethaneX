@@ -1013,3 +1013,10 @@ Exact ten source blobs and seven test blobs compared. Donor adds inferred collis
 Report: [DF02 Memory–Learning–Evolution Persistence Integration Variant Adjudication](DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md), verified SHA `b01fb2a58251fe799d09d7005ee0234dc109af5a`.
 
 The donor-only test path has 12 exact blobs, no frozen-candidate version. Donor test source exercises prediction error → learning/evolution evidence; positive/negative action consequences → strategy/decision; proposal → isolation-attested evaluation → adoption; and journal replay across a reconstructed Brain. Donor CMake registers the executable and CTest entry; candidate CMake does not. It reconstructs in the same process, not a process crash/restart; source was inspected, not run. Path/authority/retention remains open.
+
+
+## 17. Evolution experiment coordinator/statistical gate adjudication (2026-11-27)
+
+Report: [DF02 Evolution Experiment Coordinator Variant and Statistical-Gate Adjudication](DF02_EVOLUTION_EXPERIMENT_COORDINATOR_VARIANT_AND_STATISTICAL_GATE_ADJUDICATION_2026-11-27.md), verified SHA `8af42a473be7cc11e402120380dbda79c3480db8`.
+
+Candidate/donor source and 13 historical versions compared. Donor adds `started` checks, default-required isolation, tracks isolation across all trials and issues attestation. Exact `EvolutionTrials` contract computes `confidence=1/(1+standard_error)`; this is a heuristic score, not a calibrated statistical confidence or difference-CI. Gate uses minimum individual heuristic scores and gain threshold. Historical variants include separate comparison-CI/statistical-evaluation branches. Current coordinator runs baseline trials sequentially before candidate trials; environment drift/order confounding is untested. Candidate/donor test has only one deterministic positive fixture and disables isolation requirement; no native test run. Semantic/authority remains open.
