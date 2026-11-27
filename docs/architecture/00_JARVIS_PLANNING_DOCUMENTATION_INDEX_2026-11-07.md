@@ -100,3 +100,7 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Planning Foundation Finalization](plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md)
 
 **Current overall status: PLANNING CONSOLIDATED / SCOPE FROZEN / FOUNDATION ACCEPTANCE PENDING / IMPLEMENTATION NOT AUTHORIZED.**
+
+
+### New bounded evidence slice (2026-11-27)
+- [Process-isolation variant adjudication](reports/DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md): exact 15-blob source cohort, candidate/donor differences, historical path-resolution/FD/evaluator variants, and test/build registration. SHA-verified report blob `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`. Static inspection only; process-isolation adversarial testing, reverse-consumer closure, authority/retention, and DF-02 remain open.
