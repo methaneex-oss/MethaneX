@@ -290,3 +290,17 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_DIRECT_LEARNING_LOOP_EVOLUTION_ADOPTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `53c657ec5fe8465c93944e2342c40ebc45d91132`.
 - Standalone scalar feedback directly adopts without experiment isolation/controller gate; proposal/gain caller fields aren't recomputed. Test confidence at 8 observations is ~0.632, below hardcoded 0.75; successful adoption not tested. No Brain consumer found.
+
+## Immediate continuation — initial runtime/cycle/API/isolation report reconciliation (2026-11-27)
+
+- Report `DF02_COGNITIVE_RUNTIME_VARIANT_AND_CLOSED_LOOP_ADJUDICATION_2026-11-27.md`, fetched back SHA `fa192b50437fc7014a4c9c7076d6d77b1f8f6658`.
+- Donor runtime async action/outcome feedback; stop/drain and fairness risks remain. Source/test inspected, not run.
+
+- Report `DF02_COGNITIVE_CYCLE_CONTEXTUAL_LEARNING_VARIANT_ADJUDICATION_2026-11-27.md`, fetched back SHA `7ec23e8382b789c7ccfe6900c3ee6111130b2c42`.
+- Contextual cycle and feedback contracts compared. No native tests run; integration remains open.
+
+- Report `DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md`, verified report SHA `e8fd69edde496c89eba84d7a25ee2c1eb02e3cc0`.
+- Candidate/donor API ownership and CMake registration compared; semantic/authority closure remains open.
+
+- Report `DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md`, verified report SHA `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`.
+- Candidate/donor process-isolation cohort reviewed; source/test/authority/retention closure remains open.
