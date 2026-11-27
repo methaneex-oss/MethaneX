@@ -138,3 +138,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_BRAIN_JOURNAL_REPLAY_AND_OUTCOME_VALIDATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2952aaf8719af375e7f4c06f3774b7ff88fabc1e`.
 - Candidate/donor replay delta: sequence predictions, pre-mutation validation, prediction error recomputation, action outcome checks, derived affective-source binding, external observation/novelty persistence and replay/consolidation. Donor deep and action consequence tests inspected.
 - Material open gap: action consequence error is finite-checked but not recomputed from expected/actual; malformed finite event can pass and influence learning. Invalid historical records may advance cycle before validation. Tests not executed; all 35 Brain-source variants not closed.
+
+
+## Immediate continuation — evolution event replay authority review (2026-11-27)
+
+- Report `DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md`, fetched back SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
+- Direct adoption API gates are strict, but versioned `evolution_adopt` replay bypasses durable-evaluation/history matching; `Brain::observe(Event)` can append control-plane event types without evolution-specific validation.
+- Replay rollback doesn't bind event key to adopted record key. Direct rollback doesn't require the latest active adoption; stale rollback can reset baseline while a newer record remains Adopted. Tests cover legacy and direct APIs, not these replay/multi-adoption cases. No execution; high-priority authority gaps remain open.
