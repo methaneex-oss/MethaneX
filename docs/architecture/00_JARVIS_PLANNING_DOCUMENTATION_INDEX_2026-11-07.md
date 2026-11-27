@@ -159,3 +159,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Capability registry/evaluator/execution adjudication](reports/DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md): execution-gate bypass, provider result validation, in-process/no-timeout and audit persistence gaps; SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
 
 - [Evolution controller transaction/rollback adjudication](reports/DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md): exact lifecycle/compensation, same-ID status and stale rollback risks; SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
+
+- [ExperienceMemory sequence-identity adjudication](reports/DF02_EXPERIENCE_MEMORY_SEQUENCE_IDENTITY_ADJUDICATION_2026-11-27.md): duplicate-sequence/key-index mismatch, resolution-validation and persistence gaps; SHA `28adf486781da07bb0f0ea3f88dc34652fb62415`.
