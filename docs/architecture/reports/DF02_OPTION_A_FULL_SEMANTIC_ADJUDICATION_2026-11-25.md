@@ -1139,3 +1139,10 @@ Donor numeric adaptation, deterministic representation IDs/metadata filtering/fi
 Report: [DF02 Core C++ Test Build/Registration Reachability Adjudication](DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md), verified SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
 
 Candidate CMake has 45 executable/CTest entries; donor 71 executable/70 CTest. All source paths reconciled, all CTest commands map targets; 2 long-run targets are workflow-driven, DLT-002 persistence uses separate train/verify fixture commands. No duplicate target/test names. Assertions enabled in Release. Existing native build evidence is older SHA and configure/build only; no CTest execution. Test semantic adequacy remains open.
+
+
+## 35. Engineering-agent/message-bus/task-ledger adjudication (2026-11-27)
+
+Report: [DF02 Engineering Agent, Message Bus and Durable Task Ledger Adjudication](DF02_ENGINEERING_AGENT_MESSAGE_BUS_AND_TASK_LEDGER_ADJUDICATION_2026-11-27.md), verified SHA `ee2b72bdc18814dd8e69c6a2b2e6d3fdb28f73a1`.
+
+Donor bounded message queue/dedup/backpressure and durable task-ledger CAS/replay inspected. Gaps: sender identity spoofing on raw bus; task journal replay permits immutable constraint changes and lacks explicit transition graph/checksum; torn first-record recovery can truncate entire file; append flush lacks fsync; coordinator doesn't validate/persist actual output artifacts. Tests source inspected, not executed.
