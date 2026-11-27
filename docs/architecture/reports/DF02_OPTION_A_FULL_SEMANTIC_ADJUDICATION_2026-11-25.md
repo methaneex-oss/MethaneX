@@ -1097,3 +1097,10 @@ Donor-only source provides reliability-weighted signed strategy learning, exact/
 Report: [DF02 Contextual Prediction, Numeric Calibration and Evidence-Confidence Adjudication](DF02_CONTEXTUAL_PREDICTION_NUMERIC_CALIBRATION_ADJUDICATION_2026-11-27.md), verified SHA `d402b3dca026155b6961cc3ad8ca30a5b879e44d`.
 
 Donor-only prediction-context source derives concept evidence from association graph, optionally calibrates numeric predictions by key, stores provenance and increases confidence via a noisy-or-like formula. Global metric is not context-scoped, so cross-context calibration leakage is possible; graph coherence is uncalibrated confidence evidence. Concept IDs joined with unit separator without escaping. Donor phase-10 tests cover nonfinite, sequence, context and replay cases; cross-context metric contamination/calibration/fuzz gaps remain. No tests executed.
+
+
+## 29. Decision/planning/reasoning pipeline adjudication (2026-11-27)
+
+Report: [DF02 Decision, Planning and Reasoning Pipeline Variant Adjudication](DF02_DECISION_PLANNING_REASONING_PIPELINE_ADJUDICATION_2026-11-27.md), verified SHA `3d1f24e62752465b5ab9b3944a14c98c7eda22f3`.
+
+Donor decision/planning adds affective and consequence-aware score modulation; reasoning handles disputed premises and typed causal-link decoding. Gaps: planning policy weights not finite-validated (NaN may break sort comparator), expected-value summary omits negative values, reasoning accepts nonfinite link/premise confidence and may propagate malformed evidence, conflicting inferred values and duplicate premise confidence are input-order-dependent. Tests inspected, not run; broader test mapping open.
