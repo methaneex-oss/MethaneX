@@ -117,3 +117,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_EVOLUTION_EXPERIMENT_COORDINATOR_VARIANT_AND_STATISTICAL_GATE_ADJUDICATION_2026-11-27.md`, fetched back SHA `8af42a473be7cc11e402120380dbda79c3480db8`.
 - 13 exact coordinator source blobs and test versions. Donor adds trial-start and isolation requirements/attestation. Current `EvolutionTrials` “confidence” is a standard-error-derived heuristic, not a statistical confidence interval; gate compares minimum individual scores, not a CI for difference. Historical alternatives contain CI/statistical branches.
 - Baseline-then-candidate sequencing may confound time-varying environments. Test is a single deterministic positive fixture and disables required isolation; not executed. Design/verification, authority and retention remain open.
+
+
+## Immediate continuation — orchestrator durable-evaluation precondition (2026-11-27)
+
+- Report `DF02_EVOLUTION_ORCHESTRATOR_DURABLE_EVALUATION_GATE_ADJUDICATION_2026-11-27.md`, fetched back SHA `b395b6236b786340f040d392511f809f38e23ca7`.
+- Candidate source can continue adoption after selected winner's `record_evaluation` fails; donor adds lifecycle check and early return before adoption. This is a source-confirmed authority/safety correction.
+- Candidate/donor test source comparison found no orchestrator-specific failure-injection regression for that exact branch. Source/test inspection only. Owner authority, full consumers and path closure remain open.
