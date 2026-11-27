@@ -236,3 +236,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_CORE_CPP_SOURCE_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `4b9266c34f36559071d09d2b00b63e6ab74a613f`.
 - Candidate 57 library source entries; donor 64 with seven added TU and no removals/duplicates. C++20, warnings, CTest and examples default ON. No native build at frozen donor SHA or CTest; semantics remain open.
+
+
+## Immediate continuation — engineering CMake/assertion configuration (2026-11-27)
+
+- Report `DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
+- Donor adds task-ledger source/test and Threads. Engineering tests are assert-based, but unlike core CMake no Release assertion override; NDEBUG can remove behavioral checks. No native engineering tests run.
