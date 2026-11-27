@@ -115,3 +115,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Evolution coordinator/statistical-gate adjudication](reports/DF02_EVOLUTION_EXPERIMENT_COORDINATOR_VARIANT_AND_STATISTICAL_GATE_ADJUDICATION_2026-11-27.md): 13 variants, isolation gate delta, heuristic confidence semantics and evaluation-design risks; SHA `8af42a473be7cc11e402120380dbda79c3480db8`.
 
 - [Evolution orchestrator durable-evaluation gate adjudication](reports/DF02_EVOLUTION_ORCHESTRATOR_DURABLE_EVALUATION_GATE_ADJUDICATION_2026-11-27.md): ten exact variants, candidate record-failure bypass risk and donor pre-adoption gate; SHA `b395b6236b786340f040d392511f809f38e23ca7`.
+
+- [Canary state/operational-evidence adjudication](reports/DF02_EVOLUTION_CANARY_STATE_AND_OPERATIONAL_EVIDENCE_ADJUDICATION_2026-11-27.md): 17 test variants, per-experiment isolation and worst-regression delta; operational canary/restart/rollback result gaps; SHA `98b3ae70b4ed21d55cef45ce030762c2c0c679e1`.
