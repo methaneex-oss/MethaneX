@@ -248,3 +248,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md`, fetched back SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
 - CI is configured for Release CTest and Debug ASan/UBSan CTest. Manual persistence and DLT runs produce evidence. Multi-seed sweep has no pass threshold and uses fixed-action control, not matched no-learning brain. Workflow permissions/action pinning hardening open; no current frozen donor execution.
+
+
+## Immediate continuation — capability registry/evaluator/execution (2026-11-27)
+
+- Report `DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
+- Provider callback path and tests inspected. Evaluator can be bypassed; execution trusts caller descriptor/risk; result identity/schema not validated; no timeout/isolation; audit persistence status not returned. No tests run.
