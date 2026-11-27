@@ -10,12 +10,12 @@ Exact repository files and blob SHAs:
 
 - `core/cpp/src/brain.cpp` — `e9f3758fcc9c0e89b7280ce376db9033d547682d`
 - `core/cpp/include/jarvis/core/brain.hpp` — `8268ef84e0b361ead536724ba7761904b30ee58f`
-- `core/cpp/src/cognitive_cycle.cpp` — fetched at the reviewed PR #203 tree
-- `core/cpp/src/memory.cpp` — fetched at the reviewed PR #203 tree
-- `core/cpp/tests/cognitive_cycle_suite.cpp` — exact source inspected
-- `core/cpp/tests/prediction_feedback_phase10_suite.cpp` — exact source inspected
-- `core/cpp/tests/action_execution_phase7_suite.cpp` — exact source inspected
-- `core/cpp/tests/memory_architecture_suite.cpp` — exact source inspected
+- `core/cpp/src/cognitive_cycle.cpp` — `3df14c552f2048b0394dc362f7ee7a654a93fb32`
+- `core/cpp/src/memory.cpp` — `ba72a897306d4761246d0deab2fbab37c49d372f`
+- `core/cpp/tests/cognitive_cycle_suite.cpp` — `38ff2c7d6e851b4745e9dc7c01f968b7245400a2`
+- `core/cpp/tests/prediction_feedback_phase10_suite.cpp` — `e72da8e7653aee775cfade9060064231c7a01630`
+- `core/cpp/tests/action_execution_phase7_suite.cpp` — `b4a0060596c91c67080ac0a2db324f720d760fbe`
+- `core/cpp/tests/memory_architecture_suite.cpp` — `2a9eb061427c622260304d09f45089e1debef294`
 - `core/cpp/CMakeLists.txt` — `c51816888e1bddb7bc00c59e72529524e27a0717`
 - `core/cpp/tests/CMakeLists.txt` — `dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3`
 
