@@ -1132,3 +1132,10 @@ Donor goal lifecycle, momentum/deadline intent, affective intent and capability 
 Report: [DF02 Knowledge, Adaptation, Representation and Reflection Adjudication](DF02_KNOWLEDGE_ADAPTATION_REPRESENTATION_REFLECTION_ADJUDICATION_2026-11-27.md), verified SHA `ef9038472f4112a152af2e07f7a0b5841f720f27`.
 
 Donor numeric adaptation, deterministic representation IDs/metadata filtering/finite validation and reflection evidence averaging inspected. Frozen KnowledgeModel remains simple; richer feedback/calibration alternatives are historical, not integrated. Adaptation metric global by key, surprise streak fixed, reflection coherence heuristic, metadata exclusion schema fixed. Tests inspected, not run.
+
+
+## 34. Core C++ test build/registration adjudication (2026-11-27)
+
+Report: [DF02 Core C++ Test Build/Registration Reachability Adjudication](DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md), verified SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
+
+Candidate CMake has 45 executable/CTest entries; donor 71 executable/70 CTest. All source paths reconciled, all CTest commands map targets; 2 long-run targets are workflow-driven, DLT-002 persistence uses separate train/verify fixture commands. No duplicate target/test names. Assertions enabled in Release. Existing native build evidence is older SHA and configure/build only; no CTest execution. Test semantic adequacy remains open.
