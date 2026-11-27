@@ -1174,3 +1174,10 @@ Brain CI configures Release full CTest and Debug ASan/UBSan full CTest; core wor
 Report: [DF02 Capability Registry, Evaluator and Execution Boundary Adjudication](DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md), verified SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
 
 Capability registry/evaluator and permission-gated provider callback inspected. Execution bypasses registry/evaluator eligibility, trusts caller descriptor/risk, doesn't validate result identity/status/schema, allows degraded availability, and is synchronous/in-process without timeout or isolation. Brain returns result even if audit append fails. Tests only basic success/denial; no adversarial cases or execution. OPEN.
+
+
+## 40. Evolution controller transaction/rollback adjudication (2026-11-27)
+
+Report: [DF02 Evolution Controller Transaction, Idempotency and Rollback Lifecycle Adjudication](DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md), verified SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
+
+Direct adoption lifecycle uses exact evidence and compensation. Gap: record_evaluation idempotent same-ID path returns true without comparing experiment fields (later adoption validation blocks mutation); stale rollback does not require latest active adoption and may reset baseline while newer record remains Adopted. Cross-store compensation is not atomic/durable; failure/crash tests missing. Source only.
