@@ -218,3 +218,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_KNOWLEDGE_ADAPTATION_REPRESENTATION_REFLECTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `ef9038472f4112a152af2e07f7a0b5841f720f27`.
 - Donor numeric adaptation, representation deterministic identity/metadata filtering and reflection evidence changes reviewed. Frozen KnowledgeModel is simple; richer source-feedback alternatives are historical, not integrated. Global-key adaptation, fixed surprise policy and heuristic reflection remain open. Tests inspected, not run.
+
+
+## Immediate continuation — core C++ test build registration (2026-11-27)
+
+- Report `DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
+- Candidate 45 executables/45 CTest; donor 71/70. Source paths and commands reconciled; two long-run targets workflow-driven; DLT-002 persistence uses train/verify fixture; Release assertions enabled. Native build evidence is older SHA/configure+build only, no CTest. Semantics/execution remain open.
