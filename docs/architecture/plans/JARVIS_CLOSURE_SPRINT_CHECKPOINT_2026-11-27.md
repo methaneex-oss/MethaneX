@@ -6,8 +6,8 @@
 - Branch: `docs/df02-option-a-full-semantic-adjudication-20261125`
 - Base: `docs/pr192-independent-findings-response-20261125`
 - Base SHA: `a56526ae5896dfd06293ccab64289fd75507dda5`
-- Head immediately before this checkpoint update: `29466ce2c4d26ccad031ac6d0da9423ce51341be` (the preceding checkpoint commit).
-- Final PR metadata re-fetch: open, draft, unmerged, mergeable=true; base SHA remains `a56526ae5896dfd06293ccab64289fd75507dda5`. Mergeability is GitHub's current metadata, not approval or permission to merge.
+- Head immediately before this checkpoint update: `41201fc79b081888ad2974b2fb65ca5e1855521e` (the preceding checkpoint commit).
+- Final PR metadata re-fetches consistently show open, draft, unmerged and base SHA `a56526ae5896dfd06293ccab64289fd75507dda5`; GitHub's `mergeable` field fluctuated between true and false across consecutive reads, so it is treated as unstable/unresolved metadata. No mergeability remediation, rebase, retarget or protected-state change was attempted.
 - Scope: additive audit/evidence only; no runtime/source implementation changes, adoption, retirement, deletion, baseline selection, merge, rebase, retarget, cherry-pick, review-state change, Gate A/B, Stage A, or acceptance.
 
 ## Work completed and exact evidence
