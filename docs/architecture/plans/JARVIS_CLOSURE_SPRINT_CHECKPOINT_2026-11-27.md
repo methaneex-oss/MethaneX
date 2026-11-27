@@ -206,3 +206,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md`, fetched back SHA `039f269037fec426949596409e923b5edfdc69ac`.
 - Continuous state and adaptive appraisal/calibration inspected; synthetic test contracts include persistence and goal outcome. Evidence depends on supplied consequence error, weak evidence relevance floor and modulator floor; no long-run calibration/stability or wall-clock decay tests. No native execution.
+
+
+## Immediate continuation — goal/intent/self-capability audit (2026-11-27)
+
+- Report `DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md`, fetched back SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
+- Donor goal lifecycle/momentum, intent selection and self-capability availability/performance/isolation compared. Prerequisite-cycle and completion bypass, nonfinite intent/self-model inputs and isolated-health aggregation remain open. Test source inspected; SelfModel mapping incomplete; no native execution.
