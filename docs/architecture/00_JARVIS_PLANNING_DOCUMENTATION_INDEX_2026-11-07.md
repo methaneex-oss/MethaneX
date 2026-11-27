@@ -170,3 +170,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Real-capability gap audit](reports/JARVIS_REAL_CAPABILITY_GAP_AUDIT_2026-11-27.md): source/test/CMake blob revalidation at current pre-update head, capability/autonomy gaps; SHA `dc45009074599b9dd51d14fa807807848b3f1507`.
 
 - [Direct LearningLoop/EvolutionModel adoption adjudication](reports/DF02_DIRECT_LEARNING_LOOP_EVOLUTION_ADOPTION_ADJUDICATION_2026-11-27.md): direct ungated scalar adoption path, proposal validation and successful-test gap; SHA `53c657ec5fe8465c93944e2342c40ebc45d91132`.
+
+- [Self-test diagnostic/healing transaction adjudication](reports/DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md): tautological diagnostics, weak repair verification and persistence-result gaps; SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
