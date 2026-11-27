@@ -1160,3 +1160,10 @@ Candidate core library has 57 source entries; donor 64, seven new Brain/affectiv
 Report: [DF02 Engineering C++ Source/Test Registration and Release-Assertion Adjudication](DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md), verified SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
 
 Donor engineering CMake adds task_ledger.cpp and task-ledger CTest. Both donor engineering suites use assert but CMake lacks Release `-UNDEBUG`/`/UNDEBUG`; checks compile out under NDEBUG. No engineering build/CTest execution. This is an additional verification gap.
+
+
+## 38. Native CI/learning-trial workflow adjudication (2026-11-27)
+
+Report: [DF02 Native CI, Persistence Soaks and Learning-Trial Workflow Adjudication](DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md), verified SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
+
+Brain CI configures Release full CTest and Debug ASan/UBSan full CTest; core workflow also Debug CTest. Manual persistence/probe and DLT-001/002 runs are bounded and artifact-producing. Multi-seed sweep compares learning with fixed policies but has no statistical acceptance threshold and control is not matched brain learning-disabled. Workflows use tagged actions, jarvis-core lacks explicit permissions, and no frozen donor SHA run available. No execution performed.
