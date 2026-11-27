@@ -145,3 +145,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Goal/intent/self-capability adjudication](reports/DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md): lifecycle, intent, capability model and prerequisite/nonfinite/health gaps; SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
 
 - [Knowledge/adaptation/representation/reflection adjudication](reports/DF02_KNOWLEDGE_ADAPTATION_REPRESENTATION_REFLECTION_ADJUDICATION_2026-11-27.md): donor model changes, frozen KnowledgeModel scope and global adaptation/reflection limitations; SHA `ef9038472f4112a152af2e07f7a0b5841f720f27`.
+
+- [Core C++ test build/registration adjudication](reports/DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md): candidate/donor target/CTest reconciliation, DLT fixture and Release assertion behavior; SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
