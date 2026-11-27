@@ -76,3 +76,43 @@ The exact candidate and donor core test-CMake blobs are `dab0c52ab4dfe15e1e2cbcc
 The fictional MCU JARVIS is depicted as context-aware, adaptive, action-capable and capable of managing complex systems. Those are narrative capabilities, not an engineering specification or empirical evidence. Credible agent/cognitive engineering instead requires explicit state and memory models, grounded perception, prediction/error correction, bounded planning, tool/action authorization, outcome feedback, provenance and recoverable learning. The inspected source shows genuine mechanisms for experiment evaluation, action isolation, model adaptation, journaling and rollback. However, the candidate/donor comparison exposes meaningful trust and lifecycle gaps, and neither source presence nor test registration demonstrates integrated, robust, context-aware behavior. Under the user's benchmark—“If Tony Stark built the real JARVIS using this design and implementation, would it be capable, adaptive, reliable, context-aware and genuinely useful?”—the evidence supports “not yet demonstrated.” The right next step is verified behavioral integration and safe feedback, not more capability labels or documentation volume.
 
 **Final disposition: this is a material, exact-source audit advancement. It does not close any of the seven paths, the 159-path ledger, DF-02, Gate A, Gate B, Foundation acceptance, or authorize Stage A.**
+
+
+## Discovery-artifact reconciliation — full 159-path coverage inventory
+
+The frozen discovery ZIP was downloaded from workflow artifact `14956148301` and independently SHA-256 hashed in this run. Computed digest: `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`, matching the controlling audit's recorded digest.
+
+The artifact's raw CSVs were parsed and reconciled as follows:
+
+| Reconciled dimension | Exact result |
+|---|---:|
+| Donor paths in presence inventory | 159 |
+| Candidate same-path status | 95 divergent / 63 absent / 1 identical |
+| Exact path/blob ownership records | 798 |
+| Donor blob records | 159 |
+| Candidate blob records | 96 (95 divergent + 1 identical) |
+| Non-candidate, non-donor alternate blobs | 544 |
+| Paths carrying at least one alternate blob | 88 |
+| Alternate blobs by role | 299 production / 190 test / 53 build / 2 workflow |
+| Unique branch tips | 213 |
+| Unique text blobs scanned | 1,416 |
+| Candidate symbol-consumer rows | 40,048 |
+| Exact path-reference rows | 1,946 |
+
+The 544 alternate count was independently recomputed from `path_blob_ownership.csv` by excluding exact donor and candidate blobs. The one path where candidate and donor content is identical is represented by a single ownership record carrying both flags; accounting for that shared record avoids double-subtracting it. This reconciles the 544 figure exactly across 88 paths. The 798 ownership records are unique path/blob pairs; the 159 donor + 96 candidate role flags overlap once on the identical blob, so they must not be summed as unique rows.
+
+The 159-row path inventory was joined to ownership rows by exact donor path. Every row receives the conservative disposition `OPEN_NOT_FULLY_SEMANTICALLY_ADJUDICATED` and `OPEN_NO_AUTHORITY_DECISION`; this is deliberate. Presence, version counts, candidate status, tip coverage and donor symbol counts are coverage/provenance indices, not semantic closure or ownership authority.
+
+Highest-dispersion cohorts by exact alternate blob count are:
+- `core/cpp/tests/CMakeLists.txt`: 38 alternates across 40 versions.
+- `core/cpp/src/brain.cpp`: 33 alternates across 35 versions.
+- `engineering/cpp/CMakeLists.txt`: 33 alternates across 35 versions.
+- `core/cpp/tests/evolution_brain_integration_suite.cpp`: 22 alternates across 24 versions.
+- `core/cpp/CMakeLists.txt`: 20 alternates across 22 versions.
+- `core/cpp/include/jarvis/core/brain.hpp`: 19 alternates across 21 versions.
+- `core/cpp/src/brain_restored_api.cpp`: 18 alternates across 20 versions.
+- `core/cpp/src/evolution_controller.cpp`: 17 alternates across 19 versions.
+
+**What this closes:** the discovery-artifact integrity and 159-path/544-alternate coverage arithmetic are now independently reconciled.
+
+**What this does not close:** none of the 159 paths is semantically or authority-closed by the inventory alone. The 544 alternate blobs still require exact-content semantic grouping, branch-tip owner/provenance review, reverse-consumer classification, build/test reachability, behavioral evidence and retention/retirement authority. The 40,048 lexical rows and 1,946 exact-path rows remain discovery candidates, not fully adjudicated dependencies.
