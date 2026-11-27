@@ -116,3 +116,26 @@ Highest-dispersion cohorts by exact alternate blob count are:
 **What this closes:** the discovery-artifact integrity and 159-path/544-alternate coverage arithmetic are now independently reconciled.
 
 **What this does not close:** none of the 159 paths is semantically or authority-closed by the inventory alone. The 544 alternate blobs still require exact-content semantic grouping, branch-tip owner/provenance review, reverse-consumer classification, build/test reachability, behavioral evidence and retention/retirement authority. The 40,048 lexical rows and 1,946 exact-path rows remain discovery candidates, not fully adjudicated dependencies.
+
+
+## Additional exact historical slice — memory journal framing variant
+
+The same hash-verified discovery artifact contains nine distinct `core/cpp/src/memory.cpp` blobs: one frozen candidate, one frozen donor and seven alternates. Exact ownership records identify the framed-journal alternate:
+
+- Blob: `88314ed3a43c765f8a69255ace97afb7df1a6c5e`.
+- Unique owner tip: `b0560edaa72b6d455001be51695731cf988b43b2`.
+- Branch: `fix/memory-journal-framing-20261028`.
+- Owner-tip commit message: `fix(memory): validate framed stream modes and legacy append guard`, dated 2026-10-28; commit author/committer is the repository owner.
+- Exact candidate memory blob: `ba72a897306d4761246d0deab2fbab37c49d372f`.
+- Exact donor memory blob: `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
+
+This alternate adds a V2 journal header, length-delimited event frames and a 64-bit FNV-1a checksum. Its reader can skip a complete frame with a bad checksum or invalid event while continuing at the next declared frame boundary; incomplete trailing frames are truncated to the last valid boundary. It also migrates legacy unframed journals to the V2 format after reading, using a temporary file and rename. The checksum detects accidental corruption; it is not a cryptographic authenticity mechanism.
+
+The exact owner-tip CMake files are:
+- Production CMake: `core/cpp/CMakeLists.txt`, blob `bc264ce7b4ae489404ca03ea6d9676d0330a6a56`; it registers `src/memory.cpp`.
+- Test CMake: `core/cpp/tests/CMakeLists.txt`, blob `07a6421fe425b3a86f414c5923854d8a1ce4bc7e`; it registers `memory_architecture_suite.cpp` but no dedicated `memory_journal_framing_suite.cpp` target (the latter path returns 404 at this exact owner tip).
+- Registered memory test source: `core/cpp/tests/memory_architecture_suite.cpp`, blob `5d824f08437916e48749bf539cc94e10c9f44347`. Exact text inspection finds restart and memory-ranking/promotion/consolidation checks but no assertions mentioning framing, checksum, corrupt records, legacy migration or truncation.
+
+A material failure-mode caveat remains in this alternate: the legacy-read path truncates any unreadable suffix to `valid_end` before the migration block and does not quarantine that suffix. If the legacy journal is damaged, this branch does not provide the donor lineage's later `.corrupt` preservation behavior. The framed reader's recovery of complete interior bad frames is a different guarantee from preservation of a damaged legacy tail. The temporary-file rename behavior also needs platform-specific validation, especially replacement semantics where rename-over-existing differs.
+
+**Disposition:** this one-tip historical implementation is a meaningful integrity/recovery design variant, not an accepted successor. Its branch-local provenance is identified, its build registration is confirmed, and the absence of dedicated framing/corruption tests is established by exact test-CMake and test-source inspection. It remains OPEN for comparison against the donor's corrupt-tail quarantine and metadata lifecycle, fault-injection tests, platform behavior, and retention authority. No test was executed in this run.
