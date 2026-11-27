@@ -6,7 +6,7 @@
 - Branch: `docs/df02-option-a-full-semantic-adjudication-20261125`
 - Base: `docs/pr192-independent-findings-response-20261125`
 - Base SHA: `a56526ae5896dfd06293ccab64289fd75507dda5`
-- Head immediately before this checkpoint update: `41201fc79b081888ad2974b2fb65ca5e1855521e` (the preceding checkpoint commit).
+- Head immediately before this checkpoint update: `fcb8b0b9db214d800a8a8f80f50a8430831d036e` (the preceding exact-source and artifact-reconciliation report commit).
 - Final PR metadata re-fetches consistently show open, draft, unmerged and base SHA `a56526ae5896dfd06293ccab64289fd75507dda5`; GitHub's `mergeable` field fluctuated between true and false across consecutive reads, so it is treated as unstable/unresolved metadata. No mergeability remediation, rebase, retarget or protected-state change was attempted.
 - Scope: additive audit/evidence only; no runtime/source implementation changes, adoption, retirement, deletion, baseline selection, merge, rebase, retarget, cherry-pick, review-state change, Gate A/B, Stage A, or acceptance.
 
@@ -30,6 +30,7 @@
 6. Confirmed exact CMake blob SHAs and production registration of controller, runner, coordinator, orchestrator and adoption journal in both frozen graphs. Donor graph additionally registers split Brain API/action/prediction-context and affective/developmental translation units.
 7. Added `docs/architecture/reports/DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md`. File was fetched back after creation; blob SHA `17c08e0a7c2d26bcfaa0490d6c38fc7159c3b121`, 13,187 characters. Its evidence is source/API/test-content comparison and explicitly does not close any of the seven paths.
 8. No source/runtime implementation was changed. No test, build, sanitizer, static analysis, or workflow was executed in this run because the connected GitHub operations expose content/metadata but not native shell/worktree execution or workflow dispatch.
+9. Downloaded frozen discovery artifact `14956148301`; independently computed SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38` matches the controlling report. Parsed and reconciled the 159-path presence inventory and 798 path/blob ownership records: 95 divergent, 63 candidate-absent, one identical; 544 non-candidate/non-donor alternate blobs across 88 paths (299 production, 190 test, 53 build, two workflow). The identical candidate/donor blob is counted once. Added the exact arithmetic and scope boundary to the evolution audit report.
 
 ## Five review lenses applied to the new exact-source slice
 1. Semantic correctness: source-level evaluation/adoption and identity differences confirmed; no path marked closed.
@@ -53,8 +54,8 @@ These are five scoped review lenses for this evidence slice, not a claim that th
 - Test-source comparison: implemented / content-inspected only / executed: no / accepted: no.
 - Additive evidence report: committed / fetched back and hash verified / independent review pending.
 - Native build, CTest, sanitizers, static analysis: blocked by connector capabilities; no execution claimed.
-- 159-path semantic/authority ledger: OPEN; next action is exact per-path semantic dispositions and per-blob owner/provenance/retention mapping.
-- 544 alternate blobs: enumerated/triaged for coverage; not individually semantically adjudicated.
+- 159-path coverage arithmetic: reconciled against the SHA-256-verified discovery artifact; 159 paths and 544 alternate blobs across 88 paths accounted for. Semantic/authority ledger remains OPEN; next action is exact per-path semantic dispositions and per-blob owner/provenance/retention mapping.
+- 544 alternate blobs: exact ownership extract reconciled by path/blob and branch-tip metadata; not individually semantically adjudicated.
 - 40,048 symbol candidates and 1,946 path references: candidate-tip slice partly reconciled; historical rows not fully adjudicated.
 - DF-09: BLOCKED pending genuine blind fresh-reader CLEAR against frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.
 - DF-11: BLOCKED under accepted governance unless independently reviewed or governance amended.
@@ -62,6 +63,6 @@ These are five scoped review lenses for this evidence slice, not a claim that th
 - PR #203: keep draft/unmerged; no merge/retarget/rebase or protected-state changes.
 
 ## Next bounded task
-Continue exact semantic adjudication of the next highest-value unresolved cohort, not repeated report summaries: map each path's candidate/donor/alternate blob SHA to semantic API/behavior deltas, exact declaration-definition ownership, CMake and test reachability, reverse consumers by context, branch-tip provenance, authority and retention. Prioritize remaining high-dispersion memory, process-isolation, evolution and cognitive-runtime paths, then close lower-dispersion cohorts. Record every unresolved item explicitly. Use an authorized native CI/worktree path for fresh build/CTest and fault-injection evidence. Obtain independent review only after the evidence ledger is complete.
+Continue exact semantic adjudication of the next highest-value unresolved cohort, not repeated report summaries. The frozen discovery artifact is now hash-verified and the 159-path/544-alternate arithmetic reconciled; use its exact blob and owner metadata as the ledger input: map each path's candidate/donor/alternate blob SHA to semantic API/behavior deltas, exact declaration-definition ownership, CMake and test reachability, reverse consumers by context, branch-tip provenance, authority and retention. Prioritize remaining high-dispersion memory, process-isolation, evolution and cognitive-runtime paths, then close lower-dispersion cohorts. Record every unresolved item explicitly. Use an authorized native CI/worktree path for fresh build/CTest and fault-injection evidence. Obtain independent review only after the evidence ledger is complete.
 
 No Gate A/B clearance, foundation acceptance, baseline selection, implementation authorization, Stage A start, adoption, retirement or deletion is implied.
