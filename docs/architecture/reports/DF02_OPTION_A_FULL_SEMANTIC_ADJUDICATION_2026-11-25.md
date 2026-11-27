@@ -982,3 +982,12 @@ The exact candidate/donor source and public header were fetched at the frozen re
 The audit also found important assurance limits common to the candidate/donor core: `isolated` is set before requested child controls are verified; RLIMIT return values are ignored; network syscall filtering is a bounded syscall list and optional; process-group cleanup, inherited descriptors, path/fingerprint races and OS sandbox robustness lack adversarial tests. Candidate/donor process-isolation test source blobs are identical and cover only basic success/output, timeout, output-cap, requested-control fail-closed behavior and socket denial. Both CMake graphs register the two suites; **CTest was not executed**.
 
 Disposition: source-level cohort comparison completed; historical owner/authority/retention, full reverse-consumer trace and OS-level verification remain open. No implementation preference/adoption or path closure is inferred.
+
+
+## 13. Restored Brain API ownership variant adjudication (2026-11-27)
+
+Report: [DF02 Restored Brain API Ownership and Variant Adjudication](DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md), verified report blob SHA `e8fd69edde496c89eba84d7a25ee2c1eb02e3cc0`.
+
+Exact content inventory: 20 distinct `brain_restored_api.cpp` blobs (candidate + donor + 18 alternates), method-surface extraction, and owner-tip inventory. Candidate restored API has 64 unique method names; donor has 68, with four donor-only method names related to developmental strategies, recorded evolution evaluation and prediction-feedback resolution. Candidate's CMake does not register the restored API translation unit; donor CMake registers it. Candidate source/API extraction shows overlapping definitions; donor source split is clean by method-name extraction. The prior “40 overlap” count and the current “43 unique method names” extraction are not reconciled; AST/signature-level analysis remains required.
+
+Disposition: source ownership/build discrepancy confirmed; alternate semantic clusters, exact API/consumer compatibility, authority/retention and behavior remain open. No path closure or source selection.
