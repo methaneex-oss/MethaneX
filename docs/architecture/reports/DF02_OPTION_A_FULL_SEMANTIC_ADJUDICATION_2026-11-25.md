@@ -1216,3 +1216,10 @@ Re-fetched its ten source/test/CMake files at PR #203 head `8a733d20b86fe349c38f
 Report: [DF02 Direct LearningLoop/EvolutionModel Adoption Path Adjudication](DF02_DIRECT_LEARNING_LOOP_EVOLUTION_ADOPTION_ADJUDICATION_2026-11-27.md), verified SHA `53c657ec5fe8465c93944e2342c40ebc45d91132`.
 
 A separate scalar-feedback path directly mutates EvolutionModel parameters without experiment isolation/controller gate. Public adopt accepts caller-supplied proposal/gain without recomputation from fitness. The donor test's eight observations yield confidence ≈0.632, below hardcoded 0.75, so successful adoption is not exercised; assertion `adopted<=1` is non-acceptance evidence. No Brain consumer found. OPEN.
+
+
+## 73. Self-test diagnostic/healing transaction adjudication (2026-11-27)
+
+Report: [DF02 Self-Test Diagnostic Validity and Healing-Transaction Adjudication](DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md), verified SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
+
+Brain self-test has two tautological checks (journal-readable, goals-readable) and only six shallow invariants. Phase-9 repair verifier merely checks component name and a Boolean, not health; self-heal ignores recovery-event append failure and callbacks are in-process/unbounded. Test source inspected, not run.
