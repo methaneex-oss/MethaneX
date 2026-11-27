@@ -1055,3 +1055,10 @@ Direct adoption API enforces matching durable evaluation, outcome recomputation,
 Report: [DF02 Action Execution and Consequence-Persistence Contract Adjudication](DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md), verified SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
 
 Donor adds observed consequence, prediction sequence/context binding and feedback learning. Phase-7 tests assert consequence evidence can change later planning and survive reconstruction. Material gap: Brain returns execution status even if journal append fails; prediction remains unresolved and outcome/learning may be lost. Separate outcome/affective/learning appends can partially fail; no transactional batch or persistence-failure status. Tests inspected, not executed.
+
+
+## 23. Memory journal/metadata/consolidation adjudication (2026-11-27)
+
+Report: [DF02 Memory Journal, Metadata Migration and Consolidation Variant Adjudication](DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md), verified SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
+
+Nine exact source blobs and eight test blobs compared. Donor improves unreadable-suffix quarantine, metadata V1→V2 migration (consolidation field), staged metadata validation, tier/cursor rebuilding, retrieval filtering and consolidation ranking. Frozen donor's event journal remains raw/unframed/no checksum; the checksummed framing branch is a separate historical alternate, not donor-integrated. Metadata snapshot rename and append flush lack fsync durability. Tests cover corrupt-tail quarantine, missing metadata reconstruction, consolidation/ranking; not crash/fault/concurrency or parseable corruption. No tests executed.
