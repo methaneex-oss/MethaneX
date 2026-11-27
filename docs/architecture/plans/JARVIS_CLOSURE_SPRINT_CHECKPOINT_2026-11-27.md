@@ -87,3 +87,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Material safety gaps: result `isolated` set before control enforcement; ignored `setrlimit` errors; optional/incomplete network restrictions; missing hostile-descendant, FD, path-race, platform, and failure-injection tests. Tests are source-inspected and CMake-registered, not executed.
 - This cohort's source comparison is bounded completion only. Consumer trace partial; owner authority/retention and adversarial validation remain open; no source selection or closure.
 - No runtime changes; PR remains draft/unmerged; no Stage A or gate decision.
+
+
+## Immediate continuation — restored Brain API ownership cohort (2026-11-27)
+
+- Added `docs/architecture/reports/DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md`; fetched back and SHA-verified `e8fd69edde496c89eba84d7a25ee2c1eb02e3cc0`.
+- Exact inventory: candidate/donor plus 18 historical alternate blobs; all 20 content blobs in the frozen artifact. Candidate API extracted 64 unique method names; donor 68; four donor-only names. Candidate restored API translation unit is not registered by frozen candidate CMake, while donor registers it.
+- Candidate brain.cpp/API extraction found overlapping method names; donor split has zero name overlap. The prior “40 overlapping definitions” and current 43 shared unique names are not reconciled; no AST/signature closure claimed.
+- This source/API/build-owner cohort is materially advanced but remains open for semantic behavior, reverse consumers, test reachability, provenance/authority and retention. No source selection or runtime changes.
