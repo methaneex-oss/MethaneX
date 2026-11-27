@@ -224,3 +224,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
 - Candidate 45 executables/45 CTest; donor 71/70. Source paths and commands reconciled; two long-run targets workflow-driven; DLT-002 persistence uses train/verify fixture; Release assertions enabled. Native build evidence is older SHA/configure+build only, no CTest. Semantics/execution remain open.
+
+
+## Immediate continuation — engineering agent/message bus/task ledger (2026-11-27)
+
+- Report `DF02_ENGINEERING_AGENT_MESSAGE_BUS_AND_TASK_LEDGER_ADJUDICATION_2026-11-27.md`, fetched back SHA `ee2b72bdc18814dd8e69c6a2b2e6d3fdb28f73a1`.
+- Donor bus bounded queue/dedup/backpressure and task ledger CAS/locking/replay reviewed. Sender spoofing, ledger immutable-field/status-transition/checksum gaps, torn-tail and fsync durability, actual artifact verification/persistence remain open. Tests inspected, not run.
