@@ -166,3 +166,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 
 - [Action assessment/workspace/developmental-world adjudication](reports/DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md): action confidence/risk defect, snapshot semantics and world reset/callback gaps; SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
 
+
+- [Real-capability gap audit](reports/JARVIS_REAL_CAPABILITY_GAP_AUDIT_2026-11-27.md): source/test/CMake blob revalidation at current pre-update head, capability/autonomy gaps; SHA `dc45009074599b9dd51d14fa807807848b3f1507`.
