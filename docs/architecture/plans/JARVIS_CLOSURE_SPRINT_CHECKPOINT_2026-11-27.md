@@ -6,7 +6,7 @@
 - Branch: `docs/df02-option-a-full-semantic-adjudication-20261125`
 - Base: `docs/pr192-independent-findings-response-20261125`
 - Base SHA: `a56526ae5896dfd06293ccab64289fd75507dda5`
-- Head immediately before this checkpoint update: `fcb8b0b9db214d800a8a8f80f50a8430831d036e` (the preceding exact-source and artifact-reconciliation report commit).
+- Head immediately before this checkpoint update: `b0f7a77f117969dc84f3545478ac9fab888fb1b1` (the preceding exact-source and memory-journal evidence commit).
 - Final PR metadata re-fetches consistently show open, draft, unmerged and base SHA `a56526ae5896dfd06293ccab64289fd75507dda5`; GitHub's `mergeable` field fluctuated between true and false across consecutive reads, so it is treated as unstable/unresolved metadata. No mergeability remediation, rebase, retarget or protected-state change was attempted.
 - Scope: additive audit/evidence only; no runtime/source implementation changes, adoption, retirement, deletion, baseline selection, merge, rebase, retarget, cherry-pick, review-state change, Gate A/B, Stage A, or acceptance.
 
@@ -31,6 +31,7 @@
 7. Added `docs/architecture/reports/DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md`. File was fetched back after creation; blob SHA `17c08e0a7c2d26bcfaa0490d6c38fc7159c3b121`, 13,187 characters. Its evidence is source/API/test-content comparison and explicitly does not close any of the seven paths.
 8. No source/runtime implementation was changed. No test, build, sanitizer, static analysis, or workflow was executed in this run because the connected GitHub operations expose content/metadata but not native shell/worktree execution or workflow dispatch.
 9. Downloaded frozen discovery artifact `14956148301`; independently computed SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38` matches the controlling report. Parsed and reconciled the 159-path presence inventory and 798 path/blob ownership records: 95 divergent, 63 candidate-absent, one identical; 544 non-candidate/non-donor alternate blobs across 88 paths (299 production, 190 test, 53 build, two workflow). The identical candidate/donor blob is counted once. Added the exact arithmetic and scope boundary to the evolution audit report.
+10. Extended exact historical memory lineage: identified the one-tip framed-journal alternate `88314ed3a43c765f8a69255ace97afb7df1a6c5e` on `fix/memory-journal-framing-20261028` (owner tip `b0560edaa72b6d455001be51695731cf988b43b2`). Verified V2 framing/checksum, legacy migration, incomplete-tail truncation behavior, exact CMake registration, and that the registered memory architecture suite contains no dedicated frame/checksum/corruption/migration assertions. Recorded the unresolved legacy-corrupt-tail preservation and platform rename risks in the audit report.
 
 ## Five review lenses applied to the new exact-source slice
 1. Semantic correctness: source-level evaluation/adoption and identity differences confirmed; no path marked closed.
