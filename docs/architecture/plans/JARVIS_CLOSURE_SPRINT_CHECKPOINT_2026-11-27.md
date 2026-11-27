@@ -272,3 +272,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md`, fetched back SHA `6d89b9fd922dc4f3c74797838be67c26e34d76ce`.
 - Normal child exit can leave descendants; process-group/rlimit return values unchecked; no applied-control certificate, inherited environment/FDs, non-hermetic FS/network and fork-safety gaps. Tests inspected, not run.
+
+
+## Immediate continuation — action assessment/workspace/world primitives (2026-11-27)
+
+- Report `DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md`, fetched back SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
+- ActionModel confidence ignores action confidence and converts nonfinite risk to zero. Strategy/goal-outcome finite validation gaps; workspace is nonpersistent snapshot; world reset/callback/state-validation gaps. Tests inspected, not executed.
