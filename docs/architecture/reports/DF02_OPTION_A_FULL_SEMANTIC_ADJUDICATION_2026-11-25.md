@@ -1076,3 +1076,10 @@ Donor distrusts callback isolation, adds isolated-command parsing and private fi
 Report: [DF02 Association, Contextual Generalization and Causal-Hypothesis Adjudication](DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md), verified SHA `8bed402fc935f9a7d99be27d58b122d087ab5725`.
 
 Association donor adds contradiction-aware co-change, contextual graph inference, shared-neighbor concept candidates and prediction feedback. Causal model derives directional hypotheses from transition co-occurrence; no intervention/confounder identification. Public association observe/feedback methods do not reject non-finite evidence before clamp; NaN can poison weights. Test source inspected, not executed; adversarial finite/invalid and causal controls open.
+
+
+## 26. Causal-link typed codec compatibility adjudication (2026-11-27)
+
+Report: [DF02 Causal-Link Typed Codec Compatibility Adjudication](DF02_CAUSAL_LINK_TYPED_CODEC_COMPATIBILITY_ADJUDICATION_2026-11-27.md), verified SHA `c23780d44acafa6543e28dcf1b167c93fc36894e`.
+
+Donor-only codec adds length-prefixed typed scalar encoding and V1 legacy decode. Source review identifies empty-key encode/decode asymmetry, legacy `@2|` prefix misclassification, nonfinite double acceptance, default-locale float encoding/decoding, and inherent V1 type ambiguity. No dedicated codec tests located; source only.
