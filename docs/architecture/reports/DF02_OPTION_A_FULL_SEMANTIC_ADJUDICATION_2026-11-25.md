@@ -1041,3 +1041,10 @@ Candidate canary uses a single shared accumulator and mean regression; donor use
 Report: [DF02 Brain Journal Replay, Outcome-Validation and Derived-Learning Adjudication](DF02_BRAIN_JOURNAL_REPLAY_AND_OUTCOME_VALIDATION_ADJUDICATION_2026-11-27.md), verified SHA `2952aaf8719af375e7f4c06f3774b7ff88fabc1e`.
 
 Candidate/donor replay compared. Donor adds sequence-bound predictions, validation-before-mutation, prediction-error recomputation, action outcome validation, source-sequence binding for derived affective learning, external-observation/novelty persistence and replay/consolidation improvements. Donor deep and action-consequence integration test contracts inspected. Gap: action consequence error is only finite-checked, not recomputed against expected/actual, allowing a finite inconsistent outcome to pass validation and affect learning; regression test missing. Invalid historic events can advance cycle metadata before validation. No tests run; 35-source full semantic closure remains open.
+
+
+## 21. Evolution event replay authority-boundary adjudication (2026-11-27)
+
+Report: [DF02 Evolution Event Replay Authority-Boundary Adjudication](DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md), verified SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
+
+Direct adoption API enforces matching durable evaluation, outcome recomputation, journal identity, safety policy and attestation. Brain replay `evolution_adopt` instead requires only experiment ID, reconstructs and re-attests claimed isolation, then directly model-adopts and journal-replays without matching evaluation/history validation. Public `observe(Event)` can append event kinds without evolution-specific prevalidation. Replay rollback checks adopted state but not event key versus adoption-record key. Direct rollback also does not require latest active experiment for that parameter; stale canary could reset baseline while newer adoption remains marked adopted. Donor tests cover unversioned legacy rejection and direct API cases, not versioned forged/mismatched events. Source only; no tests run.
