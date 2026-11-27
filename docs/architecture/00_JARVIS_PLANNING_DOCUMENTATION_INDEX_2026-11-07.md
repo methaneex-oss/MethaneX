@@ -137,3 +137,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Contextual prediction/numeric calibration adjudication](reports/DF02_CONTEXTUAL_PREDICTION_NUMERIC_CALIBRATION_ADJUDICATION_2026-11-27.md): donor-only contextual prediction, global-key calibration leakage and confidence/identity gaps; SHA `d402b3dca026155b6961cc3ad8ca30a5b879e44d`.
 
 - [Decision/planning/reasoning pipeline adjudication](reports/DF02_DECISION_PLANNING_REASONING_PIPELINE_ADJUDICATION_2026-11-27.md): affective score integration, malformed numerical evidence and order-dependent inference gaps; SHA `3d1f24e62752465b5ab9b3944a14c98c7eda22f3`.
+
+- [Attention salience/feedback/persistence adjudication](reports/DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md): donor attention expansion, NaN contamination and constant-focus novelty gaps; SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
