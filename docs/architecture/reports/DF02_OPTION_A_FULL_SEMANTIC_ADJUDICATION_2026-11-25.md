@@ -1062,3 +1062,10 @@ Donor adds observed consequence, prediction sequence/context binding and feedbac
 Report: [DF02 Memory Journal, Metadata Migration and Consolidation Variant Adjudication](DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md), verified SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
 
 Nine exact source blobs and eight test blobs compared. Donor improves unreadable-suffix quarantine, metadata V1→V2 migration (consolidation field), staged metadata validation, tier/cursor rebuilding, retrieval filtering and consolidation ranking. Frozen donor's event journal remains raw/unframed/no checksum; the checksummed framing branch is a separate historical alternate, not donor-integrated. Metadata snapshot rename and append flush lack fsync durability. Tests cover corrupt-tail quarantine, missing metadata reconstruction, consolidation/ranking; not crash/fault/concurrency or parseable corruption. No tests executed.
+
+
+## 24. Evolution runner/isolation-attestation adjudication (2026-11-27)
+
+Report: [DF02 Evolution Experiment Runner and Isolation-Attestation Contract Adjudication](DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md), verified SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
+
+Donor distrusts callback isolation, adds isolated-command parsing and private field-snapshot attestation, and safety gate recomputes gain/threshold. Attestation is not cryptographic provenance and Brain/controller replay can re-attest reconstructed events. Backend isolation remains coarse bool; optional control success isn't a detailed certificate. Fitness range is not enforced in direct runner/controller paths; candidate-executed is not required when policy isolation is disabled. Tests cover callback lying, mutation, timeout, output cap, NaN and exception, not replay forgery, range, disabled-execution, or platform controls. Source only.
