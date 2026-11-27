@@ -95,3 +95,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Exact inventory: candidate/donor plus 18 historical alternate blobs; all 20 content blobs in the frozen artifact. Candidate API extracted 64 unique method names; donor 68; four donor-only names. Candidate restored API translation unit is not registered by frozen candidate CMake, while donor registers it.
 - Candidate brain.cpp/API extraction found overlapping method names; donor split has zero name overlap. The prior “40 overlapping definitions” and current 43 shared unique names are not reconciled; no AST/signature closure claimed.
 - This source/API/build-owner cohort is materially advanced but remains open for semantic behavior, reverse consumers, test reachability, provenance/authority and retention. No source selection or runtime changes.
+
+
+## Immediate continuation — cognitive runtime and cycle audit slices (2026-11-27)
+
+- Runtime report: `DF02_COGNITIVE_RUNTIME_VARIANT_AND_CLOSED_LOOP_ADJUDICATION_2026-11-27.md`, fetched/hash-verified `fa192b50437fc7014a4c9c7076d6d77b1f8f6658`. Seven source blobs; donor adds async feedback, provider, action adapter/execution and outcome feedback; expanded test contract inspected.
+- Runtime static risks: stop/drain may reject feedback produced by in-flight work; feedback-first worker scheduling may starve inputs; no retry/backpressure for saturated feedback. All remain test/decision obligations.
+- Cognitive cycle report: `DF02_COGNITIVE_CYCLE_CONTEXTUAL_LEARNING_VARIANT_ADJUDICATION_2026-11-27.md`, verified `7ec23e8382b789c7ccfe6900c3ee6111130b2c42`. Ten source blobs and seven tests; donor context inference/escaping, action outcome recall, contextual strategy transfer, affect and feedback contracts inspected. Donor tests cover context alias prevention, learning persistence, context isolation and regime-change behavior, but are not executed.
+- Both cohorts remain OPEN for full consumer, authority/provenance/retention and execution verification. No source changes, adoption or gate decision.
