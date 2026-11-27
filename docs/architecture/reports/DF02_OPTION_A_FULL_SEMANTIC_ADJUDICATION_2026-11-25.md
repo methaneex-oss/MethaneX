@@ -1188,3 +1188,10 @@ Direct adoption lifecycle uses exact evidence and compensation. Gap: record_eval
 Report: [DF02 ExperienceMemory Sequence Identity and Resolution Adjudication](DF02_EXPERIENCE_MEMORY_SEQUENCE_IDENTITY_ADJUDICATION_2026-11-27.md), verified SHA `28adf486781da07bb0f0ea3f88dc34652fb62415`.
 
 Donor-only in-memory sequence store reviewed. Duplicate sequence overwrites map but appends index entries; changed semantic key leaves old-key index pointing to overwritten experience. Resolved predictions accepted without actual; resolve accepts nonfinite error/arbitrary outcome. Direct test covers normal sequence independence only; no tests run.
+
+
+## 42. Process-isolation child lifecycle/control adjudication (2026-11-27)
+
+Report: [DF02 Process-Isolation Child Lifecycle and Enforced-Control Adjudication](DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md), verified SHA `6d89b9fd922dc4f3c74797838be67c26e34d76ce`.
+
+Backend source inspected: direct-child success can leave descendants alive; setpgid result and setrlimit results ignored; controls are optional and no enforcement certificate; inherited environment/FDs, filesystem and network scope not hermetic; post-fork C++ operations not fully async-safe. Tests cover success/output/timeout and requested network controls only. No execution.
