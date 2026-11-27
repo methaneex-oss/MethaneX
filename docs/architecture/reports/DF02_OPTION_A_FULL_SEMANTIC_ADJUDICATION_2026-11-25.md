@@ -1069,3 +1069,10 @@ Nine exact source blobs and eight test blobs compared. Donor improves unreadable
 Report: [DF02 Evolution Experiment Runner and Isolation-Attestation Contract Adjudication](DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md), verified SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
 
 Donor distrusts callback isolation, adds isolated-command parsing and private field-snapshot attestation, and safety gate recomputes gain/threshold. Attestation is not cryptographic provenance and Brain/controller replay can re-attest reconstructed events. Backend isolation remains coarse bool; optional control success isn't a detailed certificate. Fitness range is not enforced in direct runner/controller paths; candidate-executed is not required when policy isolation is disabled. Tests cover callback lying, mutation, timeout, output cap, NaN and exception, not replay forgery, range, disabled-execution, or platform controls. Source only.
+
+
+## 25. Association/contextual generalization/causal-hypothesis adjudication (2026-11-27)
+
+Report: [DF02 Association, Contextual Generalization and Causal-Hypothesis Adjudication](DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md), verified SHA `8bed402fc935f9a7d99be27d58b122d087ab5725`.
+
+Association donor adds contradiction-aware co-change, contextual graph inference, shared-neighbor concept candidates and prediction feedback. Causal model derives directional hypotheses from transition co-occurrence; no intervention/confounder identification. Public association observe/feedback methods do not reject non-finite evidence before clamp; NaN can poison weights. Test source inspected, not executed; adversarial finite/invalid and causal controls open.
