@@ -260,3 +260,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md`, fetched back SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
 - Direct adoption gate and compensating lifecycle reviewed. Same-ID evaluation can falsely report success for altered evidence (adoption still blocked by exact validator); stale rollback can reset baseline while newer journal record remains Adopted. Multi-store compensation/crash fault tests open.
+
+
+## Immediate continuation — ExperienceMemory identity (2026-11-27)
+
+- Report `DF02_EXPERIENCE_MEMORY_SEQUENCE_IDENTITY_ADJUDICATION_2026-11-27.md`, fetched back SHA `28adf486781da07bb0f0ea3f88dc34652fb62415`.
+- Donor-only store: duplicate sequence overwrite can desynchronize key index; resolved Prediction accepted without actual; resolution error/value unvalidated; in-memory only. Direct tests normal cases; no execution.
