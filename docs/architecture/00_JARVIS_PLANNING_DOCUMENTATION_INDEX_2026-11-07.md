@@ -149,3 +149,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Core C++ test build/registration adjudication](reports/DF02_CORE_CPP_TEST_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md): candidate/donor target/CTest reconciliation, DLT fixture and Release assertion behavior; SHA `f039066be4237df1171a505dd347d8428e08d9fb`.
 
 - [Engineering agent/message bus/task ledger adjudication](reports/DF02_ENGINEERING_AGENT_MESSAGE_BUS_AND_TASK_LEDGER_ADJUDICATION_2026-11-27.md): bounded delivery/ledger gains, sender identity and durable-journal/output-artifact gaps; SHA `ee2b72bdc18814dd8e69c6a2b2e6d3fdb28f73a1`.
+
+- [Core C++ source build-registration adjudication](reports/DF02_CORE_CPP_SOURCE_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md): 57→64 source entries, seven donor TUs, C++20/build wiring; no native execution; SHA `4b9266c34f36559071d09d2b00b63e6ab74a613f`.
