@@ -1153,3 +1153,10 @@ Donor bounded message queue/dedup/backpressure and durable task-ledger CAS/repla
 Report: [DF02 Core C++ Source Build-Registration Adjudication](DF02_CORE_CPP_SOURCE_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md), verified SHA `4b9266c34f36559071d09d2b00b63e6ab74a613f`.
 
 Candidate core library has 57 source entries; donor 64, seven new Brain/affective/developmental TUs, none removed or duplicated, all present. C++20, warning flags, CTest, examples default ON; no Werror. Native build evidence is older SHA, configure/build only; no CTest. Source-registration semantic closure remains open.
+
+
+## 37. Engineering C++ build/assertion adjudication (2026-11-27)
+
+Report: [DF02 Engineering C++ Source/Test Registration and Release-Assertion Adjudication](DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md), verified SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
+
+Donor engineering CMake adds task_ledger.cpp and task-ledger CTest. Both donor engineering suites use assert but CMake lacks Release `-UNDEBUG`/`/UNDEBUG`; checks compile out under NDEBUG. No engineering build/CTest execution. This is an additional verification gap.
