@@ -1027,3 +1027,10 @@ Candidate/donor source and 13 historical versions compared. Donor adds `started`
 Report: [DF02 Evolution Orchestrator Durable-Evaluation Gate Adjudication](DF02_EVOLUTION_ORCHESTRATOR_DURABLE_EVALUATION_GATE_ADJUDICATION_2026-11-27.md), verified SHA `b395b6236b786340f040d392511f809f38e23ca7`.
 
 Exact ten source variants compared. Candidate records evaluation attempts but may proceed to adoption when the selected winner's durable `record_evaluation` fails; donor checks winner lifecycle is still `CandidateEvaluated` and returns before adoption otherwise. Donor test adds adoption-journal/history assertions, but neither candidate nor donor orchestrator suite injects evaluation-record failure to verify this exact correction. Tests inspected, not run. Semantic/authority remains open.
+
+
+## 19. Canary state and operational-evidence adjudication (2026-11-27)
+
+Report: [DF02 Canary Isolation, Evidence Semantics and Operational-Canary Adjudication](DF02_EVOLUTION_CANARY_STATE_AND_OPERATIONAL_EVIDENCE_ADJUDICATION_2026-11-27.md), verified SHA `98b3ae70b4ed21d55cef45ce030762c2c0c679e1`.
+
+Candidate canary uses a single shared accumulator and mean regression; donor uses per-experiment canary state, worst-observation regression and preview. Donor tests check cross-experiment isolation. However, orchestrator feeds the same historical baseline/candidate fitness pair three times, so the canary-retention step is not independent live operational monitoring. Controller returns the rollback decision even if rollback transaction fails; orchestrator marks RolledBack without checking transaction success. Canary accumulators are in-memory and restart persistence is not demonstrated. No tests executed; path open.
