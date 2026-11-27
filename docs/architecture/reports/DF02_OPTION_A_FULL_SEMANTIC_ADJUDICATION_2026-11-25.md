@@ -1111,3 +1111,10 @@ Donor decision/planning adds affective and consequence-aware score modulation; r
 Report: [DF02 Attention Salience, Feedback and Persistence Adjudication](DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md), verified SHA `7fe60d584a3ccc1f84bc2e8e58e167647a4e70a9`.
 
 Donor adds prediction-error/internal-activation salience and persisted policy feedback. Public score/reinforce methods do not reject nonfinite values; NaN can contaminate scores/policy. `focus(events)` passes novelty=1.0 for every event, so no per-event novelty ranking. Tests cover basic feedback, ranking, persistence; no adversarial nonfinite/focus utility tests. Source inspected, not run.
+
+
+## 31. Affective-state/appraisal-learning adjudication (2026-11-27)
+
+Report: [DF-02 Affective-State and Appraisal-Learning Adjudication](DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md), verified SHA `039f269037fec426949596409e923b5edfdc69ac`.
+
+Donor continuous affective state and adaptive appraisal/calibration model inspected; tests specify positive/negative evidence, decay, calibration, modulation, persistence, reliability and goal outcome. Limitations: calibration depends on event-supplied consequence error (cross-report validation gap), weak evidence relevance floor 0.25, modulation ratio floor 0.25, fixed heuristic equations, no long-term calibration/stability or wall-clock timing tests. No tests run.
