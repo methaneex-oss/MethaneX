@@ -242,3 +242,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
 - Donor adds task-ledger source/test and Threads. Engineering tests are assert-based, but unlike core CMake no Release assertion override; NDEBUG can remove behavioral checks. No native engineering tests run.
+
+
+## Immediate continuation — CI/learning-trial workflows (2026-11-27)
+
+- Report `DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md`, fetched back SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
+- CI is configured for Release CTest and Debug ASan/UBSan CTest. Manual persistence and DLT runs produce evidence. Multi-seed sweep has no pass threshold and uses fixed-action control, not matched no-learning brain. Workflow permissions/action pinning hardening open; no current frozen donor execution.
