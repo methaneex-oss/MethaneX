@@ -77,3 +77,13 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - `docs/architecture/reports/DF02_EVOLUTION_ADOPTION_JOURNAL_TEST_ADJUDICATION_2026-11-27.md` — commit `b405c6e13ea35dd9b49700c0c9b0c9856be2fa2f`, verified blob `2d2eada84708678574b494cdfd58940fa10ee06c`. Exact candidate/donor adoption-journal test pair compared. Donor adds compensation/restoration, identity-conflict, validation-before-mutation, replay compensation and history idempotency scenarios.
 
 **Verification boundary:** exact source content fetched and inspected; reports fetched back with matching recorded blob SHA. No native test execution, independent review, or donor implementation selection. These add concrete Phase 1/2 evidence for a limited lifecycle slice only. DF-02 remains OPEN; phases 3–4 and the complete 159-path/544-blob semantic/authority ledger remain incomplete. Current PR #203 changed-file inventory is 12 documentation paths. No source/runtime files changed, no merge/rebase/retarget, no gate acceptance or Stage A.
+
+
+## Immediate continuation — process-isolation variant adjudication (2026-11-27)
+
+- Added `docs/architecture/reports/DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md`; fetched back and SHA-verified at blob `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`.
+- Exact content inventory: 15 distinct `core/cpp/src/process_isolation.cpp` blobs (candidate, donor, 13 alternates); 193 tip-presence rows across the variants. Owner branches and exact blob SHAs are recorded in the report. All 15 contents came from the independently SHA-verified discovery artifact.
+- Candidate/donor delta: argv preparation before fork and path-qualified `execv`; historical variants add executable realpath-before-chroot, descriptor cleanup, and a Linux-only callable evaluator route.
+- Material safety gaps: result `isolated` set before control enforcement; ignored `setrlimit` errors; optional/incomplete network restrictions; missing hostile-descendant, FD, path-race, platform, and failure-injection tests. Tests are source-inspected and CMake-registered, not executed.
+- This cohort's source comparison is bounded completion only. Consumer trace partial; owner authority/retention and adversarial validation remain open; no source selection or closure.
+- No runtime changes; PR remains draft/unmerged; no Stage A or gate decision.
