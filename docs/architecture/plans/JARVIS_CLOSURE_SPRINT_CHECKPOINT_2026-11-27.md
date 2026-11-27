@@ -1,54 +1,67 @@
 # JARVIS Closure Sprint Checkpoint — 2026-11-27
 
-## Exact live state
+## Exact live state before checkpoint update
 - Repository: `methaneex-oss/MethaneX`
 - PR: #203 — open, draft, unmerged
 - Branch: `docs/df02-option-a-full-semantic-adjudication-20261125`
 - Base: `docs/pr192-independent-findings-response-20261125`
-- Head before this checkpoint write: `e88638b732779e0c1402f4cd70a3f6f1b3f19bde`
+- Base SHA: `a56526ae5896dfd06293ccab64289fd75507dda5`
+- Head immediately before this checkpoint update: `e0df5af36a8f37aa97fbc27bcbff5ba21d112b42`
+- PR reports mergeable=false at this fetch; no attempt was made to resolve, rebase, retarget or alter branch state.
 - Scope: additive audit/evidence only; no runtime/source implementation changes, adoption, retirement, deletion, baseline selection, merge, rebase, retarget, cherry-pick, review-state change, Gate A/B, Stage A, or acceptance.
 
-## Work completed in this run
-1. Reconciled live PR metadata against stale checkpoint material. PR #203 remains draft/unmerged; its current body explicitly keeps DF-02 OPEN and records the current branch/base/head.
-2. Confirmed current controlling DF-02 artifacts on the PR head:
+## Work completed and exact evidence
+1. Reconciled live PR metadata against checkpoint facts. PR #203 is still open/draft/unmerged. Earlier checkpoint head `e88638b...` was stale; live head was `497b290...` before this run's new audit commit.
+2. Re-read the controlling DF-02 audit:
    - `docs/architecture/reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md`
-   - `docs/architecture/reports/DF02_BRAIN_CPP_LINEAGE_TRIAGE_2026-11-26.md`
-   - `docs/architecture/reports/DF02_BRAIN_HPP_API_LINEAGE_TRIAGE_2026-11-26.md`
-3. Inspected candidate/base CMake and core API/source surfaces:
-   - `core/cpp/CMakeLists.txt`
-   - `core/cpp/tests/CMakeLists.txt`
-   - `core/cpp/include/jarvis/core/brain.hpp`
-   - `core/cpp/src/brain.cpp`
-   - `core/cpp/src/brain_restored_api.cpp`
-4. Confirmed a concrete source/build-graph fact for the frozen refs: the candidate CMake registers `src/brain.cpp` and a broad set of split translation units, while the inspected base comparison exposes `brain_restored_api.cpp` as a material API-definition surface. This is evidence of ownership/layout divergence; it is not a donor-selection decision.
-5. Confirmed test graph evidence already recorded by the controlling report: candidate 45 executable targets / 45 CTest registrations versus donor 71 executable targets / 70 CTest registrations in the compared exact CMake lists; candidate-vs-donor differences remain semantic/open, not closure.
+   - Phase 0 complete; Phase 1 coverage triage complete only (88 clusters / 544 alternate blobs enumerated, not individually semantically closed); Phase 2 partial; Phase 3 and Phase 4 incomplete; DF-02 OPEN.
+   - The discovery corpus reports 159 donor paths, 544 alternate blobs, 40,048 lexical symbol candidates, 1,946 exact-path-reference candidates, 213 branch tips. Scanner results are discovery candidates, not semantic dependency proof.
+3. Retrieved exact candidate and donor content at frozen refs:
+   - Candidate PR #192: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+   - Donor PR #97: `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.
+4. Compared exact source/API blobs for seven evolution lifecycle files and two behavioral test files. Concrete semantic findings include:
+   - candidate controller accepts a much weaker evaluation/adoption precondition; donor validates identity, finite values, outcome, isolation attestation and recomputed outcome, and requires durable evidence for the exact experiment;
+   - candidate callback runner trusts a returned isolation boolean; donor marks callback execution non-isolated and provides a separate process-isolated command path with result validation and snapshot-bound attestation;
+   - candidate coordinator does not enforce configured isolation across all baseline/candidate trials; donor does;
+   - donor experiment API binds the isolation attestation to the experiment's identity and evaluated values, invalidating it after mutation;
+   - donor orchestrator requires the winning candidate to remain durably evaluated before adoption;
+   - donor adoption journal rejects reuse of an experiment ID with mismatched proposal/metric/policy identity and supports compensation restoration.
+5. Inspected matching test-source blobs. Donor integration/runner suites include negative replay, evaluation-before-adoption, callback-isolation distrust, attestation-mutation and legacy-event protection scenarios that are absent from or materially broader than candidate test coverage. This is source inspection, not test execution.
+6. Confirmed exact CMake blob SHAs and production registration of controller, runner, coordinator, orchestrator and adoption journal in both frozen graphs. Donor graph additionally registers split Brain API/action/prediction-context and affective/developmental translation units.
+7. Added `docs/architecture/reports/DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md`. File was fetched back after creation; blob SHA `17c08e0a7c2d26bcfaa0490d6c38fc7159c3b121`, 13,187 characters. Its evidence is source/API/test-content comparison and explicitly does not close any of the seven paths.
+8. No source/runtime implementation was changed. No test, build, sanitizer, static analysis, or workflow was executed in this run because the connected GitHub operations expose content/metadata but not native shell/worktree execution or workflow dispatch.
 
-## Five distinct review passes
-### 1. Correctness / semantic traceability
-Finding: the existing reports correctly label heuristic lineage as non-semantic and keep DF-02 OPEN. No contradictory closure claim found in inspected artifacts. Status: pass complete; no fix required.
+## Five review lenses applied to the new exact-source slice
+1. Semantic correctness: source-level evaluation/adoption and identity differences confirmed; no path marked closed.
+2. Build/reproducibility: relevant production files are CMake-registered; test files were content-inspected; native configure/build/CTest remains unexecuted.
+3. Security/trust/provenance: callback isolation trust, durable evaluation authority, journal identity reuse and replay boundaries identified; OS sandbox threat model and persistence fault behavior remain untested.
+4. Cognition/capability realism: safe self-modification is a prerequisite to adaptive cognition, but these controls do not prove integrated cognition or JARVIS-level usefulness.
+5. Hostile review: donor was not treated as canonical; source inspection was not called test execution; no adoption/retirement or closure decision was implied.
 
-### 2. Build / test / reproducibility
-Finding: CMake evidence is exact-content and target-list based, but this connector run did not execute a fresh native build or CTest. The prior PR record only claims Configure + Build for workflow `45816084730`; it explicitly does not claim CTest/behavioral coverage. Status: incomplete for fresh execution; no false result claimed.
+These are five scoped review lenses for this evidence slice, not a claim that the complete final five-pass audit of all 159 paths has been performed.
 
-### 3. Security / trust / provenance / authority
-Finding: reports preserve no-adoption/no-retirement boundaries and distinguish Builder evidence from Independent Reviewer and Project Director authority. No authority escalation found in inspected text. Status: pass complete; no fix required.
-
-### 4. Architecture / cognition realism
-Finding: the repository evidence shows real stateful mechanisms (prediction resolution, goal-outcome assimilation, contextual association/concept inference, affective/developmental API surfaces, capability evaluation) but source presence and test registration do not establish adaptive reliability or integrated JARVIS-level usefulness. Under the MCU benchmark, this is a mechanism-rich but not yet behaviorally proven system—not merely a chatbot, but not demonstrated as a reliable general cognitive agent. Status: pass complete.
-
-### 5. Fresh hostile reviewer
-Finding: strongest remaining gaps are unchanged and material: full 159-path semantic/authority closure, exact dependency/owner/provenance/retention decisions, fresh independent scrutiny, DF-09 exact-final-HEAD blind-reader CLEAR, DF-11 governance-compliant resolution, DF-12 Director decision, and fresh native behavioral execution. No unsupported completion claim added. Status: pass complete.
+## Overall five-pass sprint status
+- Pass 1 correctness/semantic consistency: partial; this slice reviewed, full 159-path traceability remains incomplete.
+- Pass 2 build/test/static analysis/CI/reproducibility: incomplete; no native execution path exposed.
+- Pass 3 security/trust/authority/provenance/persistence: partial; this slice reviewed, all-path authority/retention and failure testing remain open.
+- Pass 4 architecture/cognition/MCU benchmark: partial; source mechanisms assessed, integrated behavioral evidence remains insufficient.
+- Pass 5 hostile reviewer: partial; this slice reviewed, full-corpus review and exact-final-head blind review remain open.
 
 ## Task ledger
-- Live-state reconciliation: implemented / tested by exact metadata fetch / independently verified: no / accepted: no / blocked: no.
-- CMake/API lineage inspection: implemented / tested: exact file fetch and comparison / independently verified: no / accepted: no / blocked: no.
-- Fresh native build/CTest: not executed in this run / blocked by connector capabilities (no repository shell/worktree execution exposed here).
-- 159-path closure: open / next action: continue exact per-path semantic mapping and authority/provenance/retention evidence.
-- DF-09: blocked pending authorized workflow dispatch and CLEAR on exact final target.
-- DF-11: blocked by governance unless independently reviewed or governance amended.
-- DF-12: reserved Project Director decision.
+- Live-state reconciliation: implemented / exact metadata fetched / independently verified: no / accepted: no.
+- Evolution lifecycle exact-source/API comparison: implemented / source content fetched at immutable candidate/donor refs / independently verified: no / accepted: no.
+- Test-source comparison: implemented / content-inspected only / executed: no / accepted: no.
+- Additive evidence report: committed / fetched back and hash verified / independent review pending.
+- Native build, CTest, sanitizers, static analysis: blocked by connector capabilities; no execution claimed.
+- 159-path semantic/authority ledger: OPEN; next action is exact per-path semantic dispositions and per-blob owner/provenance/retention mapping.
+- 544 alternate blobs: enumerated/triaged for coverage; not individually semantically adjudicated.
+- 40,048 symbol candidates and 1,946 path references: candidate-tip slice partly reconciled; historical rows not fully adjudicated.
+- DF-09: BLOCKED pending genuine blind fresh-reader CLEAR against frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- DF-11: BLOCKED under accepted governance unless independently reviewed or governance amended.
+- DF-12: reserved for Project Director.
+- PR #203: keep draft/unmerged; no merge/retarget/rebase or protected-state changes.
 
 ## Next bounded task
-Continue from this checkpoint by selecting the next highest-value unresolved DF-02 cohort: exact candidate-absent or materially divergent Brain/API translation units. For each path, map declaration -> definition -> CMake registration -> reverse consumers -> tests -> provenance/owner/authority/retention; record only evidence-backed results and keep unresolved rows open.
+Continue exact semantic adjudication of the next highest-value unresolved cohort, not repeated report summaries: map each path's candidate/donor/alternate blob SHA to semantic API/behavior deltas, exact declaration-definition ownership, CMake and test reachability, reverse consumers by context, branch-tip provenance, authority and retention. Prioritize remaining high-dispersion memory, process-isolation, evolution and cognitive-runtime paths, then close lower-dispersion cohorts. Record every unresolved item explicitly. Use an authorized native CI/worktree path for fresh build/CTest and fault-injection evidence. Obtain independent review only after the evidence ledger is complete.
 
-No Gate A/B clearance, foundation acceptance, baseline selection, implementation authorization, or Stage A start is implied.
+No Gate A/B clearance, foundation acceptance, baseline selection, implementation authorization, Stage A start, adoption, retirement or deletion is implied.
