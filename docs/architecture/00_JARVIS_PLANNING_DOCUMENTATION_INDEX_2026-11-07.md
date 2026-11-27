@@ -133,3 +133,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Causal-link typed codec compatibility adjudication](reports/DF02_CAUSAL_LINK_TYPED_CODEC_COMPATIBILITY_ADJUDICATION_2026-11-27.md): donor-only codec, legacy-prefix/empty-key/nonfinite/locale gaps; SHA `c23780d44acafa6543e28dcf1b167c93fc36894e`.
 
 - [Developmental learning/context-transfer adjudication](reports/DF02_DEVELOPMENTAL_LEARNING_CONTEXT_TRANSFER_ADJUDICATION_2026-11-27.md): donor-only strategy-learning path, delimiter collision and heuristic false-transfer limits; SHA `b2a029df2d7dde256ab1937e63e627c546fa7dd9`.
+
+- [Contextual prediction/numeric calibration adjudication](reports/DF02_CONTEXTUAL_PREDICTION_NUMERIC_CALIBRATION_ADJUDICATION_2026-11-27.md): donor-only contextual prediction, global-key calibration leakage and confidence/identity gaps; SHA `d402b3dca026155b6961cc3ad8ca30a5b879e44d`.
