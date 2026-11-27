@@ -110,3 +110,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md`, fetched back SHA `b01fb2a58251fe799d09d7005ee0234dc109af5a`.
 - 12 exact test blobs; candidate has no test path, donor registers CTest. Donor test source traces prediction/learning, action consequences, proposal/evaluation/adoption and journal replay into later decision behavior. Test reconstruction is within same process; no crash or native test execution claimed.
 - This integration test is substantive evidence but remains donor-only/unaccepted; source/consumer/authority/retention and execution obligations open.
+
+
+## Immediate continuation — evolution coordinator statistical gate (2026-11-27)
+
+- Report `DF02_EVOLUTION_EXPERIMENT_COORDINATOR_VARIANT_AND_STATISTICAL_GATE_ADJUDICATION_2026-11-27.md`, fetched back SHA `8af42a473be7cc11e402120380dbda79c3480db8`.
+- 13 exact coordinator source blobs and test versions. Donor adds trial-start and isolation requirements/attestation. Current `EvolutionTrials` “confidence” is a standard-error-derived heuristic, not a statistical confidence interval; gate compares minimum individual scores, not a CI for difference. Historical alternatives contain CI/statistical branches.
+- Baseline-then-candidate sequencing may confound time-varying environments. Test is a single deterministic positive fixture and disables required isolation; not executed. Design/verification, authority and retention remain open.
