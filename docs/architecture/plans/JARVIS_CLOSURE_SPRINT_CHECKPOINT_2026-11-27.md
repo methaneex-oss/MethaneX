@@ -124,3 +124,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_EVOLUTION_ORCHESTRATOR_DURABLE_EVALUATION_GATE_ADJUDICATION_2026-11-27.md`, fetched back SHA `b395b6236b786340f040d392511f809f38e23ca7`.
 - Candidate source can continue adoption after selected winner's `record_evaluation` fails; donor adds lifecycle check and early return before adoption. This is a source-confirmed authority/safety correction.
 - Candidate/donor test source comparison found no orchestrator-specific failure-injection regression for that exact branch. Source/test inspection only. Owner authority, full consumers and path closure remain open.
+
+
+## Immediate continuation — canary-state and operational evidence (2026-11-27)
+
+- Report `DF02_EVOLUTION_CANARY_STATE_AND_OPERATIONAL_EVIDENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `98b3ae70b4ed21d55cef45ce030762c2c0c679e1`.
+- Donor adds experiment-keyed canary state, worst-delta regression and preview; tests include cross-experiment isolation.
+- Orchestrator's three canary observations repeat the same evaluation pair, not live telemetry; controller decision may be returned even when rollback fails, and lifecycle may falsely say RolledBack. Canary state not durable/restart-resolved. These are open verification/design obligations.
