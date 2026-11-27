@@ -266,3 +266,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_EXPERIENCE_MEMORY_SEQUENCE_IDENTITY_ADJUDICATION_2026-11-27.md`, fetched back SHA `28adf486781da07bb0f0ea3f88dc34652fb62415`.
 - Donor-only store: duplicate sequence overwrite can desynchronize key index; resolved Prediction accepted without actual; resolution error/value unvalidated; in-memory only. Direct tests normal cases; no execution.
+
+
+## Immediate continuation — process-isolation child/control audit (2026-11-27)
+
+- Report `DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md`, fetched back SHA `6d89b9fd922dc4f3c74797838be67c26e34d76ce`.
+- Normal child exit can leave descendants; process-group/rlimit return values unchecked; no applied-control certificate, inherited environment/FDs, non-hermetic FS/network and fork-safety gaps. Tests inspected, not run.
