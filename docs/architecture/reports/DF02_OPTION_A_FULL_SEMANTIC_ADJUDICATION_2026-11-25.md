@@ -1167,3 +1167,10 @@ Donor engineering CMake adds task_ledger.cpp and task-ledger CTest. Both donor e
 Report: [DF02 Native CI, Persistence Soaks and Learning-Trial Workflow Adjudication](DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md), verified SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
 
 Brain CI configures Release full CTest and Debug ASan/UBSan full CTest; core workflow also Debug CTest. Manual persistence/probe and DLT-001/002 runs are bounded and artifact-producing. Multi-seed sweep compares learning with fixed policies but has no statistical acceptance threshold and control is not matched brain learning-disabled. Workflows use tagged actions, jarvis-core lacks explicit permissions, and no frozen donor SHA run available. No execution performed.
+
+
+## 39. Capability registry/evaluator/execution adjudication (2026-11-27)
+
+Report: [DF02 Capability Registry, Evaluator and Execution Boundary Adjudication](DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md), verified SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
+
+Capability registry/evaluator and permission-gated provider callback inspected. Execution bypasses registry/evaluator eligibility, trusts caller descriptor/risk, doesn't validate result identity/status/schema, allows degraded availability, and is synchronous/in-process without timeout or isolation. Brain returns result even if audit append fails. Tests only basic success/denial; no adversarial cases or execution. OPEN.
