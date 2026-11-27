@@ -158,3 +158,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_MEMORY_JOURNAL_METADATA_AND_CONSOLIDATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `cfd0eb834e3b6ffb2cba7f213522a27488eacbd4`.
 - Nine source and eight test blobs. Donor adds corrupt-tail quarantine, V2 metadata consolidation/migration, staged validation, tier/cursor reconstruction, exact/kind-filtered retrieval and consolidation ranking. Main donor journal is raw/unframed/no checksum; framed historical variant is separate/not integrated. Append flush/metadata rename not fsync-durable. Tests inspected, not executed.
+
+
+## Immediate continuation — evolution runner/isolation attestation (2026-11-27)
+
+- Report `DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
+- Donor callback path ignores callback's isolation claim; isolated command parser and field-snapshot attestation added; safety gate recomputes threshold. Attestation is not cryptographic provenance; replay can re-attest event fields; backend isolation is a coarse bool. Direct runner lacks metric-range and candidate-executed checks when isolation is disabled. Tests inspected, not run.
