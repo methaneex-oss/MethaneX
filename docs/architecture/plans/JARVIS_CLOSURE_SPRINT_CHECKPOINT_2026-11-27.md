@@ -254,3 +254,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
 - Provider callback path and tests inspected. Evaluator can be bypassed; execution trusts caller descriptor/risk; result identity/schema not validated; no timeout/isolation; audit persistence status not returned. No tests run.
+
+
+## Immediate continuation — evolution controller transaction/rollback (2026-11-27)
+
+- Report `DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md`, fetched back SHA `23372bcae206fa02dd058127ddf4a154946ee801`.
+- Direct adoption gate and compensating lifecycle reviewed. Same-ID evaluation can falsely report success for altered evidence (adoption still blocked by exact validator); stale rollback can reset baseline while newer journal record remains Adopted. Multi-store compensation/crash fault tests open.
