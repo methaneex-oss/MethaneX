@@ -164,3 +164,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_EVOLUTION_RUNNER_AND_ISOLATION_ATTESTATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `bbf981c13f4cc95e49a332cd06eb7e1e5f72b30b`.
 - Donor callback path ignores callback's isolation claim; isolated command parser and field-snapshot attestation added; safety gate recomputes threshold. Attestation is not cryptographic provenance; replay can re-attest event fields; backend isolation is a coarse bool. Direct runner lacks metric-range and candidate-executed checks when isolation is disabled. Tests inspected, not run.
+
+
+## Immediate continuation — association and causal hypothesis audit (2026-11-27)
+
+- Report `DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md`, fetched back SHA `8bed402fc935f9a7d99be27d58b122d087ab5725`.
+- Donor association/context/concept/prediction-feedback delta and causal-transition hypothesis code/test contract reviewed. Public reliability/evidence inputs do not reject NaN before clamp; potential model-weight poisoning. Causal links are temporal co-change hypotheses, no interventions or confounder controls. Tests inspected, not executed.
