@@ -166,4 +166,3 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 
 - [Action assessment/workspace/developmental-world adjudication](reports/DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md): action confidence/risk defect, snapshot semantics and world reset/callback gaps; SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
 
-- [Action assessment/workspace/developmental-world adjudication](reports/DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md): action confidence/risk defect, snapshot semantics and world reset/callback gaps; SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
