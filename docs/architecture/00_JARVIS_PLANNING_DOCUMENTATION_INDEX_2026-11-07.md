@@ -155,3 +155,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Engineering C++ build/assertion adjudication](reports/DF02_ENGINEERING_CPP_BUILD_AND_ASSERTION_ADJUDICATION_2026-11-27.md): donor task-ledger registration and Release assert gap; SHA `2f96ba53d84e719d5251c92551fd00e0b238b677`.
 
 - [Native CI/learning-trial workflow adjudication](reports/DF02_NATIVE_CI_AND_LEARNING_TRIAL_WORKFLOW_ADJUDICATION_2026-11-27.md): CI/sanitizer/soak/probe configuration, statistical-control limits and workflow security; SHA `a22b1ff7ba39137b3ac0804195d2ab870844c117`.
+
+- [Capability registry/evaluator/execution adjudication](reports/DF02_CAPABILITY_REGISTRY_EVALUATOR_EXECUTION_ADJUDICATION_2026-11-27.md): execution-gate bypass, provider result validation, in-process/no-timeout and audit persistence gaps; SHA `3c8612310d08f61b3807d178fdd32ae4d08c8d98`.
