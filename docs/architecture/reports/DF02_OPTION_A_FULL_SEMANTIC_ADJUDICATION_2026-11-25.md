@@ -1195,3 +1195,10 @@ Donor-only in-memory sequence store reviewed. Duplicate sequence overwrites map 
 Report: [DF02 Process-Isolation Child Lifecycle and Enforced-Control Adjudication](DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md), verified SHA `6d89b9fd922dc4f3c74797838be67c26e34d76ce`.
 
 Backend source inspected: direct-child success can leave descendants alive; setpgid result and setrlimit results ignored; controls are optional and no enforcement certificate; inherited environment/FDs, filesystem and network scope not hermetic; post-fork C++ operations not fully async-safe. Tests cover success/output/timeout and requested network controls only. No execution.
+
+
+## 43. Action assessment/workspace/developmental-world adjudication (2026-11-27)
+
+Report: [DF02 Action Assessment, Strategy Workspace and Developmental-World Primitive Adjudication](DF02_ACTION_ASSESSMENT_WORKSPACE_AND_DEVELOPMENTAL_WORLD_ADJUDICATION_2026-11-27.md), verified SHA `0eb00df32afbdbf55f4d345c2b6cb3529ea9e092`.
+
+ActionModel ignores CandidateAction confidence and treats nonfinite risk as zero; may permit low-confidence/NaN-risk actions. Strategy and GoalOutcomeEvidence lack finite guards. Workspace is a mutex snapshot, not persistent/transactional. DevelopmentalWorld reset can restore invalid initial resources; observation-filter/environment callbacks may throw; state updates unvalidated. Tests source inspected, not run.
