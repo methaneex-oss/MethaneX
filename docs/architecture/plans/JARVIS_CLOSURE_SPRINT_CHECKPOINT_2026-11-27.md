@@ -103,3 +103,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Runtime static risks: stop/drain may reject feedback produced by in-flight work; feedback-first worker scheduling may starve inputs; no retry/backpressure for saturated feedback. All remain test/decision obligations.
 - Cognitive cycle report: `DF02_COGNITIVE_CYCLE_CONTEXTUAL_LEARNING_VARIANT_ADJUDICATION_2026-11-27.md`, verified `7ec23e8382b789c7ccfe6900c3ee6111130b2c42`. Ten source blobs and seven tests; donor context inference/escaping, action outcome recall, contextual strategy transfer, affect and feedback contracts inspected. Donor tests cover context alias prevention, learning persistence, context isolation and regime-change behavior, but are not executed.
 - Both cohorts remain OPEN for full consumer, authority/provenance/retention and execution verification. No source changes, adoption or gate decision.
+
+
+## Immediate continuation — memory/learning/evolution persistence integration test (2026-11-27)
+
+- Report `DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md`, fetched back SHA `b01fb2a58251fe799d09d7005ee0234dc109af5a`.
+- 12 exact test blobs; candidate has no test path, donor registers CTest. Donor test source traces prediction/learning, action consequences, proposal/evaluation/adoption and journal replay into later decision behavior. Test reconstruction is within same process; no crash or native test execution claimed.
+- This integration test is substantive evidence but remains donor-only/unaccepted; source/consumer/authority/retention and execution obligations open.
