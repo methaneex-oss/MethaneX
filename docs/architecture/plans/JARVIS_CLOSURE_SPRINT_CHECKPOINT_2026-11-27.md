@@ -212,3 +212,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_GOAL_INTENT_SELF_CAPABILITY_ADJUDICATION_2026-11-27.md`, fetched back SHA `09147c8a4407f0bb10ea859beea77da78125ba57`.
 - Donor goal lifecycle/momentum, intent selection and self-capability availability/performance/isolation compared. Prerequisite-cycle and completion bypass, nonfinite intent/self-model inputs and isolated-health aggregation remain open. Test source inspected; SelfModel mapping incomplete; no native execution.
+
+
+## Immediate continuation — knowledge/adaptation/representation/reflection (2026-11-27)
+
+- Report `DF02_KNOWLEDGE_ADAPTATION_REPRESENTATION_REFLECTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `ef9038472f4112a152af2e07f7a0b5841f720f27`.
+- Donor numeric adaptation, representation deterministic identity/metadata filtering and reflection evidence changes reviewed. Frozen KnowledgeModel is simple; richer source-feedback alternatives are historical, not integrated. Global-key adaptation, fixed surprise policy and heuristic reflection remain open. Tests inspected, not run.
