@@ -145,3 +145,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Report `DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md`, fetched back SHA `3d5b8bce687df6eda9f6e8389cfa1fe2cc77b88c`.
 - Direct adoption API gates are strict, but versioned `evolution_adopt` replay bypasses durable-evaluation/history matching; `Brain::observe(Event)` can append control-plane event types without evolution-specific validation.
 - Replay rollback doesn't bind event key to adopted record key. Direct rollback doesn't require the latest active adoption; stale rollback can reset baseline while a newer record remains Adopted. Tests cover legacy and direct APIs, not these replay/multi-adoption cases. No execution; high-priority authority gaps remain open.
+
+
+## Immediate continuation — action execution/consequence persistence (2026-11-27)
+
+- Report `DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md`, fetched back SHA `a68927b37126ded3edf42616a75dd7934d334ba6`.
+- Donor adds consequence observer, forecast sequence binding and learning. Tests specify real observed consequence despite verification failure, choice change and replay.
+- Gap: execution status returned despite action-outcome journal append failure; prediction/evidence may be lost, later learning appends are non-transactional. No persistence-failure injection or test execution. Adapter/execution/authority scope remains open.
