@@ -230,3 +230,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_ENGINEERING_AGENT_MESSAGE_BUS_AND_TASK_LEDGER_ADJUDICATION_2026-11-27.md`, fetched back SHA `ee2b72bdc18814dd8e69c6a2b2e6d3fdb28f73a1`.
 - Donor bus bounded queue/dedup/backpressure and task ledger CAS/locking/replay reviewed. Sender spoofing, ledger immutable-field/status-transition/checksum gaps, torn-tail and fsync durability, actual artifact verification/persistence remain open. Tests inspected, not run.
+
+
+## Immediate continuation — core source build registration (2026-11-27)
+
+- Report `DF02_CORE_CPP_SOURCE_BUILD_REGISTRATION_ADJUDICATION_2026-11-27.md`, fetched back SHA `4b9266c34f36559071d09d2b00b63e6ab74a613f`.
+- Candidate 57 library source entries; donor 64 with seven added TU and no removals/duplicates. C++20, warnings, CTest and examples default ON. No native build at frozen donor SHA or CTest; semantics remain open.
