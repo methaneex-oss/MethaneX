@@ -1020,3 +1020,10 @@ The donor-only test path has 12 exact blobs, no frozen-candidate version. Donor 
 Report: [DF02 Evolution Experiment Coordinator Variant and Statistical-Gate Adjudication](DF02_EVOLUTION_EXPERIMENT_COORDINATOR_VARIANT_AND_STATISTICAL_GATE_ADJUDICATION_2026-11-27.md), verified SHA `8af42a473be7cc11e402120380dbda79c3480db8`.
 
 Candidate/donor source and 13 historical versions compared. Donor adds `started` checks, default-required isolation, tracks isolation across all trials and issues attestation. Exact `EvolutionTrials` contract computes `confidence=1/(1+standard_error)`; this is a heuristic score, not a calibrated statistical confidence or difference-CI. Gate uses minimum individual heuristic scores and gain threshold. Historical variants include separate comparison-CI/statistical-evaluation branches. Current coordinator runs baseline trials sequentially before candidate trials; environment drift/order confounding is untested. Candidate/donor test has only one deterministic positive fixture and disables isolation requirement; no native test run. Semantic/authority remains open.
+
+
+## 18. Evolution orchestrator durable-evaluation gate adjudication (2026-11-27)
+
+Report: [DF02 Evolution Orchestrator Durable-Evaluation Gate Adjudication](DF02_EVOLUTION_ORCHESTRATOR_DURABLE_EVALUATION_GATE_ADJUDICATION_2026-11-27.md), verified SHA `b395b6236b786340f040d392511f809f38e23ca7`.
+
+Exact ten source variants compared. Candidate records evaluation attempts but may proceed to adoption when the selected winner's durable `record_evaluation` fails; donor checks winner lifecycle is still `CandidateEvaluated` and returns before adoption otherwise. Donor test adds adoption-journal/history assertions, but neither candidate nor donor orchestrator suite injects evaluation-record failure to verify this exact correction. Tests inspected, not run. Semantic/authority remains open.
