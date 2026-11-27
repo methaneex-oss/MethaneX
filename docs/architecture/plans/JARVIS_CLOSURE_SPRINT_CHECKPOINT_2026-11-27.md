@@ -304,3 +304,9 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md`, verified report SHA `de3a7297122df4df4c0a77aba43e9c0b7e298ff1`.
 - Candidate/donor process-isolation cohort reviewed; source/test/authority/retention closure remains open.
+
+
+## Immediate continuation — self-test/healing diagnostic validity (2026-11-27)
+
+- Report `DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
+- Brain self-test has two tautological checks; phase-9 verify callback doesn't validate health; self-heal ignores recovery append failure and callbacks lack timeout/isolation. Test inspected, not run.
