@@ -1251,3 +1251,8 @@ Report: [DF-02 All-Ref Inventory Reconciliation and Semantic Audit Queue](DF02_A
 ## 17. Developmental Brain integration test/source cohort (2026-11-28)
 
 Report: [DF02 Developmental Brain Integration Test Variant Adjudication](DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md), fetched-back SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`. Exact inventory: candidate-absent developmental-learning source six blobs, header four blobs, integration suite nine blobs; donor source/test/header and CMake integration confirmed. Donor integration assertions cover strategy transfer, action consequence/reliability, capability feedback, malformed-event rejection, episodic retrieval, featureful/featureless context, recovery from contradictory evidence and persistence/replay. The nine test variants are materially different and only grouped by feature markers/size; full exact diff and behavior closure remain open. No tests executed.
+
+
+## 18. Core C++ test-CMake 40-blob variant adjudication (2026-11-28)
+
+Report: [DF02 Core Test-CMake Variant and Registration Adjudication](DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md), verified blob SHA `2aae2721d216bd71c4ee3a4fc8e935d61c52c3ac`. All 40 distinct CMake blobs were fetched from Git blob endpoints and feature-extracted. Candidate frozen graph is 45 executable targets/45 CTest registrations; donor 71/70, with persistence train/verify aliasing and two workflow/manual long-run targets. Sixteen of 40 historical blobs explicitly preserve assertions in Release; candidate lacks the override and donor has it. This is registration/build configuration evidence, not build or test execution. All-variant exact semantic ownership, workflows, and authority remain open.
