@@ -555,3 +555,34 @@ Updated reports:
 
 ### Builder disposition
 The 159-path metadata inventory is now committed and the full-path reference scanner limitation is explicit. This does not close the semantic/authority ledger. The Builder self-review corrected the reachability inference before finalizing; no code was modified. Independent Reviewer and Blind Fresh Tester requests remain deferred until all Builder-resolvable work and full-scope self-review are clear.
+
+ 
+## Continuation — runtime integration tests, CI evidence and CTest-count discrepancy (2026-11-28)
+
+### New exact behavioral evidence
+- Cognitive runtime report: docs/architecture/reports/DF02_COGNITIVE_RUNTIME_VARIANT_AND_CLOSED_LOOP_ADJUDICATION_2026-11-27.md, blob 5c503d917eafb3e41dbf2540edc57f6de84fda25.
+- Action execution/consequence report: docs/architecture/reports/DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md, blob c6f3694c13f24a7810cd08859bd05c3a7b4cdbcf.
+- Core test-CMake report: docs/architecture/reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob ce6b779ba9f9bd6df9d46fc120d6fffe30285055.
+
+The donor-only CMake/CTest graph registers three integration suites absent from candidate CMake:
+- cognitive_runtime_learning_integration_suite: 326 lines / 88 assert expressions; context-conditioned action feedback, prediction resolution, affective/episodic learning, context isolation, regime shift, persistence/restart, and no-feedback control.
+- cognitive_runtime_goal_feedback_suite: 83 lines / 22 assertions; asynchronous goal progress/completion, durable events, regression rejection and restart reconstruction.
+- brain_action_consequence_integration_suite: 316 lines / 95 assertions; harmful surprise, unknown-vs-zero consequence, action outcome context, strategy change and forecast persistence.
+
+On historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1, the exact source/test/CMake blobs for these suites were built and executed. CTest #23, #59 and #64 passed in Brain CI #1826 native and sanitizer jobs, JARVIS Brain Tests #975 brain and sanitizer jobs, and Brain ThreadSanitizer #957. Each of the five test jobs reported 71/71. These are historical alternate-branch results, not current PR #203 test evidence or frozen donor HEAD c1da222 evidence.
+
+### New unresolved CTest registration discrepancy
+- Exact donor tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 has 71 executable targets and 70 literal add_test invocations.
+- Historical e737cae7 CI reports 71/71 tests passed in all five test jobs.
+- Available job-log payloads start at test #10; names #1–#9 and the generated CTestTestfile.cmake are unavailable. No build artifact containing the generated test list was attached.
+- The identity/origin of the 71st CTest test remains OPEN. Do not treat 70 literal registrations and 71 executed tests as reconciled.
+
+### Latest live PR state before this checkpoint write
+- PR #203 remains OPEN, DRAFT, UNMERGED, mergeable=true; branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125.
+- HEAD immediately before this checkpoint write: b600beabc7fc340ee0488cf9f457bec47101e5ac; 59 changed files, 338 commits.
+- Reviews and inline review threads remain zero. Combined status has no entries.
+- Native Brain Build #2875 for this HEAD was IN_PROGRESS at last read. No current-branch CTest result is claimed.
+- PR description now includes the new test evidence and the CTest discrepancy.
+
+### Self-review correction
+The Builder rechecked the donor-only action-consequence test by basename after the full-path matcher missed its CMake edge. The earlier unregistered-test inference was corrected before handoff. The CMake report now explicitly records that full-path reference counts are lower bounds and that CTest source/runtime counts remain unresolved. No runtime source was changed.
