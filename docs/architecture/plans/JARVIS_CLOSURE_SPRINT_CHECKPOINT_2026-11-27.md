@@ -870,3 +870,16 @@ Latest PR #203 state before this checkpoint update:
 - HEAD immediately before this checkpoint write: c460514a981ff51f60d2f87a63d58ab6c5b4a0cd.
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 394 commits; no reviews or inline review threads; combined status has no entries.
 - Native Brain Build #2924 IN_PROGRESS. This is the core/cpp build, not engineering/cpp and not CTest.
+
+ 
+## Continuation — evolution controller alternate self-review (2026-11-28)
+
+Updated report blob: 0b6d1c98e1a37f7d2f2be1a16d56233b01a5cf35.
+- e737 alternate controller 4d910df... adds replay validation, attestation checks and rejection journaling; CTest #44/#49 passed in five historical e737 jobs.
+- Self-review still finds same-ID record_evaluation idempotency without content comparison; rollback validation does not require the latest adopted revision; observe_canary ignores rollback result; adopt/rollback compensation paths ignore restoration/journal/history return values; no fault-injection tests cover these failures.
+- Thus the third-lineage controller improves replay admission but is not transactionally closed. No source changes authorized.
+
+Latest PR #203 state:
+- HEAD b758dd27f65e01cec9af3d2998099a54ce84ab4f.
+- OPEN, DRAFT, UNMERGED; mergeable metadata currently false (varied on earlier reads); 59 changed files, 397 commits; no reviews or inline review threads; no combined status entries.
+- No workflow run returned for this latest docs-only head; no current-branch CTest.
