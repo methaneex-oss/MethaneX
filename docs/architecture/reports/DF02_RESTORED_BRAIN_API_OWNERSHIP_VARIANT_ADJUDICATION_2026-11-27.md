@@ -49,7 +49,7 @@ Candidate API method-name set is a subset of donor API set in this extraction. F
 - `record_evolution_evaluation`
 - `resolve_prediction_feedback`
 
-The donor/candidate exact header blobs are respectively `671186f4c39879a182f9e511394fc564d86f2988` and `8268ef84e0b361ead536724ba7761904b30ee58f`. Donor header adds related declaration families (developmental learning, affective state/learning, contextual prediction and prediction feedback, goal-outcome evidence, evolution-evaluation recording) and changes memory exposure from mutable `Memory&` to const access. These are API/authority changes, not cosmetic additions.
+The donor/candidate exact header blobs are respectively `671186f4c39879a182f9e511394fc564d86f2988` and `8268ef84e0b361ead536724ba7761904b30ee58f`. Donor header adds related declaration families (developmental learning, affective state/learning, contextual prediction and prediction feedback, goal-outcome evidence, evolution-evaluation recording) and adds a non-const `Memory& memory() noexcept` overload alongside the const accessor. Candidate header exposes only `const Memory& memory() const noexcept`; donor therefore broadens direct mutable journal access and the memory-mutation authority surface. This is a material API/authority delta.
 
 Across all 20 restored-API blobs, 68 method names appear in every version. Version-specific surface variation is concentrated in:
 - `developmental_best_related_strategy`, `developmental_related_strategies`, `record_evolution_evaluation`, `resolve_prediction_feedback`: present in 19/20 blobs (absent from candidate blob);
