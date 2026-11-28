@@ -217,3 +217,23 @@ No runtime source or CMake was changed. These are Builder findings; completion-e
 ### Evidence contract precision correction
 
 The donor agent.hpp blob 6acadd5558b7385c5993323ad963ed80b08b6652 defines AgentArtifact {type, location, digest}, AgentEvidence {kind, value}, and AgentResult {accepted, agent_id, task_id, reason, artifacts, evidence, revision}. EngineeringTaskLedger::complete accepts only result_revision and vector<AgentEvidence>; EngineeringTaskRecord stores only that evidence vector and result_revision. It does not accept/store AgentArtifact digests/locations, the AgentResult.accepted flag, AgentResult.task_id/agent_id, or a verifier identity. The caller can therefore call complete with empty evidence, empty revision, or a result that was not accepted; the ledger itself cannot bind completion to verified artifact digests. This sharpens finding 6: the ledger is a versioned task-state journal, not an authenticated evidence-verification authority.
+
+ 
+## Integration reachability and real-agent capability boundary — 2026-11-28
+
+The production dependency graph is narrower than the names imply:
+- donor coordinator.hpp blob fc2cced25d47b23893571a100ee7f36a05d37a9b and coordinator.cpp blob e175dd61aaa3d8302aba6381401305db9f034062 integrate EngineeringTaskLedger through dispatch_tracked.
+- donor operator_console.hpp blob 196d3a6755aa7f6cf29a8f5d46a65764c27c9964 and operator_console.cpp blob bf94b8779f79fb52fc3bc39ebd8ff59b5fa13b41 integrate AgentMessageBus through AgentCommunicationEndpoint.
+- The donor coordinator does not reference MessageBus. The message bus is used by the operator console, not by dispatch_tracked or EngineeringAgent::execute.
+- EngineeringAgent remains an abstract interface in agent.hpp; agent.cpp contains validation helpers, not concrete agent implementations. EngineeringCoordinator receives a caller-supplied EngineeringAgent reference; it does not own/register/spawn a workforce.
+- AgentCommunicationEndpoint is a generic endpoint; it is not embedded in or adapted to EngineeringAgent. The test creates a generic "builder" endpoint, not a concrete EngineeringAgent that receives a bus request and executes the task.
+- dispatch_tracked invokes EngineeringExecutionBoundary::run synchronously. It does not publish task messages through AgentMessageBus. Thus task state and operator messaging are separate mechanisms, not an integrated multi-agent execution fabric.
+- Coordinator::rank uses a static score: reliability × availability factor ÷ (1 + estimated_cost). It does not update reliability from task outcomes or use per-task historical performance. It is deterministic ranking, not adaptive agent learning.
+
+A concrete failure-recording gap exists in donor coordinator.cpp lines 58–61: when AgentResult.agent_id/task_id mismatch, it calls ledger.fail(...) but ignores the return value. If that durable failure transition fails, dispatch_tracked still returns an identity error without the "; failure was not durably recorded" qualification used in the exception and ordinary-failure paths. The task can remain running with no durable failure record. This is inconsistent failure handling.
+
+The donor coordinator trusts result.accepted and passes result.revision and result.evidence to ledger.complete, but does not pass result.artifacts, validate artifact digests, require a non-empty revision/evidence set, or verify a signed evaluator identity. The task ledger does not store AgentArtifact fields or AgentResult.accepted. This means the control plane can record a task as completed without an independently verifiable output artifact.
+
+Capability verdict: the engineering subproject contains useful primitives—bounded message transport, operator console, task state ledger, eligibility/ranking and synchronous execution boundary—but it is not yet a real autonomous multi-agent workforce. There is no concrete agent implementation in this target, no message-bus-to-agent execution adapter, no durable message queue, and no outcome-driven agent selection. Under the MCU JARVIS benchmark, this is a control-plane foundation, not a capable adaptive agent workforce. Do not describe it as a working autonomous multi-agent system.
+
+No runtime source was changed. The integration gaps and failure-recording defect remain open for future authorized implementation.
