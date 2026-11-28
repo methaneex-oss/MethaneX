@@ -761,3 +761,26 @@ Latest PR #203 state before this checkpoint update:
 - HEAD immediately before this checkpoint update: 08e4f19a08452be43b1651829ce056707741b000.
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 365 commits; no reviews or inline threads; combined status has no entries.
 - No workflow run returned for this latest docs-only head; no current-branch CTest.
+
+ 
+## Continuation — common CTest source lineage and evolution test variants (2026-11-28)
+
+The core test-CMake report now includes an exact source-blob identity comparison for all 45 CTest names common to candidate and e737:
+- Report blob: f27cf456897a4ce69d805d2e66deac9377557dac.
+- 20 common test source files outside the 159-path inventory are byte-identical between candidate and e737.
+- 19 common test source files in the 159-path inventory are exact donor blobs on e737 and differ from candidate.
+- 6 common evolution test source files on e737 are neither candidate nor donor blobs; they are third-lineage alternate variants.
+- The other 26 e737 tests have no candidate CTest registration; 25 unique test source files, 24 exact donor blobs plus one alternate memory test blob; DLT-002 train/verify share one source.
+- All 71 e737 tests passed, but that is not a candidate suite pass. The e737 run uses 20 candidate-identical tests, 19 donor test variants, 6 alternate common variants and 26 donor/alternate-only test names; it also uses alternate parent CMake 33197, not frozen donor parent CMake bc264.
+
+Additional exact reports:
+- Evolution test contract / six third-lineage variants: docs/architecture/reports/DF02_EVOLUTION_TEST_CONTRACT_ADJUDICATION_2026-11-27.md, blob 4d4e573a8edab8c7aa00220e9c8ed2387c2336cc. CTest #37, #38, #43, #44, #46, #49 all passed in five e737 test jobs.
+- Association/contextual causal hypothesis: blob 015fa82e4eb2b036f3bde8744e049ab3d0ea7085. Exact donor source/test, CTest #24 passed in five e737 jobs; no intervention/counterfactual causal identification.
+- Contextual prediction/numeric calibration: blob 22326172434d814486e1146674409dda2e297cb7. Donor source/test CTest #30 passed in five e737 jobs; candidate test source is only 73 lines/12 assertions and lacks predict_with_context/apply_prediction_feedback, versus donor 1,339 lines/371 assertions.
+- Memory retrieval/journal integrity: blob d8eba541ba464990e7cd06ea7a3ed91e0de045d1. Contains journal variants, unchecked truncate failure, metadata degradation, native binary portability, multi-writer, nonfinite scoring and evidence_reliability gaps.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: 6f545f5642ccf1c0c4cf3a5623bebe45a6b12380.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 371 commits; no reviews or inline review threads; combined status has no entries.
+- No workflow run returned for this latest docs-only head. No current-branch CTest.
+- Earlier candidate Native Brain Build #2861/#2866/#2869 passed Configure + Build; historical alternate CI e737 passed 71/71.
