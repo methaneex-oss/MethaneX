@@ -148,3 +148,17 @@ Multi-writer integrity is also not established:
 - No concurrent-writer, two-instance same-path, cross-process, or crash-during-snapshot test exists in the inspected suite.
 
 The current tests construct/reconstruct Memory sequentially, not concurrently. Required future checks: define a versioned portable encoding, add cross-architecture golden-file tests, use a single-writer/path-lock or transactional append design, unique temp names, and inject process interruption around journal/metadata writes and renames. No runtime change was authorized or made.
+
+ 
+## Non-finite salience/confidence can poison retrieval ordering — 2026-11-28
+
+A final numeric-input review found a concrete correctness defect in both frozen candidate and donor:
+- Candidate memory.cpp blob ba72a897306d4761246d0deab2fbab37c49d372f lines 260–273 uses std::clamp on event.data["salience"] and event.data["reliability"] without std::isfinite validation.
+- Donor memory.cpp blob ab42bba1d32d6f48d091787491c72294a4a55bb5 lines 139–140 uses std::clamp on salience and evidence_reliability/confidence/reliability without std::isfinite validation.
+- Event scalar serialization/deserialization accepts raw double values without finite checks (donor lines 24–27).
+- Candidate recall_ranked lines 310–318 and donor recall_ranked lines 180–194 pass record.salience/confidence into std::max(..., numeric_limits<double>::min()), multiply the components and apply std::pow. std::max(NaN, min) preserves NaN under ordinary comparison semantics; the resulting score can remain NaN.
+- Donor partial_sort comparator at lines 200–201 compares a.score != b.score ? a.score > b.score : a.index > b.index. With NaN, comparisons in both directions against finite scores return false, making NaN equivalent to every finite score while finite scores remain ordered. This violates the strict-weak-ordering requirement of std::partial_sort and makes retrieval ordering unreliable.
+
+The test suites do not include NaN or infinity salience/confidence inputs. The metadata reader rejects non-finite persisted metadata fields, but that does not protect event-derived defaults: NaN can enter through Event.data, be written to the journal, and be re-derived after restart.
+
+Required future correction: reject or normalize non-finite event numeric fields at append and replay boundaries; ensure all MemoryRecord scoring inputs and computed scores are finite before sorting; use a comparator with a total, strict weak ordering; add NaN, +Inf, -Inf and corrupt-persisted-event tests. No runtime change was authorized or made. This is a real correctness gap in both candidate and donor, not merely a donor-specific difference.
