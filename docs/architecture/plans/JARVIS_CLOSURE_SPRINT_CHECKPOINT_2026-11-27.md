@@ -340,3 +340,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`.
 - Candidate-absent production source: six exact blobs; header: four; integration test: nine. Donor CMake registers source and suite. Source/test content inspected at donor exact SHA and historical test variants grouped by feature markers/size, not closed by full diff.
 - Test assertions cover strategy transfer/recovery, persistence, action outcome reliability, memory retrieval, malformed outcomes, numeric/featureless contexts and capability integration. Native build/CTest not run. Semantic diff, caller graph, false-transfer, calibration and authority/retention remain open.
+
+
+## Immediate continuation — test CMake variant cohort (2026-11-28)
+
+- Added `DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back and SHA-verified `2aae2721d216bd71c4ee3a4fc8e935d61c52c3ac`.
+- All 40 distinct test-CMake blobs fetched and feature-extracted: targets 17–74, CTest 17–73; 16 versions have Release assert-preservation flags; 16 versions show at least one target/CTest name mismatch. Mismatches include persistence train/verify aliases and workflow-only long-run targets, so counts are not defect counts.
+- Frozen candidate is 45/45; donor 71/70, with three unmatched executable names explained by persistence aliases and two long-run targets. No build/test execution. Semantic ownership, exact test/workflow reachability and provenance remain open.
