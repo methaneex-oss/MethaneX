@@ -3,7 +3,7 @@
 **Scope:** exact candidate/donor and 18 historical alternate blobs for `core/cpp/src/brain_restored_api.cpp`; cross-check against frozen `brain.cpp`, public `brain.hpp`, and core CMake registration.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 frozen HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** API-surface, duplicate-definition and build-owner differences are established for this cohort; semantic/authority disposition remains OPEN. No tests run.
+**Disposition:** API-surface, duplicate-definition and build-owner differences are established for this cohort; semantic/authority disposition remains OPEN. Historical e737 donor deep-brain suite #4 passed; current candidate CTest not run.
 
 ## 1. Exact blob and owner inventory
 
@@ -104,7 +104,7 @@ No test was run in this slice. Existing API/integration test source and CMake re
 | Candidate orphaning and donor compiled split | Confirmed |
 | 18 alternate semantic/owner groups | Partial |
 | Reverse consumers and API compatibility | Open |
-| Build/test behavior | Not executed |
+| Build/test behavior | Historical e737 donor deep-brain suite #4 passed; current candidate CTest not run |
 | Provenance, authority and retention | Open |
 | DF-02 | OPEN |
 
