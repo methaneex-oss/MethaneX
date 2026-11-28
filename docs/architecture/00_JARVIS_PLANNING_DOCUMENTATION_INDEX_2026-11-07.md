@@ -182,3 +182,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Developmental Brain integration test/source cohort adjudication](reports/DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md): candidate-absent six source/four header/nine test blobs; donor integration and extensive assertion contract; exact variant diff, execution, transfer quality and authority remain open. SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`.
 
 - [Core C++ test-CMake 40-blob variant adjudication](reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md): all exact blobs target/CTest/Release-assert extracted; candidate 45/45, donor 71/70; mismatch aliases and workflow targets classified; no execution. SHA `2aae2721d216bd71c4ee3a4fc8e935d61c52c3ac`.
+
+- [Core library-CMake 22-blob variant adjudication](reports/DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md): exact source-count inventory, candidate 57 vs donor 64, seven donor-only TU and historical variants; no build execution. SHA `17e7a318bac4766d31b8d8bff712439471a40e98`.
