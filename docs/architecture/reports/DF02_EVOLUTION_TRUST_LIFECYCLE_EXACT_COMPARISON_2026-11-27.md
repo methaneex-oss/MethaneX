@@ -139,3 +139,82 @@ The exact owner-tip CMake files are:
 A material failure-mode caveat remains in this alternate: the legacy-read path truncates any unreadable suffix to `valid_end` before the migration block and does not quarantine that suffix. If the legacy journal is damaged, this branch does not provide the donor lineage's later `.corrupt` preservation behavior. The framed reader's recovery of complete interior bad frames is a different guarantee from preservation of a damaged legacy tail. The temporary-file rename behavior also needs platform-specific validation, especially replacement semantics where rename-over-existing differs.
 
 **Disposition:** this one-tip historical implementation is a meaningful integrity/recovery design variant, not an accepted successor. Its branch-local provenance is identified, its build registration is confirmed, and the absence of dedicated framing/corruption tests is established by exact test-CMake and test-source inspection. It remains OPEN for comparison against the donor's corrupt-tail quarantine and metadata lifecycle, fault-injection tests, platform behavior, and retention authority. No test was executed in this run.
+
+ 
+## Additional authenticated-evidence lineage and executable CI reconciliation — 2026-11-28
+
+### Alternate historical lineage (not the PR #97 donor and not the current PR #203 candidate)
+
+The source inventory contains a more advanced authenticated-evidence lineage than the PR #97 donor:
+- Earlier branch: fix/evolution-authenticated-evidence-20261030, HEAD cc00afaebb4da58eb75993f0386eaab333e8282d.
+- Follow-up branch: fix/evolution-authenticated-replay-final-20261030, HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1.
+- The follow-up is one commit ahead of parent f05a67b3718e433700b589c99091c00f395cce8f and changes only core/cpp/src/evolution_controller.cpp (2 additions, 1 deletion).
+- These are historical alternate variants. They were not merged into PR #203 and are not adopted or selected as a baseline.
+
+Exact follow-up HEAD blobs:
+| Path | Blob SHA | Source observation |
+|---|---|---|
+| core/cpp/src/evolution_controller.cpp | 4d910df0fc6626bd7fb55ee35522f7869b4aa13c | Removes replay-time recreation of private isolation attestation from journal fields |
+| core/cpp/src/evolution_experiment_runner.cpp | 5c625c72a617e53b467b8ba3747196fc584aa0ce | Trusted evaluator registry, executable fingerprint checks, HMAC-SHA-256 evidence authentication and isolated command execution |
+| core/cpp/include/jarvis/core/evolution_experiment.hpp | e2296da18f33b1f36544dfbeb64f36a1082e6201 | Private snapshot attestation plus persisted evidence-authentication field |
+| core/cpp/src/process_isolation.cpp | 6da14fe42046346ec932ff3872a2469ef6a608f3 | Process-group, resource-limit, no-new-privileges and network syscall controls |
+| core/cpp/tests/evolution_experiment_runner_suite.cpp | 3338273fe972292c1ea25035ba45fed1be3da378 | 262 lines / 43 assert expressions; trusted evaluator and evidence-tampering contract |
+| core/cpp/tests/evolution_brain_integration_suite.cpp | b065a301397c83bcb460d43fa36421a7bebc9060 | Explicit restart/replay rejection for metadata-only isolation claims |
+| core/cpp/CMakeLists.txt | 33197f92141a241ff0546af1bf81fbf177a1f3ab | Requires OpenSSL Crypto and links OpenSSL::Crypto |
+| core/cpp/tests/CMakeLists.txt | cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 | Registers runner and integration suites; Release builds undefine NDEBUG for tests |
+
+### The replay-authority defect, failing evidence and correction
+
+At earlier HEAD cc00afa, EvolutionController::validate_adoption_for_brain copied the supplied experiment and, when the durable journal record said isolated, called verified.attest_isolated_result() before applying the safety gate. That recreated a private in-memory trust snapshot from persisted journal metadata. The metadata was not independently authenticated at that point; the code therefore converted a serialized claim back into isolation trust.
+
+The exact integration test at core/cpp/tests/evolution_brain_integration_suite.cpp lines 418–421 states that the journal has no independently authenticated measurements, calls restore_trusted_attestation(replayed), then asserts that adoption of the metadata-only reconstructed object must fail. At cc00afa the assertion failed.
+
+Exact CI evidence at cc00afa:
+- Brain CI run 41031463736 / run #1824: native-brain and sanitizer jobs built successfully, then both failed the same CTest case. Native job: 70/71 passed; sanitizer: 70/71 passed.
+- JARVIS Brain Tests run 41031463657 / run #973: brain and sanitizer jobs built successfully, then both failed the same CTest case. Each: 70/71 passed.
+- Brain ThreadSanitizer run 41031463629 / run #955: build succeeded; test failed with the same assertion.
+- Failure in all five test jobs: jarvis_evolution_brain_integration_suite, source line 421, Assertion '!restarted.adopt_evolution_experiment(replayed)' failed. The runner suite itself (CTest #38) passed in those runs.
+
+The follow-up commit e737cae7 changed the adoption check to call EvolutionSafetyGate::approve(experiment, policy_) on the original experiment instance. It no longer creates a new private attestation from the journal's isolated flag. The persisted HMAC/trusted-evaluator restoration path remains responsible for re-establishing trust. This is a root-cause correction, not merely a weakened assertion.
+
+Exact post-fix CI evidence at e737cae7:
+- Native Brain Build run 41033168546 / #1200: Configure/Build successful (build-only; no test claim).
+- Brain ThreadSanitizer run 41033168661 / #957: build and ThreadSanitizer CTest successful; 71/71 tests passed.
+- Brain CI run 41033168600 / #1826: native-brain CTest 71/71 passed; sanitizer CTest 71/71 passed.
+- JARVIS Brain Tests run 41033168692 / #975: brain CTest 71/71 passed; sanitizer CTest 71/71 passed.
+- Exact test log summaries report 100% tests passed out of 71 in each of the five post-fix test jobs. The successful runner and replay integration tests are included in those 71-test runs.
+
+This demonstrates a real defect, a narrow source correction, and successful native/sanitized/TSAN regression evidence on that alternate historical branch. It does not establish that the same fix is present in the frozen candidate or PR #203, and it does not authorize transplanting the branch.
+
+### Authenticated lineage: improvements and remaining trust gaps
+
+Improvements over the PR #97 donor:
+- Trusted evaluator registration binds a procedure ID to an executable path, a file fingerprint and fixed procedure arguments (runner lines 185–218).
+- Evaluation evidence is serialized with a canonical length-prefixed payload and HMAC-SHA-256 (runner lines 45–82).
+- Persisted evidence can be restored only when the MAC validates and the local trusted-evaluator registry still matches (runner lines 273–289).
+- The isolated command path requires no-new-privileges and network syscall blocking, verifies evaluator identity, runs baseline and candidate through the same procedure, and attests only after both measurements succeed (runner lines 332–382).
+- The runner test suite covers trusted registration, wrong/unregistered evaluator, executable fingerprint mismatch, authenticated evidence restoration, and tampering; the integration test covers rejection of metadata-only replay trust.
+
+Remaining security and trust-lifecycle gaps found by exact source inspection:
+1. **Non-cryptographic executable/artifact fingerprints.** EvolutionExperiment::artifact_fingerprint uses 64-bit FNV-1a (experiment header lines 63–68); EvolutionExperimentRunner::executable_fingerprint also uses 64-bit FNV-1a (runner lines 291–311). HMAC-SHA-256 authenticates the evidence payload, but the evaluator identity and artifact identifiers themselves are not collision-resistant cryptographic digests.
+2. **No key rotation/revocation lifecycle.** set_evidence_authentication_key accepts a key of at least 32 bytes and then only accepts the identical key again (runner lines 237–249). There is no key ID/version, rotation procedure, old-key retirement, or revocation API. The key is process-global memory, not persisted in a protected key store.
+3. **No trusted-evaluator deregistration/revocation API.** Registration is insert-only and rejects changed identity for an existing procedure ID (runner lines 185–203); no corresponding unregister/revoke operation is exposed. Key rotation and evaluator revocation remain distinct required operations.
+4. **Executable path TOCTOU.** Fingerprinting reads the executable by path (runner lines 291–311), then the process backend later executes by path with execv (process_isolation.cpp line 202). There is no open-file-descriptor pinning/fexecve binding the measured file object to the executed file object.
+5. **Process-group setup is unchecked.** setpgid(0,0) is explicitly discarded at process_isolation.cpp line 160, while timeout cleanup later calls kill(-pid, SIGKILL) at line 221. Failure to establish the intended process group is not surfaced as a failed isolation result.
+6. **Pipe descriptor duplication is unchecked.** dup2 is explicitly discarded at process_isolation.cpp line 157. The child can proceed even if stdout/stderr redirection did not succeed as intended.
+7. **Interpreter rejection is path-name based.** The runner rejects selected interpreter basenames, but registration does not canonicalize and pin the resolved executable object. Symlink/path alias handling needs an explicit security contract and tests.
+8. **Isolation evidence remains a Boolean summary.** The process backend has meaningful controls, but the returned isolated flag is not a signed, per-control execution certificate. The exact control results and failure reasons should be retained as evidence if the result is to support high-authority adoption.
+
+These are static source findings, not demonstrated exploits. The historical branch's passing CI establishes regression behavior for its test suite, not a complete adversarial sandbox certification. No code change was made to any historical branch.
+
+### Capability and MCU JARVIS assessment
+
+This authenticated lineage is a materially stronger evolution-control foundation than a callback-based runner: it binds experiment results to a registered local evaluator, authenticated persisted evidence, and a process-isolation backend. The replay fix shows the importance of preserving trust boundaries across restart. However, the system still lacks robust key/evaluator rotation and revocation, cryptographic executable identity, race-free execution binding, and fully evidenced process-control outcomes. If Tony Stark built real JARVIS with this design, it would be a more credible controlled-experiment subsystem, but not yet a trustworthy autonomous self-improvement authority. It is infrastructure for adaptive learning, not proof of general cognition or useful autonomy.
+
+### Disposition
+
+- Alternate authenticated lineage: source/test/build graph inspected; CI behavior verified at exact historical HEAD e737cae7.
+- Earlier alternate revision: one real replay-authority regression demonstrated by failing CI and corrected by the follow-up commit.
+- Current PR #203 / frozen candidate: no source change or adoption of this lineage.
+- Baseline selection, donor adoption/retirement/deletion, merge, gate acceptance and Stage A remain prohibited.
+- DF-02 remains OPEN; all historical variants still require owner/authority/retention adjudication.
