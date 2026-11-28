@@ -63,3 +63,54 @@ The model's `rollback(key)` resets the parameter to baseline. If an older experi
 | DF-02 | OPEN |
 
 **Disposition:** evolution-event replay remains **OPEN / NO AUTHORITY DECISION**. No implementation selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Alternate authenticated replay lineage — correction and residual rollback gap (2026-11-28)
+
+The later historical branch fix/evolution-authenticated-replay-final-20261030 at HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1 materially improves the donor replay path. It is not the PR #97 donor and is not the current PR #203 candidate.
+
+Exact refs:
+- Brain replay source: core/cpp/src/brain.cpp, blob 23080c58545d3f211a708b72952b1898f7c1991e.
+- Evolution controller: core/cpp/src/evolution_controller.cpp, blob 4d910df0fc6626bd7fb55ee35522f7869b4aa13c.
+- Integration test: core/cpp/tests/evolution_brain_integration_suite.cpp, blob b065a301397c83bcb460d43fa36421a7bebc9060.
+
+### Adoption replay: demonstrated defect and fixed alternate lineage
+
+At earlier commit cc00afaebb4da58eb75993f0386eaab333e8282d, validate_adoption_for_brain recreated a private isolation attestation from journal fields by copying the experiment and calling attest_isolated_result() when the journal record said isolated. The integration test at lines 418–421 explicitly checks that a replayed object without independently authenticated measurements cannot regain isolation trust from metadata. That assertion failed in CI.
+
+The follow-up commit e737cae7 changed the controller to call EvolutionSafetyGate::approve(experiment, policy_) on the original instance and removed the metadata-driven private re-attestation. The exact diff is in evolution_controller.cpp; the source fix is 2 additions and 1 deletion. Post-fix Brain CI, JARVIS Brain Tests and Brain ThreadSanitizer all completed with 71/71 tests passed in every test job. Exact workflow run IDs and job summaries are recorded in DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md.
+
+The alternate Brain::replay(evolution_adopt) path at lines 548–616 now:
+- restores trusted attestation only through EvolutionExperimentRunner::restore_trusted_attestation;
+- rejects already terminal adoption-journal states;
+- validates the experiment against durable evaluation/adoption evidence before model mutation;
+- records a rejection when validation or model adoption fails;
+- refuses unversioned legacy adoption events.
+
+This closes the earlier donor's specific replay-adoption evidence bypass in this alternate lineage, subject to the remaining validation and authority gaps below. It does not change the disposition of the PR #97 donor or current PR #203 candidate.
+
+### Residual rollback replay key-binding defect in the alternate lineage
+
+The same alternate Brain::replay(evolution_rollback) path remains weaker than its direct controller validation:
+- brain.cpp lines 619–625 fetches the adoption record by experiment ID and checks that its state is Adopted;
+- line 626 calls evolution_.rollback(*key) using the event-supplied parameter key;
+- line 628 calls replay_rollback using the event-supplied experiment ID;
+- it does not compare the event-supplied key with record->parameter_key before mutating the model.
+
+By contrast, EvolutionController::validate_rollback_for_brain checks record->parameter_key == parameter_key, but the replay branch does not call that validator. A mismatched rollback event can therefore mutate one parameter while transitioning a different experiment ID. This is a source-level authority defect; no exploit was executed.
+
+The alternate replay path also does not require the requested experiment to be the latest active adoption for that parameter. A stale but still Adopted experiment record may therefore be used after a newer adoption on the same key unless the event ordering/other invariants prevent it. The direct validator checks that the target record is Adopted and matches the key, but not that it is the latest active record. A sequential multi-adoption/stale-canary test remains required.
+
+### Updated replay disposition
+
+| Item | PR #97 donor | Alternate e737cae7 lineage |
+|---|---|---|
+| Adoption replay requires durable evaluation evidence | Gap identified | Source gate added; CI regression test passes |
+| Replay can recreate private attestation from serialized isolated flag | Present in donor replay path | Removed in follow-up controller fix |
+| Unversioned adoption/rollback | Rejected by donor for legacy events | Explicitly rejected |
+| Rollback event key bound to adoption record | Gap identified | Still not checked in Brain replay |
+| Rollback must target latest active adoption | Gap identified | Still open |
+| Native/sanitizer/TSAN test execution | Not executed in original donor report | 71/71 passed on each post-fix test job |
+| Authority/baseline selection | Open | Open |
+
+The authenticated alternate lineage materially improves adoption replay trust, but it does not fully close evolution rollback authority. No implementation was copied into PR #203; no donor was adopted; no baseline or retirement decision was made. DF-02 remains OPEN.
