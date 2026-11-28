@@ -96,3 +96,15 @@ A repository-resident path-level inventory has now been created from the SHA-ver
 The ledger is a reconciled **path inventory**, not the completed semantic/authority closure ledger. It does not include every alternate blob SHA or every branch name inline; the original artifact's 798 path/blob ownership rows and full branch/tip provenance remain the source for those details. All 159 paths remain semantically OPEN until exact variants, declarations/definitions, compiled/test/workflow reachability, reverse consumers, owner/authority, provenance and retention are individually adjudicated. Candidate absence is not retirement authority; same-path identity is not semantic equivalence.
 
 The 159-row CSV was fetched back and validated after writing: 160 lines including header, 159 unique data paths, expected status counts, valid donor SHA shape and no duplicate paths. This validation is structural only; it does not independently re-derive every row against all 798 ownership records.
+
+ 
+### Full-path reference scanner limitation found by Builder self-review
+
+The CSV column exact_path_reference_rows and artifact exact_path_reference_matches count literal repository-relative path-string matches. They are **not** a complete build-graph/reachability inventory. CMake commonly references a source by basename (for example, add_executable(... brain_action_consequence_integration_suite.cpp)), so a full-path matcher can miss a real build/test edge.
+
+Concrete counterexample:
+- Donor core/cpp/tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers jarvis_brain_action_consequence_integration_suite using basename brain_action_consequence_integration_suite.cpp at lines 187–189 and CTest at line 285.
+- Candidate CMake blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 does not register it.
+- The inventory artifact's full-path reference matches for this donor path contain documentation references but omit these CMake basename references.
+
+Accordingly, exact_path_reference_rows in the 159-path CSV is a lower-bound literal-reference count, not a proof of non-reachability when zero. A full closure pass must parse CMake source arguments/target registration, workflow commands, scripts, generated-source rules and include relationships by normalized basename/path. The path inventory remains useful for blob identity and variant ownership, but build reachability is still OPEN.
