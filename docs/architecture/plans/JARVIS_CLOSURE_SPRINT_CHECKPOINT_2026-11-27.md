@@ -325,3 +325,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `docs/architecture/reports/DF02_COGNITIVE_CYCLE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back and SHA-verified `6cc7c948e3986d3aa37fe9c6e9bf3f18186b1610`.
 - Candidate/donor cycle and test/CMake comparison: donor's integrated structured perception, prior-memory retrieval, forecast resolution, reasoning-derived simulation, attention/affect/uncertainty, intent selection, capability/reliability filtering, contextual transfer, and consequence calibration. Main test expanded; stress test identical.
 - Source-only; no tests executed. Remaining validation includes duplicate context labels, key/resource bounds, concurrency, evidence provenance, false transfer/calibration, matched learning baseline. No adoption/code change.
+
+
+## Immediate continuation — all-ref inventory reconciliation (2026-11-28)
+
+- Re-downloaded artifact #14956148301 and reverified ZIP SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`.
+- Reconciled totals from source CSV: 159 donor paths; 95 divergent, 63 absent, 1 identical; 798 ownership rows; 1,946 exact-path candidate references; 40,048 lexical symbol candidates; 1,135 consumer blobs.
+- Added priority report `DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md`, fetched back SHA `2ebc96c59638809d2b99e16c5ed416f808749ee7`. It lists 40 highest dispersion/match paths and their occurrence counts, strictly as an audit queue, not semantic risk or closure.
+- Phase 2 still partial; Phase 3/4 incomplete. Full semantic and authority ledger not finished.
