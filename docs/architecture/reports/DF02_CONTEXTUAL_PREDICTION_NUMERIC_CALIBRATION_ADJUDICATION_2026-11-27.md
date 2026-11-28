@@ -2,7 +2,7 @@
 
 **Scope:** donor-only `brain_prediction_context.cpp`, prediction-context data carried in Brain API/journal, and phase-10 prediction-feedback tests.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** contextual prediction is a donor-added capability. It combines graph-derived concept evidence with numeric calibration and feedback. Source/test inspection only.
+**Disposition:** contextual prediction is a donor-added capability. It combines graph-derived concept evidence with numeric calibration and feedback. Historical e737 donor prediction-feedback test #30 passed; candidate test source differs and current candidate CTest not run.
 
 ## 1. Exact ownership
 
@@ -30,7 +30,7 @@ Context evidence is graph/co-occurrence coherence, not a separately calibrated p
 
 Phase-10 source asserts non-finite predictions/confidence are rejected, numeric int/double equivalence, numeric calibration, contextual concept creation and provenance persistence, concept generalization, feedback strengthening/weakening, duplicate/mismatched sequence rejection before affect mutation, malformed/nonfinite/inconsistent prediction feedback rejection, and later action-choice changes/persistence through replay.
 
-Tests were inspected, not executed. Gaps: same prediction key under conflicting contexts and cross-context numeric calibration contamination; calibration quality and confidence calibration; member-ID delimiter collisions; false concept-context transfer; adversarial graph/coherence cases; fuzzing.
+Donor test #30 passed in historical e737 CI; candidate test source differs and current candidate CTest was not run. Gaps: same prediction key under conflicting contexts and cross-context numeric calibration contamination; calibration quality and confidence calibration; member-ID delimiter collisions; false concept-context transfer; adversarial graph/coherence cases; fuzzing.
 
 ## 5. Five review lenses
 
