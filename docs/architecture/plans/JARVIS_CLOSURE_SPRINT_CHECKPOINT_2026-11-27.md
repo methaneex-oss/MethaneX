@@ -701,3 +701,26 @@ The 71-test matrix confirms all historical e737 tests passed; the 26 tests absen
 
 ### Builder disposition
 The Builder has reconciled several high-value source/test/build cohorts and their historical CI attribution, but the complete 159-path semantic/authority ledger is still OPEN. Per-path human ownership and retention are not evidenced by repository metadata; these require Director decisions after the Builder's technical findings are complete. Do not create Independent Reviewer or Blind Fresh Tester requests until the Builder-resolvable corpus and full self-review are clear.
+
+ 
+## Continuation — memory journal recovery variants and failure-path defect (2026-11-28)
+
+Updated report: docs/architecture/reports/DF02_MEMORY_RETRIEVAL_CONSOLIDATION_VARIANT_ADJUDICATION_2026-11-28.md, blob 19da10bd30a5ae6370f70d3faf5d0c57b934d2c3.
+
+Three distinct memory journal designs were inspected:
+1. Preserve-corrupt-tail branch HEAD 292f406d0ce5bfae85d96e188822212f571750eb, memory.cpp fffb6c0ad6e43cb0b93b873969449e569b3d3f5e, test source 5d824f08437916e48749bf539cc94e10c9f44347. It backs up the complete original journal to a collision-avoiding .recovery-backup path before truncating to the verified prefix. CTest #9 passed in five CI jobs; all 70/70.
+2. Frozen donor quarantine branch HEAD 0c1d0b5f01fb448a07e9ca1c091285bc01830845, memory.cpp ab42bba1d32d6f48d091787491c72294a4a55bb5, test source ecabc6af76c52ed1e4175b151e76fadecae7729d. It quarantines the unreadable suffix to .corrupt before truncation. CTest #9 passed in five CI jobs; all 70/70. These exact donor memory/test blobs were executed in that historical branch; frozen donor parent CMake itself was not built.
+3. Framed V2 branch HEAD b0560edaa72b6d455001be51695731cf988b43b2, memory.cpp 88314ed3a43c765f8a69255ace97afb7df1a6c5e. It adds magic, length-prefixed frames and FNV-1a 64-bit checksum plus legacy migration/append guard. It has no workflow runs/status, and its registered 58-assert test does not exercise framing, checksum or corruption paths.
+
+Builder self-review found an additional defect shared by all three variants: each calls filesystem::resize_file(journal_path_, valid_end, error) but ignores the error. The Memory API exposes no recovery-required/read-only state. If truncation fails after backup/quarantine, construction continues and append can write after the corrupt suffix; later replay may stop before the new event. The framed variant can likewise append after an incomplete frame if truncation fails. The donor .corrupt file also appends multiple generations without a unique name/manifest. No runtime fix was made because authorization is audit/evidence-only. This is an explicit technical blocker requiring a future authorized implementation and fault-injection tests.
+
+Historical CI evidence:
+- Preserve branch #1532/#682/#663 (Brain CI, JARVIS Brain Tests, TSAN) test #9 passed in five jobs; Native Build #907 and Core Verification #1202 passed.
+- Quarantine branch #1541/#691/#672 test #9 passed in five jobs; Native Build #916 and Core Verification #1211 passed.
+- Framed branch has no workflow/status.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: c8199e3602fa0c60f444e700c1601e3c1c754a6b.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 359 commits; zero reviews and inline threads; combined status has no entries.
+- Native Brain Build #2895 IN_PROGRESS; no current-branch CTest.
+- No implementation change, no donor adoption, no baseline selection, no branch retirement or gate/Stage A transition.
