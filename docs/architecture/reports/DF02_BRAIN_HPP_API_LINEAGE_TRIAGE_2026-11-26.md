@@ -51,3 +51,8 @@ The candidate header, conversely, has its own broader inline/declaration surface
 ## Disposition
 
 **OPEN.** This evidence slice records substantial declaration/API divergence and version ownership. It does not select a header, prove runtime capability, authorize adoption/retirement, close DF-02, or authorize implementation/Stage A.
+
+
+## Correction — mutable Memory accessor (2026-11-28)
+
+Exact candidate header blob `8268ef84e0b361ead536724ba7761904b30ee58f` exposes only `const Memory& memory() const noexcept`. Exact donor header blob `671186f4c39879a182f9e511394fc564d86f2988` exposes both `Memory& memory() noexcept` and the const overload. The donor **adds** mutable direct access; the previous report summary that implied it removed mutable exposure was incorrect. This materially increases the Brain API authority surface because callers can mutate the journal/store directly outside Brain's normal validation/event pathways. This is a source/API finding; exact downstream use, integrity impact and acceptance remain open.
