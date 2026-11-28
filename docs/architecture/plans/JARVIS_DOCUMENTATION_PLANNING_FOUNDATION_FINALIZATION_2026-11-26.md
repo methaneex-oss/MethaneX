@@ -99,3 +99,8 @@ The original all-ref discovery artifact was re-downloaded and SHA-256 reverified
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 A further candidate-absent developmental-learning production/header and donor integration-test cohort was inventoried at exact blob SHA and CMake reachability. The donor integration test's source assertions cover context transfer, persistence/replay, action-outcome reliability, malformed evidence and episodic retrieval; nine test variants remain only partially grouped, and none was executed. Full semantic/authority closure remains open.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+A further 40-blob C++ test-CMake cohort was fetched and source-feature reconciled. Candidate target/CTest graph is 45/45; donor 71/70; Release assertion preservation exists in 16 historical variants and the donor but not the frozen candidate. The report distinguishes aliases and workflow/manual targets from missing routine CTest coverage. No native build or tests were executed; semantic/authority closure remains open.
