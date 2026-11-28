@@ -634,3 +634,37 @@ Updated exact reports:
 - Test CMake / 71-test matrix / CMake provenance: docs/architecture/reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob 55acf9645e78f8a679c5fe16bafdf8c93659d7af.
 
 This correction preserves the historical CI evidence while preventing it from being attributed to the wrong frozen parent-CMake blob.
+
+ 
+## Continuation — CMake provenance correction and broader behavioral test attribution (2026-11-28)
+
+### CMake provenance correction
+A further source-blob comparison found that the historical e737 CI did not use the exact frozen donor parent CMake:
+- Frozen donor parent CMake: bc264ce7b4ae489404ca03ea6d9676d0330a6a56.
+- e737 alternate parent CMake: 33197f92141a241ff0546af1bf81fbf177a1f3ab.
+- Both have the same 64 production source entries. Exact diff: the alternate adds find_package(OpenSSL REQUIRED COMPONENTS Crypto) and target_link_libraries(jarvis_core PUBLIC OpenSSL::Crypto) for the HMAC-SHA-256 authenticated-evidence runner.
+- e737 uses the exact frozen donor test CMake cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 and affective_planning script e3a52416b2538791a93666e5124b1f34ad1b082a.
+- Frozen candidate/PR #203 parent CMake c51816888e1bddb7bc00c59e72529524e27a0717 (57 production TUs) was built by Native Brain Build #2861/#2866/#2869; configure/build passed, no CTest.
+- Frozen donor parent CMake bc264 (64 TUs) was not independently built. The e737 native/test evidence belongs to alternate 33197, not bc264.
+
+### Expanded exact behavioral-test evidence
+Additional reports now attach historical e737 branch execution to the exact test blobs:
+- Core library CMake: docs/architecture/reports/DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob 5d08514fe317230f2fbc8d246d272c4e1565e821.
+- Core test CMake / 71-test matrix / source-blob identity: docs/architecture/reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob 55acf9645e78f8a679c5fe16bafdf8c93659d7af.
+- Developmental learning/context transfer: blob ab924c73f86984e37691d71ea2823aa189b3020e. CTest #50, #60, #65–#68 passed in all five post-fix test jobs; the 59-assert training-environment test demonstrates context-bounded adaptation and restart persistence in a synthetic world.
+- Memory-learning-evolution persistence: blob 5f92f367300402f965a6d1f02d3d5e9e4415c987. CTest #45 passed in all five jobs. The executed e737 source is alternate blob 5d578360fce5815707b3becd6b7e4df4115c2fd5, not donor blob 98e6598f60912714234f2dfabfbe52fa5eb77044.
+- Affective state/appraisal learning: blob 58aa96d870aa9c6d41c68828209a3b78d8d9137e. CTest #51–#58 passed in all five jobs.
+- Attention salience/feedback: blob b7cc9174c3a8acf97c318c5ad310a18a17188c4d. CTest #14 passed in all five jobs.
+- Restored Brain API/deep behavior: blob d1b875ebcbb5ec8762cd66a05bbcaf791489599b. Donor brain_deep_suite blob 1314123ea3b524b24fd6693fc6fb4873b6c550d5 (260 assertions) passed CTest #4 in all five jobs; candidate blob ca8e7012c92822608c3be0539784d281b0578bfd has 68 assertions and was not the tested variant.
+
+The 26 CTest names absent from candidate registration map to 25 unique source files. At e737, 24 source blobs match frozen donor blobs byte-for-byte; the memory-learning-evolution test is the one alternate source variant; DLT-002 train/verify share one source file. All 71 CTest entries passed in the five e737 test jobs. These are historical alternate-branch results, not current PR #203 test results or proof that the frozen donor parent CMake itself was built.
+
+### Latest live PR snapshot before this checkpoint update
+- PR #203 remains OPEN, DRAFT, UNMERGED, mergeable=true; branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125.
+- HEAD immediately before this checkpoint update: 06c5138e8ce838d588c5c649eb7e1d10e06b2e50.
+- 59 changed files, 353 commits; zero reviews and zero inline review threads; combined status has no entries.
+- No workflow run was returned for this latest docs-only HEAD. Earlier candidate build #2861/#2866/#2869 passed Configure + Build; no current-branch CTest.
+- No runtime/source changes; no baseline selection, donor adoption/retirement/deletion, merge/rebase/retarget, gate acceptance or Stage A.
+
+### Builder self-review status
+The source/blob attribution was rechecked after the initial CMake wording. The frozen donor CMake and alternate e737 CMake are now explicitly distinguished; the memory persistence test is correctly attributed to its alternate blob, not the donor blob. The 71-test matrix and all report blob references are durable. Full 159-path semantic/authority closure and five full-scope review passes remain incomplete; independent reviewer/fresh-reader requests remain deferred.
