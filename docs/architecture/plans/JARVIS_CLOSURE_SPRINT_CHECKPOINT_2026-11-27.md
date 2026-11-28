@@ -333,3 +333,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Reconciled totals from source CSV: 159 donor paths; 95 divergent, 63 absent, 1 identical; 798 ownership rows; 1,946 exact-path candidate references; 40,048 lexical symbol candidates; 1,135 consumer blobs.
 - Added priority report `DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md`, fetched back SHA `2ebc96c59638809d2b99e16c5ed416f808749ee7`. It lists 40 highest dispersion/match paths and their occurrence counts, strictly as an audit queue, not semantic risk or closure.
 - Phase 2 still partial; Phase 3/4 incomplete. Full semantic and authority ledger not finished.
+
+
+## Immediate continuation — developmental brain integration test cohort (2026-11-28)
+
+- Added `DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`.
+- Candidate-absent production source: six exact blobs; header: four; integration test: nine. Donor CMake registers source and suite. Source/test content inspected at donor exact SHA and historical test variants grouped by feature markers/size, not closed by full diff.
+- Test assertions cover strategy transfer/recovery, persistence, action outcome reliability, memory retrieval, malformed outcomes, numeric/featureless contexts and capability integration. Native build/CTest not run. Semantic diff, caller graph, false-transfer, calibration and authority/retention remain open.
