@@ -1,6 +1,6 @@
 # DF-02 Memory Retrieval, Consolidation and Metadata Variant Adjudication — 2026-11-28
 
-**Scope:** frozen candidate/donor `memory.cpp`, `memory.hpp`, memory architecture test and CMake registration. Candidate `caf87986dfea7aca75728818651c8687e9f5faf0`; donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Source inspection only; no native build/CTest.
+**Scope:** frozen candidate/donor `memory.cpp`, `memory.hpp`, memory architecture test and CMake registration. Candidate `caf87986dfea7aca75728818651c8687e9f5faf0`; donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Source inspection plus historical alternate-branch native/sanitizer/TSAN test evidence; no current-candidate CTest.
 
 ## Exact blobs
 - Candidate `memory.cpp`: `ba72a897306d4761246d0deab2fbab37c49d372f`; donor `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
@@ -26,3 +26,17 @@
 
 ## Disposition
 Exact candidate/donor content and tests compared. Retrieval and metadata feature deltas identified; persistence/trust/authority and complete historical variant/consumer closure remain OPEN. No implementation selected/adopted/retired/deleted. DF-02 and Foundation gates remain open.
+
+ 
+## Historical execution of exact donor memory variant — 2026-11-28
+
+The e737cae7f907696ef787a4e85b0dee3a739d71b1 alternate branch contains the exact frozen donor blobs:
+- memory.cpp ab42bba1d32d6f48d091787491c72294a4a55bb5;
+- memory.hpp 5401d5bd236cca8d3a93f2815164a7734cf6990f;
+- memory_architecture_suite.cpp ecabc6af76c52ed1e4175b151e76fadecae7729d;
+- parent CMake 33197f92141a241ff0546af1bf81fbf177a1f3ab (64-source alternate with OpenSSL dependency);
+- tests CMake cbfd1fde52fffa6eeac025da2b7ddcb5ab493261.
+
+CTest #9 jarvis_memory_architecture_suite passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; all five jobs report 71/71. The exact donor memory implementation and donor memory test were executed in that alternate branch. This is not a test result for the frozen candidate memory.cpp ba72a897 or candidate memory.hpp f3662038, and not a current PR #203 CTest result.
+
+The test validates retrieval-kind filtering, exact match, consolidation score and ranking, recurrence, metadata persistence/restore and working-tier transitions. It does not cover the main event journal's raw framing/checksum/record-length integrity, fsync/directory durability, corruption quarantine, concurrent multi-process writers, torn writes, crash injection or journal/metadata divergence. Those risks remain open.
