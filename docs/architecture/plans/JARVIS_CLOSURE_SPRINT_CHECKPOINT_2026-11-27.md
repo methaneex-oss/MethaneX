@@ -318,3 +318,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Candidate runtime is input-triggered queue/cycle processing; donor adds providers, action adapter/authorization and selected-plan execution, feedback queue, sequence-bound outcomes, goal progression, utility learning and persistence. Donor test contract substantially expands beyond candidate's cycle smoke test.
 - Exact candidate/donor files and test/CMake registration inspected; no build or tests executed.
 - Risks/open: feedback-priority starvation, callbacks that block worker shutdown, missing cancellation/deadline, shutdown discard metrics, workspace mixed-time snapshots, plan/action mapping edge cases, and feedback trust. Path remains OPEN; no adoption or code changes.
+
+
+## Immediate continuation — cognitive cycle cohort (2026-11-28)
+
+- Added `docs/architecture/reports/DF02_COGNITIVE_CYCLE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back and SHA-verified `6cc7c948e3986d3aa37fe9c6e9bf3f18186b1610`.
+- Candidate/donor cycle and test/CMake comparison: donor's integrated structured perception, prior-memory retrieval, forecast resolution, reasoning-derived simulation, attention/affect/uncertainty, intent selection, capability/reliability filtering, contextual transfer, and consequence calibration. Main test expanded; stress test identical.
+- Source-only; no tests executed. Remaining validation includes duplicate context labels, key/resource bounds, concurrency, evidence provenance, false transfer/calibration, matched learning baseline. No adoption/code change.
