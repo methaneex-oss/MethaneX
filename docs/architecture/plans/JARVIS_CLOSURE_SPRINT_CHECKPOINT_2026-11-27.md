@@ -375,3 +375,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md`; fetched-back SHA `4fd4762d172020b5ba791055479fdb843ae5095e`.
 - Exact 21 blobs and 212 tip-presence rows. Candidate header exposes const Memory; donor adds mutable Memory& accessor. This correction is important: earlier restored-API report had the direction reversed; it is now corrected. Mutable direct access is a high-priority authority/integrity risk requiring exact consumer and journal impact analysis.
 - Full API/ABI signatures, consumers, build/link/test execution, historical semantic versions and retention remain open.
+
+
+## Immediate continuation — cognitive-runtime feedback/action cohort (2026-11-28)
+
+- Added `DF02_COGNITIVE_RUNTIME_FEEDBACK_ACTION_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back blob SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`.
+- Exact candidate/donor runtime header/source/tests/CMake compared. Donor integrates perception providers, selected-plan actions, asynchronous prediction/evidence/goal feedback, sequence binding, outcome utility, metrics and workspace current-state updates. Runtime test expands 87→356 lines; additional 84-line goal-feedback suite. CMake registers two additional donor runtime suites.
+- Source risks: feedback/priority starvation, unbounded synchronous callbacks/stop, thread-start exception state, shutdown outcome-feedback rejection, heuristic reliability, non-atomic workspace snapshot. No native build/CTest; all behavior remains source-inspected.
+- Cohort open for historical variants, reverse consumers, authority/retention and fault injection. No selection/closure.
