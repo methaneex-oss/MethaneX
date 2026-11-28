@@ -114,3 +114,8 @@ The core library-CMake historical cohort (22 exact blobs) was inventoried. Candi
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 The evolution-Brain integration test historical cohort (24 exact blobs) was inventoried. Frozen candidate suite is 46 lines/7 assertions; donor 298/97 and expands lifecycle gate/replay/rollback/canary persistence checks. No tests were run. Crash/concurrency, isolation attestation, full semantic variants and authority closure remain open.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+Brain.cpp's 35 exact source blobs were inventoried and method-definition surface compared. Candidate/donor method counts reconcile when constructor is excluded; CMake source ownership split is mapped. No AST signature graph, reverse consumer closure or native build/test execution has been completed. DF-02 remains open.
