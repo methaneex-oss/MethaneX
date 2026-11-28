@@ -124,3 +124,12 @@ Brain.cpp's 35 exact source blobs were inventoried and method-definition surface
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 Brain.hpp exact 21-blob variant cohort was inventoried and a material authority correction was recorded: candidate exposes only const Memory access; donor adds mutable Memory access. The prior report's direction was reversed and has been corrected. Consumer/integrity consequences and full ABI/API closure remain open; this is not acceptance.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+Two further bounded cohorts were completed and fetched back for SHA verification:
+- Cognitive-runtime feedback/action variant report: exact frozen candidate/donor runtime/header/tests/CMake; feedback/action/perception integration plus starvation, callback blocking, shutdown feedback and snapshot-consistency risks. Report SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`.
+- Memory retrieval/consolidation variant report: exact frozen candidate/donor source/header/test/CMake; retrieval filtering, consolidation, metadata V1/V2 and sequence cursor; raw-journal recovery, durability and multiwriter gaps. Report SHA `e844e219fe292255a8f2d87c7136708086e46470`.
+
+PR #203's live inventory now reports 57 changed documentation files, 315 commits, HEAD `62e81e689d00cfcacca873e164ba0eec69dce346`, draft/open/unmerged, no submitted reviews or inline threads. This supersedes earlier changed-file counts in this document. No native build or CTest ran for these two cohorts. DF-02 remains OPEN; DF-09 and DF-11 remain blocked; terminal consistency and DF-12 Director acceptance are outstanding. This update does not constitute acceptance.
