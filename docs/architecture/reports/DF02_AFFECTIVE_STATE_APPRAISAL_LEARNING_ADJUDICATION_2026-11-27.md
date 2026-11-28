@@ -2,7 +2,7 @@
 
 **Scope:** candidate/donor affective-state model, appraisal-learning model and selected Brain evidence/goal integration tests.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor integrates continuous valence/arousal/uncertainty/tension/stability and an adaptive appraisal/calibration model. Source/test inspection only.
+**Disposition:** donor integrates continuous valence/arousal/uncertainty/tension/stability and an adaptive appraisal/calibration model. Historical e737 tests #51–#58 passed in five CI jobs; current candidate CTest not run.
 
 ## 1. Exact refs
 
@@ -27,7 +27,7 @@ The appraisal learner tracks mean absolute consequence error, scales learning pr
 
 Donor tests assert positive/negative outcome state changes, tension/uncertainty, decay, restore bounds, appraisal-weight learning from poor versus accurate evidence, reduced influence confidence, actual future signal modulation, persistence after Brain replay, generic evidence salience, reliability affecting uncertainty rather than task valence, and goal completion feedback.
 
-Tests are source inspected, not executed. They use repeated synthetic evidence, not independent external validation.
+Tests are source inspected; historical e737 donor variants #51–#58 passed in five CI jobs. They use repeated synthetic evidence, not independent external validation. Current candidate CTest was not run.
 
 ## 4. Remaining limitations
 
@@ -54,7 +54,7 @@ Tests are source inspected, not executed. They use repeated synthetic evidence, 
 | Replay persistence | Test contract present |
 | Calibration/long-term stability evaluation | Open |
 | Consequence-error integrity | Cross-report gap |
-| Native tests | Not executed |
+| Historical e737 tests | CTest #51–#58 passed in five jobs; current candidate CTest not run |
 | Full owner/consumer/authority/retention | Open |
 | DF-02 | OPEN |
 
