@@ -228,3 +228,26 @@ The 45 "Yes" entries in the matrix mean only that the candidate CMake registers 
 - CTest #30 prediction_feedback_phase10_suite: candidate test blob e72da8e7... is 73 lines / 12 assertions and contains neither predict_with_context nor apply_prediction_feedback; donor/e737 blob 973350e9... is 1,339 lines / 371 assertions and exercises contextual prediction/feedback.
 
 Thus all 71 e737 CI passes are valid for the exact alternate branch sources in that run, but none should be relabeled as a current candidate test pass. Candidate CTest-name registration alone is insufficient to establish behavioral coverage; each common test path requires exact blob comparison and semantic contract comparison.
+
+ 
+### Exact source identity for all 45 common CTest names
+
+A second pass compared the candidate and e737 test-source blobs for every common CTest name, including the 20 test source files outside the 159-path inventory:
+- 20/45 common test source files are byte-identical between candidate and e737.
+- 19/45 common test source files in the 159-path inventory are exact frozen-donor blobs on e737 and differ from candidate.
+- 6/45 common test source files are neither candidate nor frozen-donor blobs on e737; they are alternate evolution-test variants.
+- Therefore the e737 71/71 result includes 20 candidate-identical common test sources, 19 donor-variant common sources, 6 alternate common sources and 26 donor/alternate-only test names. It is not a candidate-suite pass.
+
+The six alternate common evolution-test source blobs are:
+| CTest name | Candidate blob | Frozen donor blob | e737 executed blob |
+|---|---|---|---|
+| jarvis_evolution_adoption_journal_suite | 24a1be9541cc038518065724aef1968efc4dc595 | fc8ae17bb837831fef7bf69873ec0e5243e2bc22 | ad3c58179cc150d303f5bcbbfa50beb40a1327c6 |
+| jarvis_evolution_brain_integration_suite | 3164cbc19bfb056cdccfdd58f0be047226d41a86 | 59d7dd68c42eea18d488d8e5e6aa9f7a9a327ded | b065a301397c83bcb460d43fa36421a7bebc9060 |
+| jarvis_evolution_canary_controller_suite | 6acd8aedb7520aebe745b15a2a10c527262f28e0 | 80cac5df347987a9074e1ced43202f8759f797d7 | 4b867af52e11a15e9d867a35cdefbf9c83333a2a |
+| jarvis_evolution_experiment_coordinator_suite | 83d884dd97cbcf2d002249a70e44bb29e6ac0560 | 5b410197e3c5e48acb381e274ae22e8ba037aa84 | 04507a590b23d64bc03bb94d3c3d76c87092305d |
+| jarvis_evolution_experiment_runner_suite | 08888276d875ce5e55f421e828f1bb4f061d1ea5 | 307fe75b42f804d9bb2b0e8199df1e9cf773e3c6 | 3338273fe972292c1ea25035ba45fed1be3da378 |
+| jarvis_evolution_opportunity_orchestration_suite | 4ef1dc80a85a8e9247c5816bdb73c6876d3a1b22 | 24d6dd905cb537cc6c14e329db6a7d52d49c97b8 | a4ece67094aa89f659254e01f226af49ae02f91e |
+
+The 20 byte-identical common source files outside the 159-path inventory were individually fetched at candidate ref caf87986 and e737 branch ref; all SHA pairs matched: brain_failure_suite, capability_evaluator_suite, capability_execution_suite, capability_registry_suite, cognitive_cycle_stress_suite, cognitive_trigger_suite, evolution_experiment_suite, evolution_learning_suite, evolution_monitor_suite, evolution_scheduler_suite, evolution_trials_suite, judgment_intent_strategy_phase6_suite, learning_loop_architecture_suite, perception_pipeline_suite, process_isolation_syscall_suite, self_model_health_phase4_suite, self_state_suite, self_testing_healing_phase9_suite, world_self_model_phase4_suite and world_state_suite.
+
+This completes source-blob identity attribution for all 45 common CTest source files. It does not complete semantic comparison of all 45 test implementations or source-under-test lineages. In particular, the six alternate evolution tests require exact source-contract comparison against their respective candidate/donor variants; the 19 donor test variants require semantic comparison with candidate tests; and the 20 identical test sources still execute against different candidate versus alternate implementation graphs.
