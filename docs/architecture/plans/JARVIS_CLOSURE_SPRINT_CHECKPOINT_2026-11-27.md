@@ -571,11 +571,12 @@ The donor-only CMake/CTest graph registers three integration suites absent from 
 
 On historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1, the exact source/test/CMake blobs for these suites were built and executed. CTest #23, #59 and #64 passed in Brain CI #1826 native and sanitizer jobs, JARVIS Brain Tests #975 brain and sanitizer jobs, and Brain ThreadSanitizer #957. Each of the five test jobs reported 71/71. These are historical alternate-branch results, not current PR #203 test evidence or frozen donor HEAD c1da222 evidence.
 
-### New unresolved CTest registration discrepancy
-- Exact donor tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 has 71 executable targets and 70 literal add_test invocations.
-- Historical e737cae7 CI reports 71/71 tests passed in all five test jobs.
-- Available job-log payloads start at test #10; names #1–#9 and the generated CTestTestfile.cmake are unavailable. No build artifact containing the generated test list was attached.
-- The identity/origin of the 71st CTest test remains OPEN. Do not treat 70 literal registrations and 71 executed tests as reconciled.
+### CTest registration count — resolved
+- tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 contributes 71 executable targets and 70 literal add_test registrations.
+- Donor parent core/cpp/CMakeLists.txt blob bc264ce7b4ae489404ca03ea6d9676d0330a6a56 includes tests/affective_planning.cmake at lines 79–82; that script e3a52416b2538791a93666e5124b1f34ad1b082a contributes one executable and one CTest registration.
+- Full donor graph is 72 executable targets / 71 CTest registrations. Candidate parent does not include that script; full candidate graph is 45/45.
+- CI test #1 is jarvis_affective_planning_suite from the parent include; #2–#71 are the tests subdirectory registrations. Historical e737cae7 CI reports 71/71 in all five test jobs.
+- The 71-test count is now reconciled. The 40-blob historical CMake cohort still needs parent-level include analysis for every variant.
 
 ### Latest live PR state before this checkpoint write
 - PR #203 remains OPEN, DRAFT, UNMERGED, mergeable=true; branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125.
@@ -585,4 +586,13 @@ On historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1, the exa
 - PR description now includes the new test evidence and the CTest discrepancy.
 
 ### Self-review correction
-The Builder rechecked the donor-only action-consequence test by basename after the full-path matcher missed its CMake edge. The earlier unregistered-test inference was corrected before handoff. The CMake report now explicitly records that full-path reference counts are lower bounds and that CTest source/runtime counts remain unresolved. No runtime source was changed.
+The Builder rechecked the donor-only action-consequence test by basename after the full-path matcher missed its CMake edge. The earlier unregistered-test inference was corrected before handoff. The CMake report now explicitly records that full-path reference counts are lower bounds; CTest source/runtime counts are reconciled for the inspected candidate/donor/alternate graphs. No runtime source was changed.
+
+
+### Latest live PR snapshot before this checkpoint update
+- PR #203: OPEN, DRAFT, UNMERGED, mergeable=true.
+- Branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125.
+- HEAD immediately before this checkpoint update: 41543c8bf6e98b08edc0e6006f0d89f821b026c1.
+- 59 changed files, 341 commits; no reviews or inline review threads; combined status has no entries.
+- Native Brain Build #2878 was IN_PROGRESS at last read. It is a docs-only head build; no current-branch CTest result is claimed.
+- Latest core test-CMake report blob: 5557728701e952a226b0d2973cdc4de624c8b7f2.
