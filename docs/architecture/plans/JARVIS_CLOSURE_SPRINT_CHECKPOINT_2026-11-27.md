@@ -403,3 +403,16 @@ After the two new bounded reports and finalization evidence update, live PR #203
 - No merge, retarget, rebase or runtime code change. DF-02 remains OPEN; Phase 2 partial, Phases 3/4 incomplete. DF-09 blind-reader execution/CLEAR remains blocked by unavailable workflow dispatch; DF-11 remains governance-blocked; terminal consistency inventory and DF-12 Director acceptance remain pending.
 
 This is a current evidence checkpoint, not completion or acceptance. The 159-path semantic/authority audit is not closed; no reviewer handoff is yet justified as a completed audit.
+
+
+## Bounded continuation — engineering message bus and task-ledger authority (2026-11-28)
+
+- Added `docs/architecture/reports/DF02_ENGINEERING_MESSAGE_BUS_TASK_LEDGER_AUTHORITY_ADJUDICATION_2026-11-28.md`; fetched back and verified report blob SHA `a35c5c77e8e65ec8abf8186c531fc292eeade286`.
+- Exact candidate/donor source/API comparison covered `message_bus.hpp/.cpp`, `agent.hpp`, `coordinator.cpp` and engineering CMake. Current PR #203 still exposes candidate-shaped message-bus/coordinator/CMake blobs for the inspected paths.
+- Concrete findings: candidate reports delivery after queue overflow can silently evict work; donor adds receiver acceptance/backpressure, bounded deduplication, same-ID content protection, collision-resistant delivery keys and durable task-ledger claim/version/transition/result-identity checks. Donor CMake compiles/registers `task_ledger.cpp` and a dedicated ledger test target; current candidate graph does not.
+- A guessed test filename returned 404; no test-source claim was made. No native build, CTest, sanitizer, fault injection, or independent review was executed through the connector.
+- Cohort status: source/API semantic comparison implemented; build reachability static-only; provenance/retention partial; path remains OPEN. This evidence does not select donor code or authorize implementation.
+
+## Updated continuation point
+
+The next bounded task is the remaining highest-value unresolved cohort from the exact queue, prioritizing engineering task-ledger/message-bus reverse-consumer and authority/retention closure, then lower-dispersion paths. The 159-path semantic/authority ledger remains incomplete; Phase 2 is partial and Phases 3–4 are not complete. PR #203 remains OPEN/DRAFT/UNMERGED with no runtime changes, merge, rebase, retarget, adoption, retirement, Gate A/B, Stage A or acceptance.
