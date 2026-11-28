@@ -12,7 +12,7 @@
 - 798 path/blob ownership rows.
 - 1,946 exact-path reference candidates across 159 donor paths, 76 consumer paths and 101 consumer blobs. Categories: 1,930 documentation, 15 workflow, one other.
 - 40,048 symbol-match candidates across 502 identifiers, 346 consumer paths and 1,135 consumer blobs. Categories: source 23,948; test 14,974; workflow 861; build 237; other 28. Symbol/path hits are discovery candidates and can include comments, strings, tests, incidental references or false positives.
-- Unique blob versions per donor path: median 3; mean 5.02; range 1–40. 24,978? **Corrected totals from source CSV:** 23,978 tip-presence rows and 9,889 tip-absence rows. Presence/absence is occurrence metadata, not independent implementation count.
+- Unique blob versions per donor path: median 3; mean 5.02; range 1–40. The source CSV totals 23,978 tip-presence rows and 9,889 tip-absence rows. Presence/absence is occurrence metadata, not independent implementation count.
 
 ## 2. Prioritized path cohort queue
 
