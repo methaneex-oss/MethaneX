@@ -119,8 +119,8 @@ This reconciles the 71/71 CI summary with the CMake graph. The prior "71st test 
  
 ### Exact CTest execution attribution
 
-The e737cae7 historical alternate branch used the same donor CMake blobs:
-- core/cpp/CMakeLists.txt 33197f92141a241ff0546af1bf81fbf177a1f3ab;
+The e737cae7 historical alternate branch used a distinct alternate parent CMake blob (33197f92141a241ff0546af1bf81fbf177a1f3ab), not the frozen donor parent CMake blob (bc264ce7b4ae489404ca03ea6d9676d0330a6a56). Both have the same 64 production source entries; the alternate adds OpenSSL Crypto dependency wiring for the authenticated-evidence runner. The branch uses the exact frozen donor test-subdirectory CMake and parent-included affective_planning script:
+- alternate core/cpp/CMakeLists.txt 33197f92141a241ff0546af1bf81fbf177a1f3ab;
 - core/cpp/tests/CMakeLists.txt cbfd1fde52fffa6eeac025da2b7ddcb5ab493261;
 - core/cpp/tests/affective_planning.cmake e3a52416b2538791a93666e5124b1f34ad1b082a.
 
@@ -215,3 +215,6 @@ The 26 CTest names absent from the candidate registration map to 25 unique sourc
 - memory_learning_evolution_persistence_suite.cpp is the exception: the executed e737 source is alternate blob 5d578360fce5815707b3becd6b7e4df4115c2fd5, not donor blob 98e6598f60912714234f2dfabfbe52fa5eb77044. Its separate report records the exact contract and CI evidence.
 - The parent-included affective_planning_suite.cpp is donor blob 32e5f04cfb6e4764cb205744266375367228bedf.
 This prevents attributing the test #45 pass to the wrong donor variant. The 71-test matrix is path/target/outcome evidence; variant identity is additionally constrained by these blob comparisons.
+
+ 
+The historical e737 CI result must be attributed to the alternate 33197 parent CMake, not frozen donor bc264. The frozen donor parent CMake itself was not independently built in this sprint. Candidate parent CMake c518 was built by PR #203 Native Brain Build jobs #2861/#2866/#2869 (Configure + Build only; no CTest).
