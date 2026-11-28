@@ -3,7 +3,7 @@
 **Scope:** exact candidate/donor and 13 historical alternate blobs for `core/cpp/src/process_isolation.cpp`, plus exact public header, runner, and test-contract evidence.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 frozen HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** semantic and trust-boundary differences mapped for this cohort; path remains OPEN. Source inspection only; no tests executed in this audit.
+**Disposition:** semantic and trust-boundary differences mapped for this cohort; path remains OPEN. Frozen candidate/donor exact backend refs were not executed; a third-lineage e737 backend/header variant passed historical CI tests.
 
 ## 1. Exact content inventory and owner grouping
 
@@ -64,7 +64,7 @@ This classification groups exact versions by material mechanism. It is not a ful
 
 ## 4. Exact cross-file test and registration evidence
 
-Candidate and donor frozen refs have identical process-isolation test source blobs:
+The frozen candidate and donor process-isolation test sources are not byte-identical; the main suite differs in its configured memory limit. The syscall suite is byte-identical:
 
 - `process_isolation_suite.cpp`: `78b764368de4d427c3196b26b57255edc422bf50`.
 - `process_isolation_syscall_suite.cpp`: `cd347d277c84376c3a90ce4d95b31b4dbafde583`.
@@ -116,3 +116,32 @@ The exact candidate/donor runner source blobs are respectively `83d3c26e589cd161
 | DF-02 / full 159-path ledger | OPEN |
 
 **Disposition:** `core/cpp/src/process_isolation.cpp` remains **OPEN / NO AUTHORITY DECISION**. No implementation selected, adopted, retired or deleted. This evidence slice does not close DF-02, any Foundation gate, or authorize Stage A.
+
+ 
+## Third-lineage e737 backend/header and historical CI — 2026-11-28
+
+The e737cae7 branch does not use frozen donor backend blob 8bb621fc... or frozen donor header a85f7169... . It uses:
+- process_isolation.cpp alternate blob 6da14fe42046346ec932ff3872a2469ef6a608f3 (282 lines);
+- process_isolation.hpp alternate blob b0a44fb2dc25db5f6335893ecd93187513ec0e46 (67 lines);
+- process_isolation_suite.cpp donor blob 6539da294b55e537ed28c08f3f72aff5f6b869e2 (46 lines / 8 assertions);
+- process_isolation_syscall_suite.cpp shared blob cd347d277c84376c3a90ce4d95b31b4dbafde583 (16 lines / 1 assertion).
+
+The e737 backend/header pair adds:
+- sanitizer-aware RLIMIT_AS handling: RLIMIT_AS is skipped in ASan/TSan builds because instrumentation reserves large virtual address ranges; normal-build RLIMIT_AS, RLIMIT_CPU and RLIMIT_FSIZE failures exit 125;
+- result.isolated remains false until the child exits, then is set when started and exit_code !=125, separating required-control failure from ordinary workload failure;
+- default require_network_syscall_block changes from false to true;
+- ProcessIsolationCommand adds evaluation_procedure_id, expected_executable_fingerprint and trial_index fields for trusted evaluator linkage.
+
+The alternate still ignores setpgid and dup2 return values. In sanitizer builds, the memory address-space limit is intentionally not enforced but the result does not expose a distinct "memory limit skipped" capability state. The isolation bit is still inferred from exit_code !=125, so it does not prove that every ancillary control (for example process-group setup) succeeded. The basic process-isolation test does not assert RLIMIT failure behavior, sanitizer limit policy, the new command identity fields, or result.isolated semantics.
+
+Historical e737 CI evidence:
+- CTest #47 jarvis_process_isolation_suite passed;
+- CTest #48 jarvis_process_isolation_syscall_suite passed;
+- both tests passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; all five jobs report 71/71.
+- e737 parent CMake is alternate blob 33197f92141a241ff0546af1bf81fbf177a1f3ab (64-source graph + OpenSSL Crypto), with donor test CMake cbfd1fde52fffa6eeac025da2b7ddcb5ab493261.
+
+Test-source correction:
+- Candidate process_isolation_suite.cpp blob 78b764368de4d427c3196b26b57255edc422bf50 and donor/e737 blob 6539da294b55e537ed28c08f3f72aff5f6b869e2 are both 46 lines / 8 assertions; they differ only in configured memory limit (candidate 64 MiB, donor/e737 256 MiB).
+- process_isolation_syscall_suite.cpp blob cd347d277c84376c3a90ce4d95b31b4dbafde583 is identical across candidate/donor/e737.
+
+The e737 CI result is for alternate backend/header 6da14/b0a44 plus donor main test and shared syscall test. It is not a pass result for frozen candidate backend eac7a12... or frozen donor backend 8bb621..., and does not close the descendant cleanup, unchecked setpgid/dup2, RLIMIT certification, path/FD race, inherited descriptor, platform or adversarial test gaps.
