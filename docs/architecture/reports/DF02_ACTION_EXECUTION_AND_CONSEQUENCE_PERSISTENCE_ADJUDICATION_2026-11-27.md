@@ -71,3 +71,18 @@ It does not test authorization/execute/verify/rollback/observer exceptions, inva
 | DF-02 | OPEN |
 
 Action execution remains **OPEN / NO AUTHORITY DECISION**. No implementation selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Builder reachability recheck — donor action-consequence integration suite (2026-11-28)
+
+A basename-aware CMake recheck confirms the donor-only integration test is registered; the prior full-path reference scan did not surface it because CMake names the source by basename rather than repository-relative path.
+
+Exact evidence:
+- Test source: core/cpp/tests/brain_action_consequence_integration_suite.cpp, donor blob 7616082579d53e3579cae8e87895bdb3dadba66f (316 lines, 95 assert expressions). Two historical alternate blobs are 4fb2c5377034f41b6190cf49c700ac9364fe182a (289 lines / 85 asserts) and 93fb8bbdde9cd7fbb28becfdebc4d01a7eae4e3e (293 lines / 88 asserts). No candidate blob exists.
+- Candidate core/cpp/tests/CMakeLists.txt blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 does not register the integration test.
+- Donor core/cpp/tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers jarvis_brain_action_consequence_integration_suite at lines 187–189 and CTest at line 285.
+- Donor core/cpp/CMakeLists.txt includes CTest and add_subdirectory(tests) under BUILD_TESTING at lines 79–81.
+- The separately scoped action_execution_phase7_suite is registered in both candidate and donor CMake; donor target lines 76–78 / CTest line 248, candidate target lines 70–72 / CTest line 162.
+- The 95-assert integration contract covers: negative surprise increasing prediction-error attention; unobserved/NaN consequence not being treated as zero or learned as neutral; explicit unknown optional consequence; observed consequence surviving verification failure; context preservation in the authoritative action_outcome event; strategy changes on the next cycle; persistence of affect/attention/strategy/forecast across restart; and resolution of a world-variable forecast by the next observation.
+
+This corrects the reachability record: the donor integration suite is a registered CTest target, not an orphan. It remains source-inspected only. No CI workflow runs were returned for donor frozen HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25, and no native build/CTest was executed for it in this run. Therefore 95 assertions are an executable test contract in the donor build graph, not passing test evidence.
