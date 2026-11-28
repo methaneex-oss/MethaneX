@@ -1232,3 +1232,12 @@ Report: [DF02 Cognitive Runtime Variant Adjudication](DF02_COGNITIVE_RUNTIME_VAR
 Candidate runtime is a submitted-cycle queue/worker with priority input, bounded result queue and workspace publication. Donor adds runtime perception providers, selected-plan action adapters/authorization/verification, asynchronous prediction/evidence/goal feedback, sequence-bound prediction outcomes, signed utility, feedback metrics, and workspace refresh from current brain state. Donor's tests exercise these mechanisms and persistence, whereas candidate's runtime suite is a 32-cycle queue smoke contract and lacks donor's goal-feedback test. CMake test registrations compared; no build/CTest executed.
 
 Open risks include feedback starvation of input work, synchronous callback hangs/no cancellation, discarded-queue shutdown accounting, non-atomic workspace snapshot assembly, repeated/mismatched plan-action mapping, and broader feedback provenance. No implementation selected or path closed.
+
+
+## 15. Cognitive-cycle context/perception/learning adjudication (2026-11-28)
+
+Report: [DF02 Cognitive Cycle Context, Perception and Learning Variant Adjudication](DF02_COGNITIVE_CYCLE_VARIANT_ADJUDICATION_2026-11-28.md), fetched-back report SHA `6cc7c948e3986d3aa37fe9c6e9bf3f18186b1610`.
+
+Donor adds committed-sequence structured perception, pre-observation retrieval, targeted action/perceptual recall, same-variable forecast resolution, reasoning-conclusion simulation, intent selection, dispute/attention/affect/perception uncertainty, capability filtering/reliability scoring, contextual developmental learning, consequence expectation calibration, transfer/exploration and affective planning. Exact candidate/donor headers/sources/tests/CMake inspected; stress test is identical. No build or tests executed.
+
+Open concerns: context duplicate-label determinism and unbounded provider-derived keys, per-action/per-cue retrieval budget growth, concurrent forecast resolution, trust of journaled action outcome evidence, heuristic context-transfer validity, reliability calibration, dispute-pressure heuristics and lack of matched no-learning performance benchmark. No source selection/adoption.
