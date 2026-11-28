@@ -54,3 +54,18 @@ Donor test checks successful output, output cap, timeout, required network names
 | DF-02 | OPEN |
 
 Process isolation remains **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Alternate backend execution evidence and policy delta — 2026-11-28
+
+The historical e737cae7 CI did not execute the frozen donor backend 8bb621fc...; it executed alternate backend blob 6da14fe42046346ec932ff3872a2469ef6a608f3 with header b0a44fb2dc25db5f6335893ecd93187513ec0e46. That variant:
+- checks setrlimit(RLIMIT_AS), RLIMIT_CPU and RLIMIT_FSIZE failures and exits 125 in normal builds;
+- skips RLIMIT_AS in ASan/TSan builds because sanitizer virtual-address reservations conflict with RLIMIT_AS;
+- sets isolated only after child exit and treats exit 125 as required-control failure;
+- defaults require_network_syscall_block to true and adds evaluator procedure ID, executable fingerprint and trial index to the command contract.
+
+It still ignores setpgid and dup2 return values; sanitizer builds have no explicit result field showing RLIMIT_AS was skipped; and the isolation result bit does not certify every ancillary control. The basic test does not inject these failures.
+
+CTest #47 process_isolation_suite and #48 process_isolation_syscall_suite passed in all five e737 test jobs (Brain CI #1826, JARVIS Brain Tests #975, Brain ThreadSanitizer #957; 71/71). The main test source is donor blob 6539da... (46 lines/8 assertions); the syscall test is shared blob cd347d... (16 lines/1 assertion). Candidate main test blob 78b764... is also 46 lines/8 assertions and differs only in the configured memory limit (64 MiB vs donor 256 MiB).
+
+This historical pass is for alternate backend/header 6da14/b0a44, not the frozen candidate/donor backend refs. It does not test the listed child lifecycle, process-group, descriptor, RLIMIT failure or platform gaps. No runtime source was changed.
