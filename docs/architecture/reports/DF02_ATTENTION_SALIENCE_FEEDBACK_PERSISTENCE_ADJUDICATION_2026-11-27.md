@@ -50,3 +50,12 @@ Donor tests assert feature-driven salience, policy changes from feedback, intern
 | DF-02 | OPEN |
 
 Attention remains **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Historical execution evidence for donor attention-learning suite — 2026-11-28
+
+The donor-only Brain attention-learning test blob 1fa972d9ecffdae8dce49b17356f6f4dc274d1a3 is present unchanged on historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1 and is registered as CTest #14 by donor tests/CMakeLists.txt. It is absent from candidate CMake. The test records a prediction, resolves it with error, verifies attention policy weights change, and reconstructs Brain to verify replay persistence.
+
+CTest #14 passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957; all five jobs report 71/71. The attention architecture suite at CTest #13 also passed in the same jobs. This is execution evidence on the historical alternate branch, not current PR #203 or frozen candidate evidence.
+
+The passing test does not close the source-derived gaps: nonfinite input validation, constant novelty in focus ranking, calibration/utility of attention weights, event starvation/fairness and corrupt-journal recovery remain untested or unresolved.
