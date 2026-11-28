@@ -81,3 +81,62 @@ The source changes imply required tests that were not executed here:
 
 If Tony Stark built real JARVIS with the candidate message bus and coordinator, the system would have a serious reliability defect: it could claim delivery after silently evicting queued work, and it could accept task execution without a durable, versioned authority record. The donor semantics are materially closer to a reliable engineering control plane, but they still describe a bounded local mechanism, not autonomous cognition, perception, general reasoning or closed-loop real-world usefulness. The design is useful infrastructure; it is not JARVIS by itself.
 
+
+## Builder self-review correction and deeper task-ledger source inspection — 2026-11-28
+
+A Builder self-review re-fetched the exact candidate and donor files rather than relying on the preceding report summary. This review found one reporting omission and one imprecise table entry; both are corrected here.
+
+### Corrected exact API identity
+
+The candidate and current PR #203 engineering/cpp/include/jarvis/engineering/agent.hpp are the same blob:
+- Candidate PR #192 frozen blob: b71c525a97790f460535713d85a705db086c55ac.
+- Current PR #203 blob: b71c525a97790f460535713d85a705db086c55ac.
+- Donor PR #97 blob: 6acadd5558b7385c5993323ad963ed80b08b6652.
+
+The earlier table wording “current differs from candidate in metadata only” was inaccurate. The current file is byte-identical to the candidate file. The donor adds EngineeringTask::dependencies and AgentResult::revision. No current-candidate metadata-only delta was found.
+
+### Corrected test-source inventory
+
+The earlier 404 concerned only the guessed path engineering/cpp/tests/message_bus_suite.cpp; it did not establish that the donor had no task-ledger test. The donor does contain:
+- engineering/cpp/tests/task_ledger_suite.cpp, blob e90c062261c95ff99d4b1bdcb55ce7bfad0512ec.
+- Donor engineering/cpp/CMakeLists.txt, blob 44ad82199248b9a6a53d996d046e2e3eb8265f1c, registers jarvis_engineering_task_ledger_suite and CTest name of the same spelling.
+- Candidate CMake blob 7e2621c8678ad784d6e8c9e777b22b7c5310b855 does not register that suite or compile task_ledger.cpp.
+
+The test source covers task creation, dependency gating, compare-and-swap stale-claim rejection, claim/start/complete/block/requeue, restart reconstruction, incomplete-tail truncation, independent ledger instances and a two-thread claim race. This is meaningful source-level test-contract evidence; it was not executed in this Builder run.
+
+### New source-level findings from exact donor task-ledger inspection
+
+Additional exact donor blobs:
+- engineering/cpp/include/jarvis/engineering/task_ledger.hpp: 95d3f2e42be742f9e75aed8e55ea389723534a64.
+- engineering/cpp/src/task_ledger.cpp: 7acff8990319392c9984035a4a14cc83f7154072.
+- engineering/cpp/tests/task_ledger_suite.cpp: e90c062261c95ff99d4b1bdcb55ce7bfad0512ec.
+- engineering/cpp/include/jarvis/engineering/coordinator.hpp: fc2cced25d47b23893571a100ee7f36a05d37a9b.
+- engineering/cpp/src/agent.cpp: blob SHA not recorded in this pass; do not infer one.
+
+The following defects/limitations are directly visible in the fetched task_ledger.cpp source:
+
+1. **Integer parser narrowing is unchecked.** parse_integer<T> parses into unsigned long long and casts to T without checking parsed <= numeric_limits<T>::max(). Subsequent enum-range checks operate on the narrowed value. Out-of-range serialized values can therefore wrap/narrow before validation; this requires malformed-journal tests and a root-cause correction before any ledger trust claim.
+2. **Journal replay does not validate the full task definition as immutable.** When a task ID already exists, load_locked() compares only version continuity, task ID, objective and dependencies. It does not compare required capabilities, permissions, input/output artifacts, maximum risk or maximum cost. A modified later journal record can change those authority-relevant fields while passing the visible replay checks.
+3. **Journal replay checks version continuity but not legal state-transition continuity.** A complete record with the next version can change status without proving that the previous status permits that transition. API methods enforce selected transitions, but replay does not independently enforce them.
+4. **Requeue carries prior-attempt evidence forward.** requeue() clears assigned agent, base/result revision and updates detail, but leaves record.evidence intact. The latest task snapshot can therefore expose evidence from an earlier failed/blocked attempt without an explicit attempt identity or provenance boundary.
+5. **Completion evidence is not independently validated.** complete() accepts an empty result revision and arbitrary evidence; dispatch_tracked() verifies result agent/task identity but does not verify expected artifact types, artifact locations, content digests or that the revision identifies the produced artifact set.
+6. **Append durability remains weaker than the “durable ledger” label may suggest.** append_record() writes a newline-delimited hex record and calls stream flush, but no file or directory fsync is present. Torn-tail recovery truncates to the last newline; records have no checksum/authentication. A flush is not a power-loss durability guarantee.
+7. **The test suite does not exercise the malformed/tampered journal cases above.** It tests a partial final append and normal CAS/lifecycle behavior, but not integer narrowing, unauthorized task-definition mutation, illegal replay transitions, stale evidence across requeue, empty revision, artifact digest mismatch, or fsync/power-loss guarantees.
+
+These findings are static source observations, not demonstrated exploits or executed failures. They are assigned to the donor implementation lineage only; they do not imply that the donor should be selected or adopted. The candidate absence of this ledger is a capability gap, while the donor implementation has its own correctness and integrity gaps. Both facts must remain visible in any later authority adjudication.
+
+### Updated verification ledger for this cohort
+
+| Item | Status | Evidence / limitation |
+|---|---|---|
+| Candidate/donor API and source comparison | Implemented; source re-fetched | Exact immutable blob SHAs above |
+| Current PR #203 identity check | Implemented; source re-fetched | Current agent.hpp equals candidate blob exactly |
+| Donor task-ledger test-source inspection | Implemented; source-inspected | Exact test blob and CMake registration verified |
+| Donor task-ledger parser/replay review | Implemented; source-inspected | Seven concrete limitations above |
+| Native configure/build/CTest/sanitizer | Blocked | Current connector exposes no shell/worktree execution; successful CI run below is Configure + Build only and does not run CTest |
+| Independent review / blind fresh testing | Pending | Builder cannot issue either verdict |
+| Path/authority/retention closure | Open | No source owner selection, donor adoption, retirement or deletion |
+
+### Self-review disposition
+
+The Builder corrected the inaccurate API identity statement and the incomplete test-source inventory. The newly identified donor-ledger defects cannot be fixed in source under the current audit/evidence-only authorization; they are now explicitly recorded as unresolved donor-lineage risks. No runtime source was modified. This cohort remains OPEN and is not ready to be represented as a complete DF-02 disposition.
