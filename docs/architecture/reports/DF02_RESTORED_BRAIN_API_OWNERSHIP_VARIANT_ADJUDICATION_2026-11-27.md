@@ -186,3 +186,25 @@ The candidate has a compiled cognitive core and real observation/reasoning/plann
 | DF-02 | OPEN / NO BASELINE OR DONOR DECISION |
 
 No runtime source was changed. No donor was adopted, no baseline was selected, and no gate or Director decision is implied.
+
+ 
+## External capability benchmark and cognition grounding — 2026-11-28
+
+The MCU comparison is a fictional capability benchmark, not an engineering specification. A secondary MCU reference describes J.A.R.V.I.S. as coordinating Stark's environment, lab projects, armor systems, telemetry/life-support functions, and multimodal interfaces; these are narrative depictions and are not evidence that such a system is technically feasible as portrayed. Source: https://marvelcinematicuniverse.fandom.com/wiki/J.A.R.V.I.S. (secondary fan-maintained reference, not an official Marvel technical source).
+
+Credible cognitive-architecture grounding:
+- Baars and Franklin's 2007 Global Workspace Theory / IDA architecture paper describes distributed specialist processes, global availability of selected information, working memory, episodic/semantic long-term memory and action planning. It is an implementable cognitive-architecture proposal, not proof of consciousness or a settled model of the brain: https://doi.org/10.1016/j.neunet.2007.09.013
+- Pezzulo, Parr and Friston's review traces predictive coding and active-inference architectures as gradually evolved perception/action loops, grounding adaptive action in prediction and feedback rather than a static input-output mapping: https://pmc.ncbi.nlm.nih.gov/articles/PMC8710884/
+- Hodson, Mehta and Smith's 2024 review concludes that empirical support for predictive coding is modest and that active-inference models can explain behavioral data, while further validation is required: https://doi.org/10.1016/j.neubiorev.2023.105473
+- Lageman, Fahrenfort and Slagter's 2026 review develops empirical predictions for active inference and reports promising but incomplete supporting findings: https://www.sciencedirect.com/science/article/pii/S0149763426002745
+
+Engineering benchmark derived from these sources:
+1. Specialist subsystems must exchange selected representations through a shared, inspectable workspace; a pile of unrelated modules is not a cognitive architecture.
+2. Attention/valuation must select information based on uncertainty, relevance and expected consequences, and those selections must measurably alter decisions.
+3. Perception and action must form a closed loop: predict, act, observe the outcome, compute error, update beliefs/memory, and change future behavior.
+4. Episodic and semantic memory must be distinguishable, queryable by context, persist across restart, and demonstrate useful transfer to held-out situations.
+5. The system must expose safety, authority, provenance and failure evidence for every consequential action.
+
+Applied to the inspected code: the donor CognitiveCycle and CognitiveRuntime variants materially strengthen context retrieval, representation, prediction feedback, intent-guided goal selection, action-outcome learning and workspace publication. The 260-assert donor brain_deep_suite is a stronger behavioral contract than the candidate's 68 assertions. However, source/test existence is not execution; the branch-specific native and sanitizer evidence is separately recorded, and the authenticated replay CI belongs to a historical alternate branch, not the current candidate. No real multimodal sensor integration, general-purpose autonomous task performance, held-out transfer benchmark or sustained real-world reliability result is established by this slice.
+
+The MCU question remains: if Tony Stark built real JARVIS using these designs, would it be adaptive, context-aware and useful? The advanced cognitive pipeline is directionally credible; the current evidence still describes a bounded cognitive/control substrate, not the fictional integrated assistant. Do not equate architectural resemblance with demonstrated capability.
