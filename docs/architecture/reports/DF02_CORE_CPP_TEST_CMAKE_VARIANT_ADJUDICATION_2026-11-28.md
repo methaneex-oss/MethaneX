@@ -91,3 +91,14 @@ The table below records the exact blob SHA and source-text extraction: executabl
 Open obligations: full per-blob diff for all 40; exact test-source and workflow consumers for target/test aliases; verify assertion flags at generated compile commands; build and CTest execution at frozen refs; owner/authority/retention. DF-02 remains OPEN.
 
 **Disposition:** test-CMake cohort is inventoried and reachability-adjudicated at source level only. No source selected, adopted, retired, deleted, or Stage A authorized.
+
+ 
+## CI-versus-source CTest count discrepancy — 2026-11-28
+
+A further hostile consistency check found an unresolved count mismatch:
+- Exact donor tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 contains 71 add_executable calls and 70 literal add_test calls.
+- The post-fix alternate branch CI at HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1 reports 71/71 CTest tests passed in Brain CI #1826, JARVIS Brain Tests #975 and Brain ThreadSanitizer #957.
+- The available job-log payload is truncated at the beginning: test names #10–#71 are visible, but tests #1–#9 are not. No workflow artifact containing generated CTestTestfile.cmake or a complete LastTest.log was attached to the run.
+- core/cpp/CMakeLists.txt blob 33197f92141a241ff0546af1bf81fbf177a1f3ab only exposes add_subdirectory(tests) under BUILD_TESTING; no additional literal add_test was found in that file. tests/CMakeLists.txt has no function/macro or include statement that obviously accounts for a generated extra test.
+
+Do not silently reconcile 70 source registrations with 71 executed tests. The 70 count is an exact static count of literal add_test invocations in this file; 71/71 is the actual CI summary. The identity/origin of the 71st CTest test remains OPEN pending a complete CTest log or generated CTestTestfile.cmake from the exact e737cae7 build. The prior 71 executable / 70 CTest source-table values remain as source-extraction facts, not a fully reconciled runtime graph.
