@@ -35,7 +35,7 @@ Donor test #30 passed in historical e737 CI; candidate test source differs and c
 ## 5. Five review lenses
 
 1. **Semantic:** contextual concept evidence and numeric calibration path identified.
-2. **Build/test:** donor source/test inspected; candidate path absent; no native run.
+2. **Build/test:** donor source/test CTest #30 passed in historical e737 CI; candidate test source differs and current candidate CTest was not run.
 3. **Integrity:** context-member serialization identity and global metric scope are open.
 4. **Cognition:** graph evidence influences predictions, but is not calibrated contextual probability or robust semantic understanding.
 5. **Hostile review:** evidence-strength/confidence terms qualified; no capability claim beyond source/test contract.
