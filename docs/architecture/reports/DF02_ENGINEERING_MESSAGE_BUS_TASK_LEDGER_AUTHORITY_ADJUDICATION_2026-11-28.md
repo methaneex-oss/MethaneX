@@ -155,3 +155,60 @@ All line numbers below refer to donor blob 7acff8990319392c9984035a4a14cc83f7154
 The supporting donor agent validation file was also fetched and SHA-verified: engineering/cpp/src/agent.cpp blob d922dab52bd2f8d774f3734686da21391cabbf19. Its valid_task() checks task ID/objective, non-empty required capabilities and finite non-negative maximum cost; it does not validate dependency semantics itself. EngineeringTaskLedger::create() performs dependency existence/duplicate/self checks, while the journal replay omissions above remain.
 
 These anchors improve reproducibility but do not replace malformed-journal or crash/fault-injection execution.
+
+ 
+## Engineering subproject build graph and task-ledger source review — 2026-11-28
+
+### Exact CMake reachability
+
+There is no repository-root CMakeLists.txt and no engineering/CMakeLists.txt on candidate or donor refs. engineering/cpp/CMakeLists.txt is a standalone CMake project; .github/workflows/engineering.yml runs CMake from working-directory engineering/cpp. It is not part of the core/cpp target graph.
+
+Frozen candidate:
+- CMake blob 7e2621c8678ad784d6e8c9e777b22b7c5310b855.
+- Static library has five TUs: agent.cpp, coordinator.cpp, execution.cpp, message_bus.cpp, operator_console.cpp.
+- One CTest executable: agent_and_console_suite.
+
+Frozen donor:
+- CMake blob 44ad82199248b9a6a53d996d046e2e3eb8265f1c.
+- Static library has six TUs: the five candidate TUs plus task_ledger.cpp.
+- Two CTest executables: agent_and_console_suite and task_ledger_suite.
+- find_package(Threads REQUIRED) is inside BUILD_TESTING, and Threads::Threads is linked only to task_ledger_suite, not PUBLIC/INTERFACE on jarvis_engineering. The library itself uses std::mutex in message_bus/task_ledger. Downstream consumers may not inherit the thread-link requirement; BUILD_TESTING=OFF also skips find_package(Threads). This is a portability/build-interface gap to resolve before the standalone library is consumed broadly.
+
+The engineering workflow blob 46738b2a3b1c6ab66a7f2eeb3d0a9e892be829e7 runs build-test, ASan/UBSan and TSan from engineering/cpp, but triggers only on push/pull_request changes under engineering/** or the workflow file. It has no workflow_dispatch. The frozen donor HEAD c1da222 and historical e737 head have no JARVIS Engineering Layer workflow run. e737 contains donor CMake blob 44ad, but its Brain CI/Native Brain Build runs do not execute engineering/cpp.
+
+A different branch feat/engineering-agent-message-bus has Engineering workflow #199 success, but its CMake blob fdf681b7f23ca4b918a2eff9b39b62acc8e98119 builds a different 13-source worker/pipeline/provider architecture and does not contain task_ledger.cpp or task_ledger_suite.cpp. It is not evidence for the frozen donor task-ledger CMake. Other engineering feature branches likewise use distinct CMake variants. No native build/CTest/ASan/UBSan/TSan result is established for the frozen donor CMake 44ad or task-ledger source.
+
+### Task-ledger behavioral contract
+
+Exact donor blobs:
+- task_ledger.hpp 95d3f2e42be742f9e75aed8e55ea389723534a64 (67 lines);
+- task_ledger.cpp 7acff8990319392c9984035a4a14cc83f7154072 (494 lines);
+- task_ledger_suite.cpp e90c062261c95ff99d4b1bdcb55ce7bfad0512ec (134 lines / 43 assert expressions);
+- donor agent_and_console_suite.cpp 7ac8c21e6df0d157d4d95fe87fabae962734139a (74 lines / 31 assertions), versus candidate b1f7a48df7adad95750e6970fa76f75acb2ac6ea (10 lines / 7 assertions).
+
+The task-ledger suite tests:
+- task creation and dependency gating;
+- compare-and-swap claim/start/complete transitions and stale-version rejection;
+- block/requeue/reclaim;
+- restart reconstruction of latest state and evidence;
+- incomplete final append truncation;
+- two independent ledger instances reloading under a shared journal lock before CAS;
+- a same-process race where exactly one of two instances can claim the same version.
+
+Positive design evidence: JournalFileLock uses LockFileEx on Windows and flock on POSIX; every mutation acquires the path lock and reloads the journal before version comparison. load_locked checks resize_file errors for a torn tail and fails closed on malformed complete records. This is stronger than an instance-local mutex alone.
+
+### Self-review defects and gaps
+
+1. Completion does not require evidence. task_ledger.hpp lines 40–42 declares complete(..., evidence = {}, detail = {}); task_ledger.cpp lines 385–403 checks task/version/status/agent but accepts an empty result_revision and empty evidence vector. The test supplies evidence but never asserts that evidence-free completion is rejected. This conflicts with evidence-before-completion governance.
+2. Requeue retains stale evidence. task_ledger.cpp lines 446–464 clears assignment/base/result revision but does not clear record.evidence. Because the record has no attempt ID or per-attempt evidence history, evidence from a prior attempt remains attached to a newly queued attempt until replaced by a later complete/fail.
+3. Replay does not validate legal status transitions. load_locked lines 282–294 checks version increment and immutable task id/objective/dependencies, but does not validate allowed prior-status -> next-status transitions or the actor/assignment rules enforced by public methods. The line journal has no checksum/MAC, so a validly hex-encoded modified record can alter status/evidence without detection.
+4. parse_integer uses stoull then static_cast<T> without checking parsed <= numeric_limits<T>::max (lines 132–140). For unsigned risk/status fields, oversized values can wrap before enum-range validation.
+5. append_record flushes and checks stream.good() (lines 304–309) but does not fsync/fdatasync the journal or containing directory. A successful completion result is not proof of power-loss durability.
+6. Evidence is weakly typed. Serialization stores only AgentEvidence.kind and .value (lines 185–189); no immutable source path, blob hash, signer, timestamp, or verifier identity is bound by the ledger itself.
+7. The file lock serializes independent instances, but the test uses two instances in one process, not two OS processes. No cross-process stress, lock-owner crash, lock timeout or Windows-specific runtime test exists.
+8. The journal has no checksum/MAC. Hex encoding protects delimiters, not tampering or valid-field substitution. Corrupt complete records fail closed, but validly re-encoded modifications are not authenticated.
+9. CMake does not propagate Threads::Threads from the static library to consumers.
+
+The donor test's 43 assertions are valuable behavioral evidence at source level, but there is no native CI result for the frozen donor task-ledger CMake/source. The CMake file is not reachable from the core/cpp build and the available successful engineering workflow run #199 is a different 13-source architecture without the task ledger.
+
+No runtime source or CMake was changed. These are Builder findings; completion-evidence enforcement, replay validation, numeric overflow checks, durability, and transitive thread linkage require future implementation authorization. Task-ledger adoption/retirement remains a Project Director decision.
