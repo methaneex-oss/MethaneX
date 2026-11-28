@@ -174,3 +174,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Self-test diagnostic/healing transaction adjudication](reports/DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md): tautological diagnostics, weak repair verification and persistence-result gaps; SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
 
 - [Cognitive runtime variant adjudication](reports/DF02_COGNITIVE_RUNTIME_VARIANT_ADJUDICATION_2026-11-28.md): candidate/donor queue runtime compared with donor's perception/action/feedback/goal-learning integration and expanded test contract; unresolved starvation/cancellation/consistency/trust and authority. Report SHA `e63125c88c747790549ab1c476aa22f94181426c`.
+
+- [Cognitive cycle context/perception/learning variant adjudication](reports/DF02_COGNITIVE_CYCLE_VARIANT_ADJUDICATION_2026-11-28.md): exact candidate/donor cycle, test and CMake source comparison; integrated evidence/perception/learning differences and validation gaps. SHA `6cc7c948e3986d3aa37fe9c6e9bf3f18186b1610`.
