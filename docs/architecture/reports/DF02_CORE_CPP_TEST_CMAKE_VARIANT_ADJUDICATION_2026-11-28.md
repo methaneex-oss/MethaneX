@@ -4,7 +4,7 @@
 **Candidate:** frozen PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
 **Evidence:** artifact #14956148301 / workflow #45470173876; archive SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`.  
-**Disposition:** exact CMake-content cohort enumerated and target/CTest structure feature-extracted; source-level reachability only, not build/test execution.
+**Disposition:** 40-blob test-subdirectory cohort enumerated; candidate/donor parent-level CMake reachability reconciled. Historical alternate e737cae7 has 71/71 native/sanitizer/TSAN test execution; current PR #203 candidate has no CTest execution in this sprint.
 
 ## 1. Candidate/donor registration
 
@@ -115,3 +115,13 @@ The previous count discrepancy is now resolved by inspecting the parent CMake fi
 - The successful historical CI's test #1 is jarvis_affective_planning_suite, exactly the parent-included test. Tests #2–#71 are represented by the subdirectory registrations.
 
 This reconciles the 71/71 CI summary with the CMake graph. The prior "71st test unknown" finding is CLOSED for the inspected donor/alternate graph. The broader 40-blob historical CMake cohort still requires per-variant parent-CMake inclusion analysis; this reconciliation applies to the frozen candidate, frozen donor and e737 alternate refs listed here.
+
+ 
+### Exact CTest execution attribution
+
+The e737cae7 historical alternate branch used the same donor CMake blobs:
+- core/cpp/CMakeLists.txt 33197f92141a241ff0546af1bf81fbf177a1f3ab;
+- core/cpp/tests/CMakeLists.txt cbfd1fde52fffa6eeac025da2b7ddcb5ab493261;
+- core/cpp/tests/affective_planning.cmake e3a52416b2538791a93666e5124b1f34ad1b082a.
+
+The CI run's first test is jarvis_affective_planning_suite, supplied by the parent include; tests #2–#71 are the tests subdirectory registrations. Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957 each report 71/71 passed. This is actual execution evidence for the historical alternate graph. The current PR #203 candidate remains 45/45 CTest registrations at source level, but no current-branch CTest run is claimed.
