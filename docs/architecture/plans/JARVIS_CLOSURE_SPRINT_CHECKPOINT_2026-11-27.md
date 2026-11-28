@@ -525,3 +525,33 @@ The Builder has made substantial bounded progress and self-reviewed these change
 - DF-12: Project Director decision pending.
 - No baseline selected; no donor adopted/retired/deleted; no Gate A/B clearance; no Foundation acceptance; no Stage A.
 - Actual elapsed execution time: not measurable from available runtime. This checkpoint does not claim ten real hours.
+
+ 
+## Continuation correction — CMake basename reachability and action-consequence test (2026-11-28)
+
+### Self-review correction
+During a follow-up check of the candidate-absent action-consequence integration test, the Builder initially observed no exact full-path CMake match and nearly classified the test as unregistered. A basename-aware CMake inspection corrected that inference before handoff:
+- Donor test CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers jarvis_brain_action_consequence_integration_suite from brain_action_consequence_integration_suite.cpp at lines 187–189 and CTest at line 285.
+- Candidate test CMake blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 does not register it.
+- Donor core CMake includes tests under BUILD_TESTING at lines 79–81.
+- Donor test source blob 7616082579d53e3579cae8e87895bdb3dadba66f is 316 lines / 95 assert expressions; candidate has no blob. Two historical variants have 85 and 88 asserts.
+- The 95-assert contract tests observed consequence versus missing/unknown consequence, harmful-surprise attention, context persistence into action_outcome, strategy change, persistence/restart of affect/attention/strategy/forecast, and resolution of a world-variable forecast by the next observation.
+- No workflow run or combined status was returned for donor frozen HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25; this test source is registered in the donor CTest graph but has no passing execution evidence in this sprint.
+
+### Scanner limitation and inventory interpretation correction
+The artifact's exact_path_reference_matches and CSV exact_path_reference_rows are literal full-path-string matches. They can miss CMake edges expressed using source basenames. The action-consequence suite is a concrete counterexample: CMake registers the basename but the full-path matcher did not surface the edge. Therefore exact_path_reference_rows is a lower-bound literal-reference count, not an exhaustive reachability count. A full closure pass must parse CMake source arguments and target registration, workflow commands, scripts, generated-source rules and include relationships by normalized basename/path. A zero full-path count must never be treated as proof of non-reachability.
+
+Updated reports:
+- Action execution/consequence persistence: docs/architecture/reports/DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md, blob 1db39bac35c82e2fad9cfc0ea09dbb3ac90c9638.
+- All-ref inventory/queue: docs/architecture/reports/DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md, blob 7384043744cd6c252aa21e487f5ce801261c7e3b.
+
+### Live state before this checkpoint update
+- PR #203 remains OPEN, DRAFT, UNMERGED; mergeable=true.
+- Branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125 at a56526ae5896dfd06293ccab64289fd75507dda5.
+- HEAD immediately before this checkpoint update: 24660abd4f5022abd3a3e4d96c32d34bad618395.
+- 59 changed files, 334 commits; zero submitted reviews and zero inline review threads.
+- Native Brain Build workflow #2871 for this HEAD was QUEUED at last read. Current branch CTest remains unexecuted.
+- PR #203 body has been updated with the 159-path inventory and authenticated replay evidence; it still needs the two latest report blob SHAs above added after this checkpoint update.
+
+### Builder disposition
+The 159-path metadata inventory is now committed and the full-path reference scanner limitation is explicit. This does not close the semantic/authority ledger. The Builder self-review corrected the reachability inference before finalizing; no code was modified. Independent Reviewer and Blind Fresh Tester requests remain deferred until all Builder-resolvable work and full-scope self-review are clear.
