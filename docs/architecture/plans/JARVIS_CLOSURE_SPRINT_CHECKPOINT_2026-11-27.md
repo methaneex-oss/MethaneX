@@ -813,3 +813,24 @@ Latest PR #203 state before this checkpoint update:
 - HEAD immediately before this checkpoint write: 5d122913cfa43c98df63d5b90513490dcbf44275.
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 385 commits; no reviews or inline review threads; combined status has no entries.
 - Native Brain Build #2915 IN_PROGRESS; it is a docs-only head build. No current-branch CTest.
+
+ 
+## Continuation — engineering standalone build graph and task-ledger authority audit (2026-11-28)
+
+Engineering report updated to blob 90f605469634cff1f9c77de7d9d232602997407a:
+- engineering/cpp/CMakeLists is a standalone CMake project; no root CMakeLists.txt or engineering/CMakeLists.txt exists on candidate/donor refs.
+- Candidate CMake blob 7e2621c8678ad784d6e8c9e777b22b7c5310b855 builds five TUs and one test target.
+- Frozen donor CMake blob 44ad82199248b9a6a53d996d046e2e3eb8265f1c builds six TUs (adds task_ledger.cpp) and two test targets (adds task_ledger_suite).
+- .github/workflows/engineering.yml blob 46738b2a3b1c6ab66a7f2eeb3d0a9e892be829e7 runs build-test, ASan/UBSan and TSan from engineering/cpp on engineering/** changes; no workflow_dispatch.
+- Frozen donor c1da222 and historical e737 branch have no Engineering Layer workflow run. A separate Engineering workflow #199 success on feat/engineering-agent-message-bus uses CMake blob fdf681 (13-source worker/provider architecture) and no task ledger; it is not evidence for donor task ledger.
+- Donor task_ledger.cpp 7acff899..., header 95d3f2e..., test e90c062... (43 assertions). Tests cover version CAS, dependencies, block/requeue/reclaim, restart, torn-tail truncation, independent instances and same-process race.
+- Positive: OS-level file lock (flock/LockFileEx) and reload-before-CAS; torn-tail resize errors checked; malformed complete records fail closed.
+- Defects/gaps: complete accepts empty result revision/evidence; ledger does not store AgentArtifact digest/location or AgentResult.accepted; requeue retains prior evidence; replay does not validate legal status transitions; parse_integer casts stoull without target-range check; append flushes but does not fsync; journal has no checksum/MAC; file lock test is same-process only; CMake fails to propagate Threads::Threads from static library to consumers.
+- No native build/CTest/ASan/UBSan/TSan evidence exists for frozen donor task-ledger CMake/source. The CMake/test graph and implementation are not part of core/cpp target graph.
+
+No runtime/CMake source changes were made. These findings remain Builder-resolvable only after implementation authorization; task-ledger adoption and authority remain Project Director decisions.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: 625a89b3725f261d122dd9f849b5c5ed5859c40c.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 389 commits; no reviews or inline review threads; combined status has no entries.
+- No workflow run returned for this latest docs-only head; no current-branch CTest.
