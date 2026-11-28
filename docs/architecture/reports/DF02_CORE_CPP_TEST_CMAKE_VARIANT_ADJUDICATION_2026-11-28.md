@@ -78,7 +78,7 @@ The table below records the exact blob SHA and source-text extraction: executabl
 - 16/40 variants contain explicit Release assertion-preservation flags. Candidate frozen blob lacks them; donor frozen blob contains them.
 - The larger CMake family adds eight affective suites, six developmental suites (one variant has seven), feedback suites, learning/evolution persistence integration, DLT trials and long-run workflow targets. Older compact versions do not register those features.
 - The CMake evolution is not monotonic: different branches introduce, remove, rename, split, or omit suites. Some historical variants contain extra persistence/unseen-transfer integration targets; other variants do not. Branch chronology cannot select authority.
-- Same-name mismatch extraction flags 15 versions with at least one target/CTest name discrepancy; some discrepancies are intentional custom train/verify or workflow-driven long-run operations. Exact semantics of every mismatch and owner-tip retention remain open.
+- Same-name mismatch extraction flags 16 versions with at least one target/CTest name discrepancy; some discrepancies are intentional custom train/verify or workflow-driven long-run operations. Exact semantics of every mismatch and owner-tip retention remain open.
 
 ## 4. Review lenses and remaining work
 
