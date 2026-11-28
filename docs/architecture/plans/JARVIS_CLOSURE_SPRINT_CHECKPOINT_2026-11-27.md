@@ -784,3 +784,32 @@ Latest PR #203 state before this checkpoint update:
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 371 commits; no reviews or inline review threads; combined status has no entries.
 - No workflow run returned for this latest docs-only head. No current-branch CTest.
 - Earlier candidate Native Brain Build #2861/#2866/#2869 passed Configure + Build; historical alternate CI e737 passed 71/71.
+
+ 
+## Continuation — process-isolation provenance and test-status reconciliation (2026-11-28)
+
+Process-isolation reports were corrected after exact branch/blob comparison:
+- Variant report: blob 92e9b2bc25ba735515c4d843a0fde1750933d016.
+- Child lifecycle report: blob 50a92fa86733f38420bfdbfdc3ba24f21865e236.
+- Historical e737 did not use frozen donor backend 8bb621fc... or donor header a85f7169...; it used alternate backend 6da14fe42046346ec932ff3872a2469ef6a608f3 and header b0a44fb2dc25db5f6335893ecd93187513ec0e46.
+- The alternate adds sanitizer-aware RLIMIT_AS handling, checks normal-build RLIMIT failures, changes isolated-result timing/semantics, defaults network syscall blocking to true, and adds evaluator identity/fingerprint/trial fields.
+- It still ignores setpgid/dup2 failures; sanitizer memory-limit skip is not exposed as a result capability; positive isolation tests do not test false-on-required-control-failure or resource-limit failure.
+- CTest #47/#48 passed in all five e737 test jobs. The main test is donor blob 6539da... (8 assertions); candidate main test 78b764... is same 8 assertions but uses 64 MiB instead of donor 256 MiB. Syscall test cd347... is identical candidate/donor/e737.
+- This is alternate backend/header test evidence, not frozen candidate/donor backend test evidence or current PR #203 CTest.
+
+Historical test execution status has been reconciled in the following reports:
+- Developmental: blob 30ab25ce8808a74e90126f224cf0ff296efa9786; tests #50, #60, #65–#68 passed in five e737 jobs.
+- Affective: blob d33dccb4f3841db8c0c1ab0cb8e526fbee6b1282; tests #51–#58 passed.
+- Attention: blob 786d2fe16f1654c7301d3e8fd8676ba9c9d19a55; test #14 passed.
+- Restored Brain API: blob de245abfef0e8f6ac1a447b097b01fa1c2b3d6fd; donor deep suite #4 passed; candidate suite differs.
+- Association: blob 53f13b24897f3e594fdb54e883c5015edd01c73e; donor test #24 passed.
+- Prediction: blob d4fa11b625b3d8a27e4fd8903fb3189e874b38f8; donor test #30 passed; candidate test source differs.
+- Cognitive runtime: blob 12db698aeb4d368eca6f0721aec0782060d8fefa; tests #23/#59 passed.
+- Action execution: blob b84184e26ac805a01a8de3fd7b5e7eba2fe485a1; tests #27/#64 passed.
+
+All of these passes are historical e737 alternate-branch results, not current PR #203 CTest. No runtime source was changed.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: 5d122913cfa43c98df63d5b90513490dcbf44275.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 385 commits; no reviews or inline review threads; combined status has no entries.
+- Native Brain Build #2915 IN_PROGRESS; it is a docs-only head build. No current-branch CTest.
