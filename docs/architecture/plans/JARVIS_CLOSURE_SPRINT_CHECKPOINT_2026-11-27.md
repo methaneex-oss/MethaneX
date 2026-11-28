@@ -724,3 +724,21 @@ Latest PR #203 state before this checkpoint update:
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 359 commits; zero reviews and inline threads; combined status has no entries.
 - Native Brain Build #2895 IN_PROGRESS; no current-branch CTest.
 - No implementation change, no donor adoption, no baseline selection, no branch retirement or gate/Stage A transition.
+
+ 
+## Continuation — memory recovery and metadata degradation self-review (2026-11-28)
+
+The memory report received a further correction and now has blob 42fd80d0c2691a782b697ace2a030f6edcaa2c7e:
+- The donor quarantine and preserve-corrupt-tail variants both ignore resize_file errors during recovery. If truncation fails, the Memory object has no recovery-required/read-only state and can append after the corrupt suffix; later replay may stop before the new event.
+- The donor .corrupt file uses append mode without unique generation names/manifest.
+- The framed V2 variant uses FNV-1a 64-bit (not cryptographic), has no dedicated framing/corruption tests and no CI; it also ignores truncate errors.
+- The memory metadata sidecar stores tier/salience/confidence/consolidation outside the event journal. Both the 58-assert alternate and 70-assert donor memory tests explicitly delete .meta after promoting an event to Semantic and then assert that the reconstructed event falls back to Episodic. The test comment "rebuild learned distribution" is misleading: event/sequence history returns, but learned tier, salience, confidence and consolidation are lost. Corrupt/truncated metadata is not quarantined or surfaced as degraded memory; load_metadata() returns and the constructor silently uses defaults.
+- This is an explicit degraded-mode behavior, not a proven preservation of learned memory state. Future authorized work needs a visible degraded-memory state and/or journal-backed reconstruction, plus fault-injection tests. No runtime change was authorized or made.
+
+Latest memory report blob: 42fd80d0c2691a782b697ace2a030f6edcaa2c7e.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint update: 842b34402c40d6f8424a090400729502ac774d62.
+- OPEN, DRAFT, UNMERGED; mergeable metadata returned false on the latest read (it has varied across reads; no merge/rebase/retarget action taken).
+- 59 changed files, 361 commits; zero reviews and inline threads; combined status has no entries.
+- No workflow run returned for this latest docs-only head; no current-branch CTest.
