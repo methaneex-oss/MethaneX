@@ -2,7 +2,7 @@
 
 **Scope:** frozen donor `ProcessIsolationBackend::run` child/parent lifecycle, limit enforcement and tests; supplements the process-isolation variant report.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** process isolation provides process separation, timeout/output bounds and opt-in controls. Child cleanup and limit-enforcement evidence have concrete gaps. Source/test inspection only.
+**Disposition:** process isolation provides process separation, timeout/output bounds and opt-in controls. Child cleanup and limit-enforcement evidence have concrete gaps. Historical e737 alternate CI passed tests #47/#48; frozen candidate/donor backend refs and current PR #203 CTest were not executed.
 
 ## 1. Exact refs
 
@@ -29,12 +29,12 @@ These are source-derived risks; no adversarial reproduction was run.
 
 ## 4. Test evidence and gaps
 
-Donor test checks successful output, output cap, timeout, required network namespace behavior and socket creation blocked by requested syscall filter. It does not test child/grandchild survival after normal exit, process-group setup failure, setrlimit failure, inherited descriptors, environment/PATH, network bypass syscalls, filesystem access, CPU/memory enforcement or platform matrix. Tests not executed.
+The donor main test (8 assertions) and shared syscall test (1 assertion) were executed as CTest #47/#48 in historical e737 CI, but the backend under test was alternate blob 6da14fe... and header b0a44fb..., not frozen donor backend 8bb621fc... . Both tests passed in five jobs (71/71). No current PR #203 CTest was run. The tests do not cover child/grandchild survival after normal exit, process-group setup failure, setrlimit failure, inherited descriptors, environment/PATH, network bypass syscalls, filesystem access, CPU/memory enforcement or platform matrix.
 
 ## 5. Five review lenses
 
 1. **Semantics:** timeout/output kill path and opt-in controls compared.
-2. **Build/test:** source and test inspected; no native run.
+2. **Build/test:** CMake registration and exact test blobs inspected; historical e737 alternate backend tests #47/#48 passed in five jobs; frozen candidate/donor backend and current PR #203 CTest remain unexecuted.
 3. **Security:** descendant lifecycle, incomplete controls and inherited environment/descriptors remain.
 4. **Capability:** isolated process is not equivalent to hermetic sandbox.
 5. **Hostile review:** `isolated` Boolean qualified; no safety certification claimed.
