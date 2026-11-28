@@ -3,7 +3,7 @@
 **Scope:** all seven exact `core/cpp/src/cognitive_runtime.cpp` blobs, frozen candidate/donor headers, runtime test sources and CMake target/CTest differences.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 frozen HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** a major runtime capability delta and a bounded behavioral closed-loop test contract are established. Source/test inspection only; no tests executed. Path remains OPEN.
+**Disposition:** a major runtime capability delta and a bounded behavioral closed-loop test contract are established. Historical e737 CI tests #23 and #59 passed in five jobs; current candidate CTest not run. Path remains OPEN.
 
 ## 1. Exact version inventory
 
