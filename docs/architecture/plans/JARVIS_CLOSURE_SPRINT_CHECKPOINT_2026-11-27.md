@@ -368,3 +368,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`.
 - All 35 exact blobs and tip counts inventoried. Candidate method extraction is 48 names including constructor (47 excluding); donor 9 including constructor (8 excluding), reconciling earlier counts. Candidate broad implementation vs donor's split TU ownership compared.
 - Candidate CMake leaves seven donor split TUs unregistered; donor registers them. Reverse consumers (665 symbol-match candidates/34 exact-path candidates), AST/signature, historical semantic variants, authority/retention remain open. No build/test execution.
+
+
+## Immediate continuation — Brain.hpp 21-blob cohort/correction (2026-11-28)
+
+- Added `DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md`; fetched-back SHA `4fd4762d172020b5ba791055479fdb843ae5095e`.
+- Exact 21 blobs and 212 tip-presence rows. Candidate header exposes const Memory; donor adds mutable Memory& accessor. This correction is important: earlier restored-API report had the direction reversed; it is now corrected. Mutable direct access is a high-priority authority/integrity risk requiring exact consumer and journal impact analysis.
+- Full API/ABI signatures, consumers, build/link/test execution, historical semantic versions and retention remain open.
