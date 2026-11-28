@@ -140,3 +140,18 @@ These findings are static source observations, not demonstrated exploits or exec
 ### Self-review disposition
 
 The Builder corrected the inaccurate API identity statement and the incomplete test-source inventory. The newly identified donor-ledger defects cannot be fixed in source under the current audit/evidence-only authorization; they are now explicitly recorded as unresolved donor-lineage risks. No runtime source was modified. This cohort remains OPEN and is not ready to be represented as a complete DF-02 disposition.
+
+### Exact source anchors for the seven findings
+
+All line numbers below refer to donor blob 7acff8990319392c9984035a4a14cc83f7154072 at PR #97 frozen HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25:
+- Integer narrowing: task_ledger.cpp lines 133–140.
+- Incomplete immutable-task comparison and version-only replay continuity: lines 284–294; the equality checks are limited to task ID, objective and dependencies.
+- No replay transition validation: same replay loop, lines 284–294; no previous-status/current-status transition predicate is applied.
+- Requeue retains prior evidence: lines 446–464; evidence is not cleared or attempt-scoped.
+- Completion does not validate revision/artifacts: lines 385–404; revision is assigned without non-empty or artifact/digest validation.
+- Append durability: lines 304–309; stream flush only, with no fsync call in this function.
+- Torn-tail recovery: lines 273–300; final incomplete line is truncated to last newline, but complete records have no checksum/authentication verification.
+
+The supporting donor agent validation file was also fetched and SHA-verified: engineering/cpp/src/agent.cpp blob d922dab52bd2f8d774f3734686da21391cabbf19. Its valid_task() checks task ID/objective, non-empty required capabilities and finite non-negative maximum cost; it does not validate dependency semantics itself. EngineeringTaskLedger::create() performs dependency existence/duplicate/self checks, while the journal replay omissions above remain.
+
+These anchors improve reproducibility but do not replace malformed-journal or crash/fault-injection execution.
