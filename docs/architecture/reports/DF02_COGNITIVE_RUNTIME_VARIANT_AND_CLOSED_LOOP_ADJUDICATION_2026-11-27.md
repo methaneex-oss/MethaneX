@@ -152,3 +152,36 @@ The runtime integration suite demonstrates a fixture-driven closed loop with obs
 The historical CI proves that these tests passed under native, sanitizer and ThreadSanitizer jobs in that branch. It does not certify external adapter safety or eliminate the runtime's previously identified stop/drain feedback-loss, queue-starvation, cancellation, idempotency and restart-reconciliation risks.
 
 No source was changed. Current PR #203 remains documentation-only and the cognitive-runtime path remains OPEN.
+
+ 
+## Fictional JARVIS benchmark and research-grounded architecture comparison — 2026-11-28
+
+### MCU JARVIS is a capability benchmark, not a technical specification
+
+Marvel's official AI overview frames JARVIS as one of its fictional disembodied assistants (Marvel, "Every Major A.I. in the Marvel Universe", https://share.marvel.com/comics/discover/2500/every-major-ai-in-the-marvel-universe). The Iron Man screenplay depicts JARVIS scanning Tony's body/device, analyzing the design and challenging a mismatch between Tony's stated intention and observed actions (Iron Man screenplay, https://storyfactory.uk/wp-content/uploads/2019/05/1.-Iron-Man.pdf). Marvel's official JARVIS-to-Vision featurette is at https://www.youtube.com/watch?v=U-hHF_mLdSs. These are fictional narrative depictions, not a validated engineering specification or evidence that such a system is currently achievable.
+
+The useful engineering benchmark is the *integrated capability set*: multimodal perception; persistent world/user context; attention and salience selection; prediction and error correction; memory and knowledge retrieval; goal-directed planning; controlled tool/robot actuation; outcome monitoring; learning from consequences; trust, authorization and safe recovery. The standard is not whether the repository contains a class named Memory, Attention or CognitiveCycle; it is whether the components work together in an observable, repeatable closed loop.
+
+### Credible cognitive architecture references
+
+1. Anderson et al. (2004), "An Integrated Theory of the Mind", Psychological Review, https://www.cs.utexas.edu/~dana/ACT-R.pdf. ACT-R specifies interacting perceptual-motor, goal and declarative-memory modules, buffers and a production system. It is a computational cognitive architecture with explicit integration, not merely a set of independent modules.
+2. Laird (2021), "An Analysis and Comparison of ACT-R and Soar", Advances in Cognitive Systems, https://advancesincognitivesystems.github.io/acs2021/data/ACS-21_paper_6.pdf. The comparison emphasizes working memory, procedural memory, long-term declarative memory, metadata and their role in retrieval/learning.
+3. Baars & Franklin (2007), "An architectural model of conscious and unconscious brain functions: Global Workspace Theory and IDA", Neural Networks, https://doi.org/10.1016/j.neunet.2007.09.013. The model describes specialized processors and a global workspace that broadcasts selected information, with working memory and episodic/semantic memory.
+4. Dehaene & Changeux (1998), "A neuronal model of a global workspace in effortful cognitive tasks", PNAS, https://pmc.ncbi.nlm.nih.gov/articles/PMC24407/. The proposed architecture distinguishes a global workspace from specialized perceptual, motor, memory, evaluative and attentional processors.
+5. Clark (2013), "Whatever next? Predictive brains, situated agents, and the future of cognitive science", Behavioral and Brain Sciences, https://doi.org/10.1017/S0140525X12000477. Predictive processing links generative models, prediction errors, precision, perception and action.
+6. Sprevak & Smith (2023), "An Introduction to Predictive Processing Models of Perception and Decision-Making", Topics in Cognitive Science, https://doi.org/10.1111/tops.12704. This distinguishes predictive coding from active inference and describes planning in partially observable environments.
+7. Hodson, Mehta & Smith (2024), "The empirical status of predictive coding and active inference", Neuroscience & Biobehavioral Reviews, https://doi.org/10.1016/j.neubiorev.2023.105473. This review cautions that empirical support is uneven and further validation is required; predictive processing should be treated as a research framework, not settled fact.
+
+### Comparison against actual repository evidence
+
+The repository has recognizable ingredients: working/context state, memory retrieval and consolidation, association/causal hypotheses, prediction feedback, attention, affective appraisal, developmental learning, action execution, evolution/adoption controls and an engineering task ledger. Historical alternate CI provides useful synthetic behavioral evidence for several of these cohorts.
+
+However, current evidence does not establish an integrated JARVIS-quality system:
+- Candidate test sources are materially weaker than donor/alternate sources for several core tests; the 71/71 e737 result is not a candidate-suite pass.
+- Memory can silently lose learned tier/salience/confidence/consolidation when its metadata sidecar is absent; journal recovery ignores truncate errors; NaN can poison retrieval ordering; native serialization and multi-writer durability are unproven.
+- The cognitive components have not been shown to coordinate through a stable global workspace/attention mechanism with calibrated prediction, reliable memory updates and safe action feedback across held-out tasks.
+- The engineering subproject contains message/task control-plane primitives, not concrete agent implementations or an integrated message-bus-to-agent execution fabric.
+- Evolution replay has improved in a third lineage, but same-ID content-blind idempotency, stale rollback eligibility and unchecked compensation paths remain.
+- No current candidate native CTest has been run in this audit; the local container could not resolve github.com and the GitHub connector cannot dispatch the engineering workflow.
+
+Benchmark verdict: if Tony Stark built a real JARVIS from the current frozen candidate design and implementation, the system would not yet be reliably capable, adaptive, context-aware or independently useful in the broad MCU sense. It is not merely paperwork or a chatbot wrapper: it contains substantive cognitive and control-plane mechanisms. But it is still an incomplete, weakly integrated cognitive architecture with important persistence, trust, test-source and execution gaps. The correct status is "promising architectural foundation; capability not yet demonstrated", not "JARVIS complete".
