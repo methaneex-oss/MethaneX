@@ -109,3 +109,8 @@ A further 40-blob C++ test-CMake cohort was fetched and source-feature reconcile
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 The core library-CMake historical cohort (22 exact blobs) was inventoried. Candidate source list has 57 translation units; donor has 64, including seven donor-only Brain/affective/developmental TUs. Historical source/options variants remain partially adjudicated, and native build/test execution was not available. This is evidence advancement, not Foundation acceptance.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+The evolution-Brain integration test historical cohort (24 exact blobs) was inventoried. Frozen candidate suite is 46 lines/7 assertions; donor 298/97 and expands lifecycle gate/replay/rollback/canary persistence checks. No tests were run. Crash/concurrency, isolation attestation, full semantic variants and authority closure remain open.
