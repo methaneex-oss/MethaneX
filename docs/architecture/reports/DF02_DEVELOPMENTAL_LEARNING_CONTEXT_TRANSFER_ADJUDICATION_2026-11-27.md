@@ -62,3 +62,37 @@ These are source-level risks, not executed reproductions.
 | DF-02 | OPEN |
 
 Developmental learning remains **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Donor-only developmental environment suite and historical CI execution — 2026-11-28
+
+The previous source-only disposition is updated with exact test reachability and historical execution evidence. The following test/source blobs were fetched at e737cae7f907696ef787a4e85b0dee3a739d71b1 and match the donor blobs:
+- developmental_learning.cpp: dbf5f43271dfa0a3c57236e2faa82eb88d15490d (445 lines);
+- developmental_learning_suite.cpp: 8e94932b40c109f1c73470418d85ca2020a2e198 (301 lines);
+- developmental_brain_integration_suite.cpp: 760162dd6d1e669162e0bf22223a437491f5e262 (1,139 lines);
+- developmental_training_environment_suite.cpp: 62a0ee4f8ec966e48a45848217ba7a6d6e96196f (356 lines / 59 assert expressions);
+- developmental_world_integration_suite.cpp: 4290fcfde741f1be9a4a69adc70699ade6fe7922 (198 lines).
+
+Donor CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers these donor-only tests:
+- CTest #50 jarvis_developmental_learning_suite;
+- CTest #60 jarvis_developmental_brain_integration_suite;
+- CTest #65 jarvis_developmental_training_environment_suite;
+- CTest #66 jarvis_developmental_environment_suite;
+- CTest #67 jarvis_developmental_world_suite;
+- CTest #68 jarvis_developmental_world_integration_suite.
+
+All six passed in the post-fix historical e737cae7 CI. Exact execution was confirmed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957; each job reports 71/71 tests passed. Candidate CMake blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 does not register these six tests, and the corresponding donor-only paths are absent from the frozen candidate where recorded in the inventory.
+
+### Developmental training environment semantics
+
+The 59-assert suite defines a deterministic world that offers both actions but does not choose for the Brain. The Brain must choose, execute only the selected one-step action, receive the observed consequence, and update future choices. The suite checks:
+- executor outage and failed execution produce no observed world consequence and must not create a route preference;
+- negative route outcomes update attention/strategy while keeping the action model executable for later learning;
+- a strategy learned in one navigation context initially transfers to a related context, then contradictory outcomes revise only the local context;
+- the original context retains its useful strategy, the exception persists across restart/replay, and a third related context can still receive bounded transfer;
+- an unrelated task context does not inherit navigation preference;
+- environment/task/step labels remain episodic context, not fabricated world facts.
+
+This is strong behavioral evidence for context-bounded adaptation in a controlled environment. It is not a general training engine or proof of open-world semantic understanding: the environment, action set, transitions and observations are synthetic and predefined. The tests show that the system can change later decisions from consequences in this fixture, not that it can autonomously discover tasks or generalize safely across arbitrary domains.
+
+The 71-test pass evidence belongs to historical branch e737cae7, not current PR #203 and not the frozen PR #97 donor HEAD c1da222. No runtime source was changed or adopted. DF-02 remains OPEN; candidate absence and donor test success do not grant baseline authority.
