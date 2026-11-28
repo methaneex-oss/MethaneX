@@ -186,3 +186,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Core library-CMake 22-blob variant adjudication](reports/DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md): exact source-count inventory, candidate 57 vs donor 64, seven donor-only TU and historical variants; no build execution. SHA `17e7a318bac4766d31b8d8bff712439471a40e98`.
 
 - [Evolution-Brain integration test 24-blob adjudication](reports/DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md): exact test blob inventory and candidate/donor lifecycle assertions; donor expands evaluation/replay/rollback/canary persistence contract; no execution. SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`.
+
+- [Brain.cpp 35-blob exact variant/ownership adjudication](reports/DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md): exact inventory, method extraction reconciliation and candidate/donor CMake split; reverse consumers/AST/authority remain open. SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`.
