@@ -64,3 +64,16 @@ The donor test suite checks low-reliability evidence, contradiction weakening, m
 | DF-02 | OPEN |
 
 Association and causal-learning paths remain **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Historical execution of exact donor association/causal suite — 2026-11-28
+
+The e737cae7f907696ef787a4e85b0dee3a739d71b1 alternate branch contains the exact frozen donor source/test blobs:
+- association_model.cpp 80bc2e94d8cab4e5a48ead18ba9efcad4ed785b6 (290 lines);
+- causal_model.cpp b7e1e6e6aeb929f09af33b9d17c80a6eed34948c (149 lines);
+- association_causality_phase5_suite.cpp 0d31349857e85a019467e9864bbe6625a6ecdef7 (161 lines / 46 assert expressions);
+- donor tests/CMakeLists.txt cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers it as CTest #24.
+
+CTest #24 passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; all five jobs report 71/71. The frozen candidate test blob d520025258805b02c1b3fbb2dbebe32e01562fbf is 56 lines and does not contain the donor's contextual inference/feedback/causal hypothesis assertions.
+
+This confirms the donor association/causal test contract executes on the historical e737 branch. It does not validate causal identification: the suite uses repeated synthetic state transitions and no intervention, randomized control, confounder handling or counterfactual negative control. The public-model non-finite-input validation gap remains untested. This is not current PR #203 CTest evidence or a baseline decision.
