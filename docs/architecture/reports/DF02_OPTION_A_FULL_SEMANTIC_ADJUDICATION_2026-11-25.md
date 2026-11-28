@@ -1241,3 +1241,8 @@ Report: [DF02 Cognitive Cycle Context, Perception and Learning Variant Adjudicat
 Donor adds committed-sequence structured perception, pre-observation retrieval, targeted action/perceptual recall, same-variable forecast resolution, reasoning-conclusion simulation, intent selection, dispute/attention/affect/perception uncertainty, capability filtering/reliability scoring, contextual developmental learning, consequence expectation calibration, transfer/exploration and affective planning. Exact candidate/donor headers/sources/tests/CMake inspected; stress test is identical. No build or tests executed.
 
 Open concerns: context duplicate-label determinism and unbounded provider-derived keys, per-action/per-cue retrieval budget growth, concurrent forecast resolution, trust of journaled action outcome evidence, heuristic context-transfer validity, reliability calibration, dispute-pressure heuristics and lack of matched no-learning performance benchmark. No source selection/adoption.
+
+
+## 16. All-ref inventory reconciliation and priority queue (2026-11-28)
+
+Report: [DF-02 All-Ref Inventory Reconciliation and Semantic Audit Queue](DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md), verified blob SHA `2ebc96c59638809d2b99e16c5ed416f808749ee7`. The original discovery ZIP was downloaded again and its SHA-256 independently rechecked. Counts reconcile to 159 paths, 95 divergent/63 absent/1 identical, 798 ownership rows, 1,946 exact-path references, and 40,048 symbol-match candidate rows. The report ranks 40 high-dispersion/high-match paths for further semantic/context closure. Priority is heuristic only; no path is closed by the inventory.
