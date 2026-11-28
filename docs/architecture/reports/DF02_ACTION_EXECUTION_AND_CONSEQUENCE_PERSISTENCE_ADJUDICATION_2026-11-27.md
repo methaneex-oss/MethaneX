@@ -2,7 +2,7 @@
 
 **Scope:** exact candidate/donor action-execution source/API, Brain execution adapter, phase-7 test suite and donor action-consequence integration.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor adds observed-consequence capture and learning feedback; tests specify useful behavioral effects. Persistence failure is not reflected in the action result. Source/test inspection only; no execution.
+**Disposition:** donor adds observed-consequence capture and learning feedback; tests specify useful behavioral effects. Persistence failure is not reflected in the action result. Historical e737 CI action-execution test #27 and action-consequence test #64 passed in five jobs; current candidate CTest not run.
 
 ## 1. Exact source blobs
 
