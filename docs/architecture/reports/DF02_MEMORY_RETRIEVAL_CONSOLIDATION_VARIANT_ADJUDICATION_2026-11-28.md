@@ -114,3 +114,17 @@ Required corrective behavior for any future implementation:
 Additional forensic issue: the frozen donor quarantine code opens the fixed .corrupt path with ios::app. Repeated recoveries append multiple unreadable suffixes without a generation header or manifest; this is less traceable than the preserve-corrupt-tail branch's collision-avoiding .recovery-backup.N filenames. The current tests remove .corrupt before each run and do not test repeated quarantine generations.
 
 This defect was found during Builder self-review. It is not fixed because the active authorization prohibits runtime/source implementation changes. It remains an explicit technical blocker; the passing CI tests exercise successful recovery, not failure of the recovery operation itself.
+
+ 
+## Metadata-sidecar loss semantics — 2026-11-28
+
+A final test-contract review corrected the interpretation of the "rebuild learned tiers" comment:
+- The 58-assert test blob 5d824f08437916e48749bf539cc94e10c9f44347 lines 90–133 promotes an experience to Semantic, appends a second event of the same kind, deletes the .meta sidecar, reconstructs Memory, then explicitly asserts tier_of("learned-kind") == Episodic at lines 126–133.
+- The frozen donor 70-assert test blob ecabc6af76c52ed1e4175b151e76fadecae7729d has the same expectation at lines 129–134.
+- Therefore the test does **not** prove learned tier restoration from the journal. It proves that when metadata is missing, the event journal restores event/sequence history but all records fall back to default Episodic tier. Previously learned Semantic/Procedural tier, salience, confidence and consolidation are lost.
+- This is an explicit degraded-mode behavior in the tests, not an accidental claim of successful learned-state restoration. The comment "Rebuild the learned distribution from journal records" is semantically misleading: the journal has no learned tier data; only default tiers are reconstructed.
+- load_metadata() returns on invalid magic/count, truncated/invalid record, duplicate sequence or non-finite values without exposing a degraded-memory status or quarantining the bad sidecar. The constructor then calls rebuild_learned_tiers() over default metadata records. The test covers a missing sidecar, not a corrupt/truncated sidecar.
+
+Capability implication: event recall survives sidecar loss, but learned memory organization does not. This may be acceptable as a documented fallback only if the system surfaces degraded memory state and the user/agent knows that semantic/episodic organization and salience/ confidence/consolidation have been lost. Current API/test contract does not surface that distinction. A future authorized fix needs either journal-backed learning metadata, validated replay/reconstruction rules, or explicit degraded-state reporting plus recovery tooling; corrupt-sidecar fault injection is required.
+
+No runtime change was made. This is a technical capability gap for future Builder implementation authorization and remains open.
