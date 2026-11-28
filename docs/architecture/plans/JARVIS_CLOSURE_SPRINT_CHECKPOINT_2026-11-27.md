@@ -834,3 +834,21 @@ Latest PR #203 state before this checkpoint update:
 - HEAD immediately before this checkpoint write: 625a89b3725f261d122dd9f849b5c5ed5859c40c.
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 389 commits; no reviews or inline review threads; combined status has no entries.
 - No workflow run returned for this latest docs-only head; no current-branch CTest.
+
+ 
+## Continuation — engineering control-plane integration boundary (2026-11-28)
+
+Engineering report now updated to blob 8a82ad054827adc534cb77899072e972c74f53ab:
+- EngineeringTaskLedger is integrated into EngineeringCoordinator::dispatch_tracked.
+- AgentMessageBus is integrated into EngineeringOperatorConsole, but not into coordinator dispatch or EngineeringAgent::execute.
+- EngineeringAgent is an abstract interface; the donor engineering target contains no concrete agent implementation. AgentCommunicationEndpoint is generic and is not adapted to EngineeringAgent.
+- dispatch_tracked runs synchronously through EngineeringExecutionBoundary; task state and operator messaging remain separate mechanisms.
+- Coordinator::rank is a static reliability × availability ÷ (1+cost) heuristic, not outcome-driven agent adaptation.
+- A result identity mismatch calls ledger.fail but ignores its return value; if failure persistence fails, the task can remain running without the "failure was not durably recorded" qualification used in other failure paths.
+- Coordinator trusts AgentResult.accepted and does not pass/store AgentArtifact digests; the ledger can record completion with empty evidence/revision.
+- Capability verdict: control-plane primitives, not a working autonomous multi-agent workforce. No runtime source was changed.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: 7062b90c1b0b4debc5d66bb9f2a147f14926f38d.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 391 commits; no reviews or inline review threads; combined status has no entries.
+- No workflow run returned for this latest docs-only head; no current-branch CTest.
