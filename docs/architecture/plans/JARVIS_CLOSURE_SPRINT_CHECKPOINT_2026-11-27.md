@@ -354,3 +354,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `17e7a318bac4766d31b8d8bff712439471a40e98`.
 - All 22 distinct CMake blobs inventoried. Candidate has 57 source entries; donor 64. Seven donor-only TUs are Brain restored API/action execution/prediction context/affective planning plus affective/developmental models. Three historical donor-shaped 64-entry variants are noted but not authority-classified.
 - Source-list evidence only; native build/link/tests not executed. Exact historical source/options diff, consumer graph, provenance/retention remain open.
+
+
+## Immediate continuation — evolution-Brain integration test cohort (2026-11-28)
+
+- Added `DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`.
+- Exact 24 test blobs inventoried. Candidate integration suite 46 lines/7 assertions; donor 298/97. Donor contract adds durable evaluation gate, legacy replay/rollback protection, prediction feedback, manual rollback, invalid experiment cases, canary persistence and restart reconstruction.
+- Isolation helper is a simple shell fixture, not an adversarial sandbox proof. Fixed fixture paths and missing crash/concurrency/failure injection remain open. CMake registration inspected; no native build/CTest executed.
