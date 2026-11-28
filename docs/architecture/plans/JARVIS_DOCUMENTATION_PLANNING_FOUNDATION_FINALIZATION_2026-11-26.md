@@ -119,3 +119,8 @@ The evolution-Brain integration test historical cohort (24 exact blobs) was inve
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 Brain.cpp's 35 exact source blobs were inventoried and method-definition surface compared. Candidate/donor method counts reconcile when constructor is excluded; CMake source ownership split is mapped. No AST signature graph, reverse consumer closure or native build/test execution has been completed. DF-02 remains open.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+Brain.hpp exact 21-blob variant cohort was inventoried and a material authority correction was recorded: candidate exposes only const Memory access; donor adds mutable Memory access. The prior report's direction was reversed and has been corrected. Consumer/integrity consequences and full ABI/API closure remain open; this is not acceptance.
