@@ -383,3 +383,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Exact candidate/donor runtime header/source/tests/CMake compared. Donor integrates perception providers, selected-plan actions, asynchronous prediction/evidence/goal feedback, sequence binding, outcome utility, metrics and workspace current-state updates. Runtime test expands 87→356 lines; additional 84-line goal-feedback suite. CMake registers two additional donor runtime suites.
 - Source risks: feedback/priority starvation, unbounded synchronous callbacks/stop, thread-start exception state, shutdown outcome-feedback rejection, heuristic reliability, non-atomic workspace snapshot. No native build/CTest; all behavior remains source-inspected.
 - Cohort open for historical variants, reverse consumers, authority/retention and fault injection. No selection/closure.
+
+
+## Immediate continuation — Memory retrieval/consolidation cohort (2026-11-28)
+
+- Added `DF02_MEMORY_RETRIEVAL_CONSOLIDATION_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `e844e219fe292255a8f2d87c7136708086e46470`.
+- Exact candidate/donor `memory.cpp`, header, architecture test and CMake compared. Donor adds kind/exact-match prefilter, consolidation score, latest-by-kind sequence index, metadata V1/V2 migration compatibility and broader assertions.
+- Risks: raw unframed event journal/truncating recovery, metadata snapshot no fsync, platform rename/crash semantics, untested multiwriter/failure injection, heuristic consolidation, tier-only forgetting (not deletion). No build/CTest executed.
+- Cohort remains OPEN for historical variants, semantic consumers, authority/retention and persistence adversarial verification.
