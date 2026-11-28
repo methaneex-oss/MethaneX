@@ -253,3 +253,10 @@ Concrete loss scenario:
 Therefore the bus provides bounded deduplication of successful in-memory enqueue, not durable delivery, at-least-once processing or exactly-once execution. The 65,536-entry FIFO eventually evicts old IDs, after which an old retry may be delivered again. There is no durable queue, ack-after-processing, retry lease, dead-letter path or recovery after process restart. The operator console's receive() drains the endpoint queue without an acknowledgement contract.
 
 Required future semantics must be named precisely: either durable at-least-once delivery with consumer acknowledgements/idempotent handlers, or explicitly best-effort in-memory enqueue with a documented loss window. Do not describe the current result as verified task execution or reliable message processing.
+
+ 
+### Self-review precision: at-most-once enqueue is explicitly tested
+
+The donor agent_and_console_suite.cpp blob 7ac8c21e6df0d157d4d95fe87fabae962734139a (31 assertions) explicitly asserts at lines 42–50 that after a message is enqueued and drained, retrying the same message ID returns accepted while the peer pending queue remains empty. The test comment describes this as preventing duplicate enqueue after an uncertain acknowledgement. It also tests queue overflow rejection and successful retry after the queue is drained.
+
+Therefore the post-drain loss behavior is an explicit at-most-once-in-memory-enqueue contract, not an accidental implementation omission. The design is internally consistent if "accepted" means only "placed in the in-memory endpoint queue" and the consumer is responsible for processing without a later retry. It is not suitable to claim durable/reliable task delivery or at-least-once processing. If JARVIS needs reliable agent work, the bus needs a separate acknowledgement after processing or a durable queue; the current tests intentionally do not provide that.
