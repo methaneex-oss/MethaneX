@@ -89,3 +89,8 @@ Since the snapshot above, four exact-source adjudication reports have been added
 - Restored Brain API ownership: exact 20-blob cohort; candidate translation-unit unregistered versus donor integration; AST/API/consumer/authority reconciliation remains open.
 
 Each report was fetched back from the branch and blob SHA verified. These are bounded source/test/CMake inspections; no runtime source was modified and no native build or CTest was executed. PR #203 remains draft/open/unmerged, with 48 documentation files changed at the last terminal inventory. It has no submitted reviews or inline threads. DF-02 remains open; DF-09 and DF-11 remain blocked; DF-12 remains reserved for Project Director acceptance. This update is not a final terminal inventory, independent review, or acceptance.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+The original all-ref discovery artifact was re-downloaded and SHA-256 reverified. Its path/blob/consumer counts reconcile with the prior reports; a bounded audit-queue report ranks 40 high-dispersion/high-match paths for manual semantic closure. This improves audit ordering but is not the complete 159-path semantic/authority ledger. PR #203 remains documentation-only and draft; no independent review, native test run or Director acceptance has occurred.
