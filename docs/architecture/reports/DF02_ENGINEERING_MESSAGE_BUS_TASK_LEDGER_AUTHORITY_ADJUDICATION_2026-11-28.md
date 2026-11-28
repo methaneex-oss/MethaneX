@@ -212,3 +212,8 @@ Positive design evidence: JournalFileLock uses LockFileEx on Windows and flock o
 The donor test's 43 assertions are valuable behavioral evidence at source level, but there is no native CI result for the frozen donor task-ledger CMake/source. The CMake file is not reachable from the core/cpp build and the available successful engineering workflow run #199 is a different 13-source architecture without the task ledger.
 
 No runtime source or CMake was changed. These are Builder findings; completion-evidence enforcement, replay validation, numeric overflow checks, durability, and transitive thread linkage require future implementation authorization. Task-ledger adoption/retirement remains a Project Director decision.
+
+ 
+### Evidence contract precision correction
+
+The donor agent.hpp blob 6acadd5558b7385c5993323ad963ed80b08b6652 defines AgentArtifact {type, location, digest}, AgentEvidence {kind, value}, and AgentResult {accepted, agent_id, task_id, reason, artifacts, evidence, revision}. EngineeringTaskLedger::complete accepts only result_revision and vector<AgentEvidence>; EngineeringTaskRecord stores only that evidence vector and result_revision. It does not accept/store AgentArtifact digests/locations, the AgentResult.accepted flag, AgentResult.task_id/agent_id, or a verifier identity. The caller can therefore call complete with empty evidence, empty revision, or a result that was not accepted; the ledger itself cannot bind completion to verified artifact digests. This sharpens finding 6: the ledger is a versioned task-state journal, not an authenticated evidence-verification authority.
