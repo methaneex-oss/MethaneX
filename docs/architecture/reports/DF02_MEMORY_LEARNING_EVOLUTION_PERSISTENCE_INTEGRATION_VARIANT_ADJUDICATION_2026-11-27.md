@@ -2,7 +2,7 @@
 
 **Scope:** twelve exact versions of the donor-only `core/cpp/tests/memory_learning_evolution_persistence_suite.cpp` path, including the frozen donor, and exact test-CMake registration.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** a cross-mechanism persistence integration contract is established from source; it is absent from candidate build registration. Tests not executed. No path/authority closure.
+**Disposition:** donor and alternate test variants are inventoried; the frozen donor variant was source-inspected but not executed, while a distinct historical alternate variant passed CTest #45 in five e737cae7 CI jobs. Candidate build registration is absent. No path/authority closure.
 
 ## 1. Exact variant inventory
 
@@ -66,3 +66,29 @@ The suite's process-isolated evaluator uses a command fixture and the repository
 | DF-02 | OPEN |
 
 **Disposition:** this donor-only suite is valuable integration evidence in source form, but not an accepted candidate test or selected implementation. No adoption/retirement/deletion decision; DF-02 and Foundation gates remain open; Stage A is not authorized.
+
+ 
+## Exact alternate test variant and historical execution evidence — 2026-11-28
+
+The earlier donor test blob 98e6598f60912714234f2dfabfbe52fa5eb77044 was **not** the source blob executed by the e737cae7 historical CI. The branch's exact file was fetched and SHA-verified:
+- Executed alternate test blob: 5d578360fce5815707b3becd6b7e4df4115c2fd5 (246 lines; 25 explicit check() calls, not C assert expressions).
+- It is one of the twelve inventoried variants (branch owner feat/prediction-developmental-validation20261030).
+- The CMake registration is the same donor test-CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261; CTest name jarvis_memory_learning_evolution_persistence_suite is test #45.
+- The frozen candidate CMake does not register this suite.
+
+The executed alternate test contract:
+1. Records a prediction and verifies prediction-error feedback updates the same registered evolution parameter's evidence statistics.
+2. Executes six successful/verified stable-action interactions and six failed/unreliable-action interactions in a separate context; verifies positive/negative developmental strategies and later decision-score preference.
+3. Requires accumulated evidence to produce an evolution proposal, records evaluation through the configured isolated runner, adopts it, and verifies the parameter value changes.
+4. Reconstructs a new Brain instance from the same journal and verifies adopted parameter value/observation count, positive and negative strategies, changed decision, adopted history, resolved prediction and action-outcome records survive replay.
+
+The exact test #45 passed in all five post-fix e737cae7 test jobs:
+- Brain CI #1826 native-brain job 123987534801;
+- Brain CI #1826 sanitizer job 123987535203;
+- JARVIS Brain Tests #975 brain job 123987535124;
+- JARVIS Brain Tests #975 sanitizer job 123987534874;
+- Brain ThreadSanitizer #957 job 123987535201.
+
+Each corresponding log explicitly reports test #45 Passed; each complete job reports 71/71. This execution evidence applies to alternate blob 5d578360, not donor blob 98e6598f and not current PR #203. The test reconstructs a new Brain in the same OS process using the same journal path; it is not a process crash/restart test. Its isolated evaluator is a controlled fixture, not an independent external evaluator.
+
+The donor test source remains a separate variant and must not be described as executed. No runtime source was changed or adopted; candidate absence and alternate test success do not create baseline authority. DF-02 remains OPEN.
