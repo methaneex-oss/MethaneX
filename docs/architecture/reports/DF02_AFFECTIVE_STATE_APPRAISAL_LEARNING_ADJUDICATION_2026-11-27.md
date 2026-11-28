@@ -59,3 +59,20 @@ Tests are source inspected, not executed. They use repeated synthetic evidence, 
 | DF-02 | OPEN |
 
 Affective-state/learning remains **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Historical execution evidence for donor affective integration tests — 2026-11-28
+
+The following exact donor test blobs are present unchanged on historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1:
+- affective_state_suite.cpp 3956eec2ed9885e80ada1d038de6c581338b8f8c (CTest #51);
+- affective_decision_learning_suite.cpp 920ddcbc8a422783bb8724093afd952cc885e6b6 (#52);
+- affective_state_model_suite.cpp 29f15bdd1a5d55afd5170a9d21bc3572befc97f0 (#53);
+- affective_learning_suite.cpp bfbbca315c60c9b1c941dbc553a0cabba304581c (#54);
+- affective_evidence_suite.cpp c8a401cab1a29d57506f990043a1f82536fd9029 (#55);
+- affective_goal_outcome_suite.cpp 06d72304fa0c4ea67eb4a27b91c484007f231199 (#56);
+- affective_decision_suite.cpp 982b11e117b8f59cce3719a5253cb52e96304c0d (#57);
+- affective_brain_decision_suite.cpp 9ff9c0480fa34fa4f5600e514af419b2bbc79765 (#58).
+
+All eight tests passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957; each of the five test jobs reports 71/71. The donor test-CMake blob registers these suites; frozen candidate CMake does not. This is historical alternate-branch execution, not current PR #203 test evidence or an adoption decision.
+
+The pass evidence confirms that the continuous affective state, appraisal learning, evidence weighting, goal outcome and Brain integration test contracts execute together in that branch. It does not resolve the previously listed calibration, nonfinite-input, weak-evidence floor, long-duration stability or consequence-provenance gaps. Synthetic test success is not independent validation of real affective calibration.
