@@ -2,7 +2,7 @@
 
 **Scope:** candidate/donor `evolution_controller.cpp`, adoption-journal state machine and donor controller/adoption tests.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor introduces staged adoption and compensating rollback paths; direct lifecycle is materially stricter. Transactional failure cases and idempotency mismatch remain open. Source/test inspection only.
+**Disposition:** donor introduces staged adoption and compensating rollback paths; direct lifecycle is materially stricter. Transactional failure cases and idempotency mismatch remain open. Historical e737 third-lineage controller/tests #44 and #49 passed in five CI jobs; frozen candidate/donor controller refs and current PR #203 CTest not run.
 
 ## 1. Exact refs
 
@@ -51,8 +51,30 @@ No execution performed. Missing adversarial tests include evaluation same-ID/dif
 | Same-ID evaluation content comparison | Gap |
 | Stale active rollback | Gap |
 | Compensation/crash/fault injection | Open |
-| Native tests | Not performed |
+| Native tests | Historical e737 alternate tests #44/#49 passed in five jobs; frozen candidate/donor exact refs and current PR #203 CTest not run |
 | Full consumer/authority/retention | Open |
 | DF-02 | OPEN |
 
 Evolution controller remains **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
+
+ 
+## Third-lineage e737 controller and historical execution — 2026-11-28
+
+The e737cae7 branch contains a third controller lineage, distinct from both frozen refs:
+- candidate controller: 01484ebf12fc3902bce749030a1f54610b26236a (82 lines);
+- frozen donor controller: 4e77ec2e5daa09a964132ca486b8c5ee1cebf2f5 (316 lines);
+- e737 alternate controller: 4d910df0fc6626bd7fb55ee35522f7869b4aa13c (351 lines).
+
+The e737 variant adds materially stronger replay checks:
+- replay_evaluation requires candidate_executed, finite fitness/confidence/minimum-improvement/proposal fields, valid outcome, confidence range, isolation attestation policy, and recomputes EvolutionExperimentEngine::evaluate to confirm the recorded outcome;
+- validate_adoption_for_brain compares evaluation procedure ID, evaluator executable fingerprint, baseline/candidate artifact IDs and other exact evaluated fields; it no longer recreates a private attestation from journal fields;
+- replay_rejection persists rejected evidence into adoption journal/history;
+- simulated evidence is accepted only when policy explicitly permits it; otherwise valid isolation attestation is required.
+
+The e737 alternate test sources are also third-lineage:
+- evolution_adoption_journal_suite.cpp ad3c58179cc150d303f5bcbbfa50beb40a1327c6 (CTest #49);
+- evolution_brain_integration_suite.cpp b065a301397c83bcb460d43fa36421a7bebc9060 (CTest #44).
+
+Both tests passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; all five jobs report 71/71. The e737 parent build graph is alternate CMake 33197 (64 TUs + OpenSSL Crypto), not frozen donor parent CMake bc264.
+
+This historical result is evidence for the 351-line alternate controller and alternate tests, not the frozen donor 316-line controller, candidate 82-line controller, or current PR #203. The original gaps around same-ID evaluation-content mismatch, stale rollback after later same-parameter adoption, compensation failure and crash between stores remain to be checked against the exact e737 variant; do not assume the alternate diff resolves them.
