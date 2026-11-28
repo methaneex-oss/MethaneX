@@ -852,3 +852,21 @@ Latest PR #203 state before this checkpoint update:
 - HEAD immediately before this checkpoint write: 7062b90c1b0b4debc5d66bb9f2a147f14926f38d.
 - OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 391 commits; no reviews or inline review threads; combined status has no entries.
 - No workflow run returned for this latest docs-only head; no current-branch CTest.
+
+ 
+## Continuation — engineering message-bus delivery semantics and execution-tool limits (2026-11-28)
+
+Engineering report latest blob: bb2d1ae3a65b5308295367a1263942c1d0bd5d0d.
+- MessageBus accepted means in-memory endpoint enqueue. The donor 31-assert agent_and_console_suite explicitly tests that after drain(), retrying the same message ID returns accepted without redelivery. This is an intentional at-most-once-in-memory-enqueue contract, not durable delivery or at-least-once processing.
+- If an endpoint is destroyed or a consumer fails after drain, the accepted-ID cache can suppress the same retry without delivering to a new endpoint. No acknowledgement-after-processing, durable queue, retry lease or dead-letter mechanism exists.
+- This is acceptable only if documented as best-effort in-memory enqueue; it is not reliable agent task delivery.
+
+Local execution attempt:
+- Container has git 2.47.3, CMake 3.31.6 and g++ 14.2.0.
+- Command git ls-remote https://github.com/methaneex-oss/MethaneX.git HEAD failed: Could not resolve host: github.com.
+- No repository files are mounted locally; therefore no local native build/CTest could be run. GitHub connector has no workflow-dispatch action; engineering.yml has no workflow_dispatch. The donor task-ledger CMake has no historical Engineering Layer run. This is an environmental limitation, not a passed check.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint write: c460514a981ff51f60d2f87a63d58ab6c5b4a0cd.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 394 commits; no reviews or inline review threads; combined status has no entries.
+- Native Brain Build #2924 IN_PROGRESS. This is the core/cpp build, not engineering/cpp and not CTest.
