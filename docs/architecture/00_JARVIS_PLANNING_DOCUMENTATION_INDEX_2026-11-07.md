@@ -180,3 +180,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [All-ref inventory reconciliation and audit queue](reports/DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md): reverified artifact ZIP SHA, reconciled 159-path/ownership/consumer totals and ranked 40 path cohorts for further manual semantic/context work. SHA `2ebc96c59638809d2b99e16c5ed416f808749ee7`. Discovery/prioritization only; DF-02 remains open.
 
 - [Developmental Brain integration test/source cohort adjudication](reports/DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md): candidate-absent six source/four header/nine test blobs; donor integration and extensive assertion contract; exact variant diff, execution, transfer quality and authority remain open. SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`.
+
+- [Core C++ test-CMake 40-blob variant adjudication](reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md): all exact blobs target/CTest/Release-assert extracted; candidate 45/45, donor 71/70; mismatch aliases and workflow targets classified; no execution. SHA `2aae2721d216bd71c4ee3a4fc8e935d61c52c3ac`.
