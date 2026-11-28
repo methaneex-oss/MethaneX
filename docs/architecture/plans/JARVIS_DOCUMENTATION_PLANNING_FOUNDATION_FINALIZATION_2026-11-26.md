@@ -94,3 +94,8 @@ Each report was fetched back from the branch and blob SHA verified. These are bo
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 The original all-ref discovery artifact was re-downloaded and SHA-256 reverified. Its path/blob/consumer counts reconcile with the prior reports; a bounded audit-queue report ranks 40 high-dispersion/high-match paths for manual semantic closure. This improves audit ordering but is not the complete 159-path semantic/authority ledger. PR #203 remains documentation-only and draft; no independent review, native test run or Director acceptance has occurred.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+A further candidate-absent developmental-learning production/header and donor integration-test cohort was inventoried at exact blob SHA and CMake reachability. The donor integration test's source assertions cover context transfer, persistence/replay, action-outcome reliability, malformed evidence and episodic retrieval; nine test variants remain only partially grouped, and none was executed. Full semantic/authority closure remains open.
