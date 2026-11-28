@@ -86,3 +86,13 @@ Exact evidence:
 - The 95-assert integration contract covers: negative surprise increasing prediction-error attention; unobserved/NaN consequence not being treated as zero or learned as neutral; explicit unknown optional consequence; observed consequence surviving verification failure; context preservation in the authoritative action_outcome event; strategy changes on the next cycle; persistence of affect/attention/strategy/forecast across restart; and resolution of a world-variable forecast by the next observation.
 
 This corrects the reachability record: the donor integration suite is a registered CTest target, not an orphan. It remains source-inspected only. No CI workflow runs were returned for donor frozen HEAD c1da222e6c94aeb3f2ad000392c21fe4fc81ab25, and no native build/CTest was executed for it in this run. Therefore 95 assertions are an executable test contract in the donor build graph, not passing test evidence.
+
+ 
+### Historical alternate-branch execution of the action-consequence integration suite
+
+The donor action-consequence source/test/CMake blobs are also present unchanged on historical alternate branch fix/evolution-authenticated-replay-final-20261030 at HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1. In that branch, brain_action_consequence_integration_suite.cpp blob 7616082579d53e3579cae8e87895bdb3dadba66f and tests/CMakeLists.txt blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 are built and registered. CTest #64 passed in:
+- Brain CI #1826 native-brain and sanitizer jobs;
+- JARVIS Brain Tests #975 brain and sanitizer jobs;
+- Brain ThreadSanitizer #957 TSAN job.
+
+All five jobs reported 71/71 tests passed. This is executed behavioral evidence for the exact test and CMake blobs on the e737cae7 alternate branch, not on frozen donor HEAD c1da222 or current PR #203. The donor c1da222 itself returned no workflow runs/status. The test uses deterministic callback fixtures; it does not validate real external adapters or production hardware.
