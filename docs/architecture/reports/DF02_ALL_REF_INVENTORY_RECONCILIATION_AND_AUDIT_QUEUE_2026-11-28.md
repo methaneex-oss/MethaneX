@@ -77,3 +77,7 @@ This queue establishes reproducible priorities and exact counts only. DF-02 Phas
 ## New completed bounded source cohort
 
 - `core/cpp/src/cognitive_runtime.cpp` / `core/cpp/include/jarvis/core/cognitive_runtime.hpp`: [Cognitive Runtime Feedback/Action Adjudication](DF02_COGNITIVE_RUNTIME_FEEDBACK_ACTION_VARIANT_ADJUDICATION_2026-11-28.md), blob SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`. Exact candidate/donor and CMake/test comparison. Donor feedback/action/perception additions and fairness/shutdown/callback risks identified. Source inspection only; no tests. The path remains OPEN.
+
+## New completed bounded source cohort
+
+- `core/cpp/src/memory.cpp` and `core/cpp/include/jarvis/core/memory.hpp`: [Memory Retrieval/Consolidation Adjudication](DF02_MEMORY_RETRIEVAL_CONSOLIDATION_VARIANT_ADJUDICATION_2026-11-28.md), SHA `e844e219fe292255a8f2d87c7136708086e46470`. Exact candidate/donor/test/CMake review. Donor retrieval/consolidation improvements and durability/migration risks recorded. Source-only; no path closure.
