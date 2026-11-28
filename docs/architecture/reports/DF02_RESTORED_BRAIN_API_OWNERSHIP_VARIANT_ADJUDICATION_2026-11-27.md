@@ -208,3 +208,12 @@ Engineering benchmark derived from these sources:
 Applied to the inspected code: the donor CognitiveCycle and CognitiveRuntime variants materially strengthen context retrieval, representation, prediction feedback, intent-guided goal selection, action-outcome learning and workspace publication. The 260-assert donor brain_deep_suite is a stronger behavioral contract than the candidate's 68 assertions. However, source/test existence is not execution; the branch-specific native and sanitizer evidence is separately recorded, and the authenticated replay CI belongs to a historical alternate branch, not the current candidate. No real multimodal sensor integration, general-purpose autonomous task performance, held-out transfer benchmark or sustained real-world reliability result is established by this slice.
 
 The MCU question remains: if Tony Stark built real JARVIS using these designs, would it be adaptive, context-aware and useful? The advanced cognitive pipeline is directionally credible; the current evidence still describes a bounded cognitive/control substrate, not the fictional integrated assistant. Do not equate architectural resemblance with demonstrated capability.
+
+ 
+## Historical execution of the donor deep-brain behavioral contract — 2026-11-28
+
+The donor brain_deep_suite.cpp blob 1314123ea3b524b24fd6693fc6fb4873b6c550d5 (835 lines / 260 assert expressions) is present unchanged on historical alternate branch e737cae7f907696ef787a4e85b0dee3a739d71b1 and is CTest #4. The frozen candidate version is a different blob, ca8e7012c92822608c3be0539784d281b0578bfd (68 assert expressions), registered under the same test name in the candidate CMake graph.
+
+CTest #4 passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957; all five jobs report 71/71. This is execution evidence for the 260-assert donor/alternate suite, not a pass result for the 68-assert candidate blob and not current PR #203 evidence.
+
+The larger donor suite's tests cover more than assertion count: context-sensitive recall and transfer, prediction feedback, goals, decisions, action outcomes, persistence/replay and cross-subsystem behavior. The result is a stronger behavioral contract in the alternate branch, but still a synthetic deterministic suite; it does not demonstrate broad held-out task generalization or real multimodal autonomy. No implementation was copied or adopted.
