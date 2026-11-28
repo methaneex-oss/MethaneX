@@ -616,3 +616,21 @@ Latest PR #203 state before this checkpoint update:
 - Native Brain Build #2880 was IN_PROGRESS at last read. It is a docs-only head build; no current-branch CTest result is claimed.
 
 The full test matrix is a real improvement in behavioral evidence and build-graph reconciliation. The broader 40-blob parent-CMake inclusion family and 159-path semantic/authority closure remain open.
+
+ 
+## Provenance correction — alternate CMake dependency wiring and build attribution (2026-11-28)
+
+A source-blob recheck corrected a potential over-attribution:
+- Frozen donor parent CMake at c1da222 is blob bc264ce7b4ae489404ca03ea6d9676d0330a6a56.
+- Historical e737cae7 CI did **not** use that exact parent blob. It used alternate 64-source blob 33197f92141a241ff0546af1bf81fbf177a1f3ab.
+- Exact diff: both have the same 64 production source entries; the alternate adds find_package(OpenSSL REQUIRED COMPONENTS Crypto) and target_link_libraries(jarvis_core PUBLIC OpenSSL::Crypto) for the HMAC-SHA-256 authenticated-evidence runner.
+- e737 uses the exact frozen donor test CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 and parent-included affective_planning script e3a52416b2538791a93666e5124b1f34ad1b082a.
+- Thus the 71/71 test results and native build are attributable to alternate CMake 33197 + donor test CMake + donor affective-planning script + the exact source/test blobs identified in each report. They are not test/build evidence for frozen donor parent CMake bc264.
+- PR #203 and frozen candidate use parent CMake c51816888e1bddb7bc00c59e72529524e27a0717 (57 production TUs) and test CMake dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 (45/45). PR #203 Native Brain Build #2861/#2866/#2869 passed Configure + Build on docs-only commits containing that unchanged candidate source/CMake tree; no CTest.
+- Frozen donor bc264 (64 TUs) was not independently built in this sprint.
+
+Updated exact reports:
+- Library CMake provenance/build: docs/architecture/reports/DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob 5d08514fe317230f2fbc8d246d272c4e1565e821.
+- Test CMake / 71-test matrix / CMake provenance: docs/architecture/reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md, blob 55acf9645e78f8a679c5fe16bafdf8c93659d7af.
+
+This correction preserves the historical CI evidence while preventing it from being attributed to the wrong frozen parent-CMake blob.
