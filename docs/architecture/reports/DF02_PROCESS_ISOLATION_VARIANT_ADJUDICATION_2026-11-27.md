@@ -145,3 +145,8 @@ Test-source correction:
 - process_isolation_syscall_suite.cpp blob cd347d277c84376c3a90ce4d95b31b4dbafde583 is identical across candidate/donor/e737.
 
 The e737 CI result is for alternate backend/header 6da14/b0a44 plus donor main test and shared syscall test. It is not a pass result for frozen candidate backend eac7a12... or frozen donor backend 8bb621..., and does not close the descendant cleanup, unchecked setpgid/dup2, RLIMIT certification, path/FD race, inherited descriptor, platform or adversarial test gaps.
+
+ 
+### Self-review correction: alternate isolation-result semantics are not fully tested
+
+The 8-assert process_isolation_suite does assert isolated=true for successful execution, timeout and a child whose socket syscall is denied. It does not assert isolated=false when a required control fails with exit 125, and it does not inject setrlimit failures or verify the sanitizer-specific RLIMIT_AS skip. The statement above that the suite does not assert result.isolated semantics is therefore narrowed: it checks positive isolation results, but not the critical false-on-required-control-failure branch or whether every configured control was actually applied.
