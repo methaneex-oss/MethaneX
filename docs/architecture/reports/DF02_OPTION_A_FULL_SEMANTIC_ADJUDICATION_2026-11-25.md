@@ -1246,3 +1246,8 @@ Open concerns: context duplicate-label determinism and unbounded provider-derive
 ## 16. All-ref inventory reconciliation and priority queue (2026-11-28)
 
 Report: [DF-02 All-Ref Inventory Reconciliation and Semantic Audit Queue](DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md), verified blob SHA `2ebc96c59638809d2b99e16c5ed416f808749ee7`. The original discovery ZIP was downloaded again and its SHA-256 independently rechecked. Counts reconcile to 159 paths, 95 divergent/63 absent/1 identical, 798 ownership rows, 1,946 exact-path references, and 40,048 symbol-match candidate rows. The report ranks 40 high-dispersion/high-match paths for further semantic/context closure. Priority is heuristic only; no path is closed by the inventory.
+
+
+## 17. Developmental Brain integration test/source cohort (2026-11-28)
+
+Report: [DF02 Developmental Brain Integration Test Variant Adjudication](DF02_DEVELOPMENTAL_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md), fetched-back SHA `e537ed36aaee58ba83a60bfce3e2fa8aea62baa7`. Exact inventory: candidate-absent developmental-learning source six blobs, header four blobs, integration suite nine blobs; donor source/test/header and CMake integration confirmed. Donor integration assertions cover strategy transfer, action consequence/reliability, capability feedback, malformed-event rejection, episodic retrieval, featureful/featureless context, recovery from contradictory evidence and persistence/replay. The nine test variants are materially different and only grouped by feature markers/size; full exact diff and behavior closure remain open. No tests executed.
