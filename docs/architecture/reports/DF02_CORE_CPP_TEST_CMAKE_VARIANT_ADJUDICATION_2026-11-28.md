@@ -206,3 +206,12 @@ Source-to-target mapping was parsed from the exact donor CMake source arguments 
 | 71 | jarvis_dlt_002_persistence_verify | dlt_002_persistence.cpp | No | Passed |
 
 The frozen candidate registers 45 of these test names; 26 are donor/alternate-only registrations. The e737 CI run passed all 71 in the alternate graph. This is not a pass result for the frozen candidate's own 45-test graph. The 26 missing candidate tests are concrete behavioral-evidence gaps, not automatically runtime defects: each requires semantic review, ownership/authority adjudication, and Director decision before any adoption.
+
+ 
+### Test-source blob identity cross-check
+
+The 26 CTest names absent from the candidate registration map to 25 unique source files because DLT-002 persistence uses separate train and verify tests against one executable. Exact file fetches at e737cae7 show:
+- 24 of the 25 unique source files match their frozen donor blobs byte-for-byte.
+- memory_learning_evolution_persistence_suite.cpp is the exception: the executed e737 source is alternate blob 5d578360fce5815707b3becd6b7e4df4115c2fd5, not donor blob 98e6598f60912714234f2dfabfbe52fa5eb77044. Its separate report records the exact contract and CI evidence.
+- The parent-included affective_planning_suite.cpp is donor blob 32e5f04cfb6e4764cb205744266375367228bedf.
+This prevents attributing the test #45 pass to the wrong donor variant. The 71-test matrix is path/target/outcome evidence; variant identity is additionally constrained by these blob comparisons.
