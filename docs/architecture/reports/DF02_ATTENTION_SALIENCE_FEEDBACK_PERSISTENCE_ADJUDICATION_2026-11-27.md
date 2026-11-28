@@ -2,7 +2,7 @@
 
 **Scope:** candidate/donor `attention.cpp`, attention architecture and Brain learning tests.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor adds prediction-error and internal-activation salience inputs; feedback changes policy weights and replay persists them. Source/test inspection only.
+**Disposition:** donor adds prediction-error and internal-activation salience inputs; feedback changes policy weights and replay persists them. Historical e737 attention-learning test #14 passed in five CI jobs; current candidate CTest not run.
 
 ## 1. Exact refs
 
@@ -25,7 +25,7 @@ Candidate salience uses novelty, uncertainty and urgency. Donor adds prediction 
 
 ## 4. Test evidence and gaps
 
-Donor tests assert feature-driven salience, policy changes from feedback, internal activation, attention-state ranking/priority learning, and persistence after Brain reconstruction. Source inspected, not executed. Gaps: NaN/Inf weights/events/rewards, focus ordering with varied novelty, repeated reinforcement saturation/oscillation, event-type fairness/starvation, policy recovery from corrupt journal, and calibrated attention utility.
+Donor tests assert feature-driven salience, policy changes from feedback, internal activation, attention-state ranking/priority learning, and persistence after Brain reconstruction. Source inspected; donor attention-learning test #14 passed in historical e737 CI; current candidate CTest not run. Gaps: NaN/Inf weights/events/rewards, focus ordering with varied novelty, repeated reinforcement saturation/oscillation, event-type fairness/starvation, policy recovery from corrupt journal, and calibrated attention utility.
 
 ## 5. Five review lenses
 
