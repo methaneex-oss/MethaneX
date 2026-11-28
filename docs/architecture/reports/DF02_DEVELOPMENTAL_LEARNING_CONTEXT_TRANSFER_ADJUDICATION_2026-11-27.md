@@ -2,7 +2,7 @@
 
 **Scope:** donor-only `developmental_learning.cpp`, exact candidate-absent/source variants, donor learning and Brain-integration test contracts.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor adds context-sensitive strategy/association learning, bounded numeric/categorical transfer, negation/schema guards, confidence-weighted signed utility and deterministic ranking. This source path is donor-added; candidate path absent. Source/test inspection only.
+**Disposition:** donor adds context-sensitive strategy/association learning, bounded numeric/categorical transfer, negation/schema guards, confidence-weighted signed utility and deterministic ranking. This source path is donor-added; candidate path absent. Historical e737 alternate-branch tests #50, #60, #65–#68 passed; current candidate CTest not run.
 
 ## 1. Exact ownership and test inventory
 
