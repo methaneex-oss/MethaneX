@@ -8,7 +8,7 @@
 
 ## 1. Candidate/donor registration
 
-| Frozen graph | Executable targets | CTest registrations | Exact-name unregistered targets |
+| tests/CMakeLists subdirectory only | Executable targets | CTest registrations | Exact-name unregistered targets |
 |---|---:|---:|---|
 | Candidate | 45 | 45 | 0 |
 | Donor | 71 | 70 | 3 |
@@ -101,4 +101,17 @@ A further hostile consistency check found an unresolved count mismatch:
 - The available job-log payload is truncated at the beginning: test names #10–#71 are visible, but tests #1–#9 are not. No workflow artifact containing generated CTestTestfile.cmake or a complete LastTest.log was attached to the run.
 - core/cpp/CMakeLists.txt blob 33197f92141a241ff0546af1bf81fbf177a1f3ab only exposes add_subdirectory(tests) under BUILD_TESTING; no additional literal add_test was found in that file. tests/CMakeLists.txt has no function/macro or include statement that obviously accounts for a generated extra test.
 
-Do not silently reconcile 70 source registrations with 71 executed tests. The 70 count is an exact static count of literal add_test invocations in this file; 71/71 is the actual CI summary. The identity/origin of the 71st CTest test remains OPEN pending a complete CTest log or generated CTestTestfile.cmake from the exact e737cae7 build. The prior 71 executable / 70 CTest source-table values remain as source-extraction facts, not a fully reconciled runtime graph.
+Do not silently reconcile 70 source registrations with 71 executed tests. The 70 count is an exact static count of literal add_test invocations in this file; 71/71 is the actual CI summary. The 71st CTest test was not represented in this file; it is registered by a parent-level included CMake script. See the resolved reconciliation below. The 71 executable / 70 CTest values remain correct for this subdirectory only, not for the full donor graph.
+
+ 
+### Parent-level CMake inclusion resolves the 71st CTest test — 2026-11-28
+
+The previous count discrepancy is now resolved by inspecting the parent CMake file and the included script:
+- Candidate core/cpp/CMakeLists.txt blob c51816888e1bddb7bc00c59e72529524e27a0717 has include(CTest) and add_subdirectory(tests) under BUILD_TESTING (lines 77–79); it does not include affective_planning.cmake.
+- Donor core/cpp/CMakeLists.txt blob bc264ce7b4ae489404ca03ea6d9676d0330a6a56 adds include(${CMAKE_CURRENT_SOURCE_DIR}/tests/affective_planning.cmake) after add_subdirectory(tests) (lines 79–82).
+- The included script core/cpp/tests/affective_planning.cmake is donor blob e3a52416b2538791a93666e5124b1f34ad1b082a. It adds jarvis_affective_planning_suite and its add_test registration.
+- The donor tests/CMakeLists subdirectory contributes 71 executable targets / 70 CTest registrations. The parent include contributes one executable / one CTest registration. The complete donor graph is therefore 72 executable targets / 71 CTest registrations.
+- The candidate tests/CMakeLists contributes 45 executable targets / 45 CTest registrations, and the candidate parent has no additional affective_planning include; complete candidate graph remains 45/45.
+- The successful historical CI's test #1 is jarvis_affective_planning_suite, exactly the parent-included test. Tests #2–#71 are represented by the subdirectory registrations.
+
+This reconciles the 71/71 CI summary with the CMake graph. The prior "71st test unknown" finding is CLOSED for the inspected donor/alternate graph. The broader 40-blob historical CMake cohort still requires per-variant parent-CMake inclusion analysis; this reconciliation applies to the frozen candidate, frozen donor and e737 alternate refs listed here.
