@@ -78,3 +78,14 @@ Stage A remains NOT STARTED / HELD. No source baseline selection, donor adoption
 **PLANNING CONSOLIDATION AND SCOPE FREEZE: BUILDER-COMPLETED, ACCEPTANCE OF THIS DOCUMENTATION CHANGE PENDING REQUIRED INDEPENDENT REVIEW AND PROJECT DIRECTOR.**
 
 **FOUNDATION GATES: NOT CLOSED.** DF-02, DF-09, DF-11 governance compliance, terminal inventory and DF-12 remain outstanding. No claim that every phase/gate is closed is supportable.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+Since the snapshot above, four exact-source adjudication reports have been added to PR #203:
+- Cognitive runtime variants: perception/action/feedback/goal-learning integration and queue/callback/fairness gaps.
+- Cognitive cycle variants: perception, memory retrieval, prediction resolution, reasoning-to-simulation, affect/attention, contextual transfer and consequence learning; resource/context/concurrency validation gaps.
+- Process-isolation variants: exact 15-blob source cohort; executable-resolution and pre-fork differences; safety-control enforcement/test gaps.
+- Restored Brain API ownership: exact 20-blob cohort; candidate translation-unit unregistered versus donor integration; AST/API/consumer/authority reconciliation remains open.
+
+Each report was fetched back from the branch and blob SHA verified. These are bounded source/test/CMake inspections; no runtime source was modified and no native build or CTest was executed. PR #203 remains draft/open/unmerged, with 48 documentation files changed at the last terminal inventory. It has no submitted reviews or inline threads. DF-02 remains open; DF-09 and DF-11 remain blocked; DF-12 remains reserved for Project Director acceptance. This update is not a final terminal inventory, independent review, or acceptance.
