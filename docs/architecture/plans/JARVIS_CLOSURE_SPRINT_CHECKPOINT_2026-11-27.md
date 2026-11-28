@@ -347,3 +347,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back and SHA-verified `2aae2721d216bd71c4ee3a4fc8e935d61c52c3ac`.
 - All 40 distinct test-CMake blobs fetched and feature-extracted: targets 17–74, CTest 17–73; 16 versions have Release assert-preservation flags; 16 versions show at least one target/CTest name mismatch. Mismatches include persistence train/verify aliases and workflow-only long-run targets, so counts are not defect counts.
 - Frozen candidate is 45/45; donor 71/70, with three unmatched executable names explained by persistence aliases and two long-run targets. No build/test execution. Semantic ownership, exact test/workflow reachability and provenance remain open.
+
+
+## Immediate continuation — core library-CMake cohort (2026-11-28)
+
+- Added `DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `17e7a318bac4766d31b8d8bff712439471a40e98`.
+- All 22 distinct CMake blobs inventoried. Candidate has 57 source entries; donor 64. Seven donor-only TUs are Brain restored API/action execution/prediction context/affective planning plus affective/developmental models. Three historical donor-shaped 64-entry variants are noted but not authority-classified.
+- Source-list evidence only; native build/link/tests not executed. Exact historical source/options diff, consumer graph, provenance/retention remain open.
