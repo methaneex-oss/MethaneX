@@ -2,7 +2,7 @@
 
 **Scope:** exact candidate/donor association model, causal model and phase-5 behavioral test contract.  
 **Candidate:** PR #192 frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`. **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** donor adds contradiction-aware co-change learning, contextual graph inference, shared-context concept candidates, generalized matches and prediction feedback; causal model maintains transition-derived hypotheses. Public model methods lack finite-value validation. Source/test inspection only; no tests executed.
+**Disposition:** donor adds contradiction-aware co-change learning, contextual graph inference, shared-context concept candidates, generalized matches and prediction feedback; causal model maintains transition-derived hypotheses. Public model methods lack finite-value validation. Historical e737 donor association/causal test #24 passed in five CI jobs; current candidate CTest not run.
 
 ## 1. Exact inventory
 
@@ -60,7 +60,7 @@ The donor test suite checks low-reliability evidence, contradiction weakening, m
 | Finite/invalid input validation | Gap identified |
 | Causal identification/negative controls | Open |
 | Full owner/consumer/authority/retention | Open |
-| Native tests | Not executed |
+| Native tests | Historical e737 test #24 passed in five jobs; current candidate CTest not run |
 | DF-02 | OPEN |
 
 Association and causal-learning paths remain **OPEN / NO AUTHORITY DECISION**. No source selected/adopted/retired/deleted; no DF-02 closure, Foundation clearance or Stage A authorization.
