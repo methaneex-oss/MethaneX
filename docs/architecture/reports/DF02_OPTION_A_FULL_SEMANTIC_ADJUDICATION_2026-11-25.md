@@ -1261,3 +1261,8 @@ Report: [DF02 Core Test-CMake Variant and Registration Adjudication](DF02_CORE_C
 ## 19. Core library-CMake 22-blob variant adjudication (2026-11-28)
 
 Report: [DF02 Core C++ Library-CMake Variant Adjudication](DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md), verified SHA `17e7a318bac4766d31b8d8bff712439471a40e98`. Candidate 57-source CMake vs donor 64-source graph; seven donor-only translation units (restored Brain API/action execution/prediction context/affective planning plus affective/developmental models). All 22 exact historical CMake blobs and source-entry counts were inventoried. No build/test execution; historical source/options, semantic owner, consumer and authority/retention closure remain open.
+
+
+## 20. Evolution-Brain integration test 24-blob adjudication (2026-11-28)
+
+Report: [DF02 Evolution-Brain Integration Test Variant Adjudication](DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md), verified SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`. Exact 24 test blobs and tip-owner counts inventoried. Frozen candidate suite is 46 lines/7 asserts; donor is 298 lines/97 asserts. Donor adds evaluation-before-adoption, legacy replay/rollback protection, prediction feedback, failed-gate cases, manual rollback, canary/restart persistence and identity checks. The isolation helper uses a simple shell fixture, not hostile evaluator verification; fixed journal paths and crash/concurrency coverage remain open. Source-only; no tests executed.
