@@ -125,3 +125,84 @@ The e737cae7 historical alternate branch used the same donor CMake blobs:
 - core/cpp/tests/affective_planning.cmake e3a52416b2538791a93666e5124b1f34ad1b082a.
 
 The CI run's first test is jarvis_affective_planning_suite, supplied by the parent include; tests #2–#71 are the tests subdirectory registrations. Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer, and Brain ThreadSanitizer #957 each report 71/71 passed. This is actual execution evidence for the historical alternate graph. The current PR #203 candidate remains 45/45 CTest registrations at source level, but no current-branch CTest run is claimed.
+
+ 
+### Full 71-test execution matrix — historical e737cae7 branch
+
+Source-to-target mapping was parsed from the exact donor CMake source arguments and cross-checked against the candidate test-name set. The test outcomes below come from Brain CI #1826 native-brain job 123987534801. All 71 passed. "Candidate registration" is CTest-name presence in frozen candidate CMake; it is not a claim that the candidate source implementation is semantically equivalent.
+
+| # | CTest name | Source file | Candidate CTest registration | e737 CI |
+|---:|---|---|---|---|
+| 1 | jarvis_affective_planning_suite | affective_planning_suite.cpp (parent include) | No | Passed |
+| 2 | jarvis_brain_contract | brain_contract.cpp | Yes | Passed |
+| 3 | jarvis_brain_10_suite | brain_10_suite.cpp | Yes | Passed |
+| 4 | jarvis_brain_deep_suite | brain_deep_suite.cpp | Yes | Passed |
+| 5 | jarvis_brain_failure_suite | brain_failure_suite.cpp | Yes | Passed |
+| 6 | jarvis_self_state_suite | self_state_suite.cpp | Yes | Passed |
+| 7 | jarvis_perception_pipeline_suite | perception_pipeline_suite.cpp | Yes | Passed |
+| 8 | jarvis_world_state_suite | world_state_suite.cpp | Yes | Passed |
+| 9 | jarvis_memory_architecture_suite | memory_architecture_suite.cpp | Yes | Passed |
+| 10 | jarvis_knowledge_memory_phase3_suite | knowledge_memory_phase3_suite.cpp | Yes | Passed |
+| 11 | jarvis_world_self_model_phase4_suite | world_self_model_phase4_suite.cpp | Yes | Passed |
+| 12 | jarvis_self_model_health_phase4_suite | self_model_health_phase4_suite.cpp | Yes | Passed |
+| 13 | jarvis_attention_architecture_suite | attention_architecture_suite.cpp | Yes | Passed |
+| 14 | jarvis_attention_learning_brain_suite | attention_learning_brain_suite.cpp | No | Passed |
+| 15 | jarvis_reasoning_architecture_suite | reasoning_architecture_suite.cpp | Yes | Passed |
+| 16 | jarvis_decision_planning_architecture_suite | decision_planning_architecture_suite.cpp | Yes | Passed |
+| 17 | jarvis_action_model_architecture_suite | action_model_architecture_suite.cpp | Yes | Passed |
+| 18 | jarvis_learning_loop_architecture_suite | learning_loop_architecture_suite.cpp | Yes | Passed |
+| 19 | jarvis_goals_architecture_suite | goals_architecture_suite.cpp | Yes | Passed |
+| 20 | jarvis_cognitive_cycle_suite | cognitive_cycle_suite.cpp | Yes | Passed |
+| 21 | jarvis_cognitive_cycle_stress_suite | cognitive_cycle_stress_suite.cpp | Yes | Passed |
+| 22 | jarvis_cognitive_runtime_suite | cognitive_runtime_suite.cpp | Yes | Passed |
+| 23 | jarvis_cognitive_runtime_learning_integration_suite | cognitive_runtime_learning_integration_suite.cpp | No | Passed |
+| 24 | jarvis_association_causality_phase5_suite | association_causality_phase5_suite.cpp | Yes | Passed |
+| 25 | jarvis_judgment_intent_strategy_phase6_suite | judgment_intent_strategy_phase6_suite.cpp | Yes | Passed |
+| 26 | jarvis_action_authorization_suite | action_authorization_suite.cpp | Yes | Passed |
+| 27 | jarvis_action_execution_phase7_suite | action_execution_phase7_suite.cpp | Yes | Passed |
+| 28 | jarvis_learning_adaptation_phase8_suite | learning_adaptation_phase8_suite.cpp | Yes | Passed |
+| 29 | jarvis_self_testing_healing_phase9_suite | self_testing_healing_phase9_suite.cpp | Yes | Passed |
+| 30 | jarvis_prediction_feedback_phase10_suite | prediction_feedback_phase10_suite.cpp | Yes | Passed |
+| 31 | jarvis_cognitive_workspace_runtime_suite | cognitive_workspace_runtime_suite.cpp | Yes | Passed |
+| 32 | jarvis_cognitive_trigger_suite | cognitive_trigger_suite.cpp | Yes | Passed |
+| 33 | jarvis_capability_registry_suite | capability_registry_suite.cpp | Yes | Passed |
+| 34 | jarvis_capability_evaluator_suite | capability_evaluator_suite.cpp | Yes | Passed |
+| 35 | jarvis_capability_execution_suite | capability_execution_suite.cpp | Yes | Passed |
+| 36 | jarvis_evolution_experiment_suite | evolution_experiment_suite.cpp | Yes | Passed |
+| 37 | jarvis_evolution_experiment_coordinator_suite | evolution_experiment_coordinator_suite.cpp | Yes | Passed |
+| 38 | jarvis_evolution_experiment_runner_suite | evolution_experiment_runner_suite.cpp | Yes | Passed |
+| 39 | jarvis_evolution_trials_suite | evolution_trials_suite.cpp | Yes | Passed |
+| 40 | jarvis_evolution_learning_suite | evolution_learning_suite.cpp | Yes | Passed |
+| 41 | jarvis_evolution_scheduler_suite | evolution_scheduler_suite.cpp | Yes | Passed |
+| 42 | jarvis_evolution_monitor_suite | evolution_monitor_suite.cpp | Yes | Passed |
+| 43 | jarvis_evolution_canary_controller_suite | evolution_canary_controller_suite.cpp | Yes | Passed |
+| 44 | jarvis_evolution_brain_integration_suite | evolution_brain_integration_suite.cpp | Yes | Passed |
+| 45 | jarvis_memory_learning_evolution_persistence_suite | memory_learning_evolution_persistence_suite.cpp | No | Passed |
+| 46 | jarvis_evolution_opportunity_orchestration_suite | evolution_opportunity_orchestration_suite.cpp | Yes | Passed |
+| 47 | jarvis_process_isolation_suite | process_isolation_suite.cpp | Yes | Passed |
+| 48 | jarvis_process_isolation_syscall_suite | process_isolation_syscall_suite.cpp | Yes | Passed |
+| 49 | jarvis_evolution_adoption_journal_suite | evolution_adoption_journal_suite.cpp | Yes | Passed |
+| 50 | jarvis_developmental_learning_suite | developmental_learning_suite.cpp | No | Passed |
+| 51 | jarvis_affective_state_suite | affective_state_suite.cpp | No | Passed |
+| 52 | jarvis_affective_decision_learning_suite | affective_decision_learning_suite.cpp | No | Passed |
+| 53 | jarvis_affective_state_model_suite | affective_state_model_suite.cpp | No | Passed |
+| 54 | jarvis_affective_learning_suite | affective_learning_suite.cpp | No | Passed |
+| 55 | jarvis_affective_evidence_suite | affective_evidence_suite.cpp | No | Passed |
+| 56 | jarvis_affective_goal_outcome_suite | affective_goal_outcome_suite.cpp | No | Passed |
+| 57 | jarvis_affective_decision_suite | affective_decision_suite.cpp | No | Passed |
+| 58 | jarvis_affective_brain_decision_suite | affective_brain_decision_suite.cpp | No | Passed |
+| 59 | jarvis_cognitive_runtime_goal_feedback_suite | cognitive_runtime_goal_feedback_suite.cpp | No | Passed |
+| 60 | jarvis_developmental_brain_integration_suite | developmental_brain_integration_suite.cpp | No | Passed |
+| 61 | jarvis_goal_directed_cognition_suite | goal_directed_cognition_suite.cpp | No | Passed |
+| 62 | jarvis_goal_outcome_model_suite | goal_outcome_model_suite.cpp | No | Passed |
+| 63 | jarvis_experience_memory_test | experience_memory_test.cpp | No | Passed |
+| 64 | jarvis_brain_action_consequence_integration_suite | brain_action_consequence_integration_suite.cpp | No | Passed |
+| 65 | jarvis_developmental_training_environment_suite | developmental_training_environment_suite.cpp | No | Passed |
+| 66 | jarvis_developmental_environment_suite | developmental_environment_suite.cpp | No | Passed |
+| 67 | jarvis_developmental_world_suite | developmental_world_suite.cpp | No | Passed |
+| 68 | jarvis_developmental_world_integration_suite | developmental_world_integration_suite.cpp | No | Passed |
+| 69 | jarvis_dlt_001_trial | dlt_001_trial.cpp | No | Passed |
+| 70 | jarvis_dlt_002_persistence_train | dlt_002_persistence.cpp | No | Passed |
+| 71 | jarvis_dlt_002_persistence_verify | dlt_002_persistence.cpp | No | Passed |
+
+The frozen candidate registers 45 of these test names; 26 are donor/alternate-only registrations. The e737 CI run passed all 71 in the alternate graph. This is not a pass result for the frozen candidate's own 45-test graph. The 26 missing candidate tests are concrete behavioral-evidence gaps, not automatically runtime defects: each requires semantic review, ownership/authority adjudication, and Director decision before any adoption.
