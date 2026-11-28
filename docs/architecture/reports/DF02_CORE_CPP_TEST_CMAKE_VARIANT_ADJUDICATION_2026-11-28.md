@@ -218,3 +218,13 @@ This prevents attributing the test #45 pass to the wrong donor variant. The 71-t
 
  
 The historical e737 CI result must be attributed to the alternate 33197 parent CMake, not frozen donor bc264. The frozen donor parent CMake itself was not independently built in this sprint. Candidate parent CMake c518 was built by PR #203 Native Brain Build jobs #2861/#2866/#2869 (Configure + Build only; no CTest).
+
+ 
+### Candidate CTest-name presence is not test-source equivalence
+
+The 45 "Yes" entries in the matrix mean only that the candidate CMake registers the same CTest name. They do not prove that the candidate test source or implementation is the same as the e737 donor/alternate test. Exact counterexamples:
+- CTest #4 brain_deep_suite: candidate test blob ca8e7012... is 68 assert expressions; donor/e737 blob 1314123e... is 260.
+- CTest #9 memory_architecture_suite: candidate test blob 2a9eb061... is 27 assertions; donor/e737 quarantine blob ecabc6af... is 70.
+- CTest #30 prediction_feedback_phase10_suite: candidate test blob e72da8e7... is 73 lines / 12 assertions and contains neither predict_with_context nor apply_prediction_feedback; donor/e737 blob 973350e9... is 1,339 lines / 371 assertions and exercises contextual prediction/feedback.
+
+Thus all 71 e737 CI passes are valid for the exact alternate branch sources in that run, but none should be relabeled as a current candidate test pass. Candidate CTest-name registration alone is insufficient to establish behavioral coverage; each common test path requires exact blob comparison and semantic contract comparison.
