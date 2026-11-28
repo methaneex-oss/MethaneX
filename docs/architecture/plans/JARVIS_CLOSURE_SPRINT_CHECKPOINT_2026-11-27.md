@@ -742,3 +742,22 @@ Latest PR #203 state before this checkpoint update:
 - OPEN, DRAFT, UNMERGED; mergeable metadata returned false on the latest read (it has varied across reads; no merge/rebase/retarget action taken).
 - 59 changed files, 361 commits; zero reviews and inline threads; combined status has no entries.
 - No workflow run returned for this latest docs-only head; no current-branch CTest.
+
+ 
+## Continuation — memory numeric integrity and evidence-confidence semantic gap (2026-11-28)
+
+Latest memory report blob: d8eba541ba464990e7cd06ea7a3ed91e0de045d1.
+
+Further Builder self-review identified:
+- Non-finite salience/confidence inputs can survive std::clamp as NaN in both frozen candidate and donor. Scores then become NaN; donor partial_sort comparator can violate strict-weak-ordering requirements. Event serialization/deserialization does not reject non-finite doubles. No NaN/Inf tests exist.
+- Memory journal and metadata use raw native object representations (native-endian uint64, int64, double, bool) with no explicit cross-architecture encoding contract. Same-host restart does not prove portable persistence.
+- Memory's mutex is instance-local, not a path-scoped or OS file lock. Two Memory instances/processes sharing a journal can race; metadata snapshot uses a fixed .tmp path. No concurrent-writer test exists.
+- The donor memory test distinguishes operational reliability=0.1 from evidence_reliability=0.9 and expects confidence >0.8; donor code prioritizes evidence_reliability. Candidate memory.cpp only reads reliability, and candidate's 27-assert memory test lacks this case. Donor 70-assert test passed CTest #9 in five quarantine-branch CI jobs.
+- Missing/corrupt .meta sidecar silently loses learned tier/salience/confidence/consolidation and defaults records to Episodic. The donor and alternate tests explicitly expect Episodic after sidecar deletion; this is a degraded mode, not learned-state reconstruction.
+
+These are audit findings only; no runtime source was changed due the active audit/evidence-only authorization.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint update: 08e4f19a08452be43b1651829ce056707741b000.
+- OPEN, DRAFT, UNMERGED, mergeable=true; 59 changed files, 365 commits; no reviews or inline threads; combined status has no entries.
+- No workflow run returned for this latest docs-only head; no current-branch CTest.
