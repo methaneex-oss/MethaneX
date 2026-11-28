@@ -102,3 +102,53 @@ These are audit findings/risks; no implementation change was authorized or made.
 | Runtime path and DF-02 | OPEN |
 
 **Disposition:** `core/cpp/src/cognitive_runtime.cpp` remains **OPEN / NO AUTHORITY DECISION**. No implementation selected, adopted, retired or deleted. This report does not close DF-02, Foundation gates, or authorize Stage A.
+
+ 
+## Additional donor-only integration suites and historical execution evidence — 2026-11-28
+
+The previous bounded test inventory named the runtime learning-integration and goal-feedback suites but did not enumerate their complete contracts or attach actual test-run evidence. The following exact recheck closes that evidence gap for the historical alternate branch only.
+
+### Exact donor-only test contracts and CMake reachability
+
+1. **cognitive_runtime_learning_integration_suite.cpp**
+   - Blob: 656de56b1368e40afb090778a7a5504ab4208056; 326 lines / 88 assert expressions.
+   - Candidate path is absent. Donor CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers executable at lines 64–66 and CTest at line 244.
+   - The test drives a real CognitiveRuntime worker with deterministic test callbacks. It asserts action execution and observed consequence feedback; resolution of the action-consequence prediction; prediction-error metric, affective learning and episodic outcome memory; a subsequent choice change from calibrate to wait; context isolation between runtime-learning-context and orchard-irrigation-context; adaptation after an environment-regime reversal within a bounded 40-observation loop; strategy persistence across restart; a real post-restart decision using the restored preference; and a no-feedback control proving verified execution alone does not create a developmental preference.
+2. **cognitive_runtime_goal_feedback_suite.cpp**
+   - Blob: 15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f; 83 lines / 22 assert expressions.
+   - Candidate path is absent. Donor CMake registers executable at lines 172–174 and CTest at line 280.
+   - It verifies asynchronous goal-progress and goal-completion feedback, durable goal_progress/goal_complete events, regression rejection during worker assimilation, feedback_failed accounting, and goal reconstruction after restart.
+3. **brain_action_consequence_integration_suite.cpp**
+   - Blob: 7616082579d53e3579cae8e87895bdb3dadba66f; 316 lines / 95 assert expressions.
+   - Candidate path is absent. Donor CMake registers executable at lines 187–189 and CTest at line 285.
+   - It verifies harmful-surprise attention, unknown versus zero consequence, observed consequence despite verification failure, exact context in action_outcome, strategy change, affect/attention/forecast persistence, and next-observation forecast resolution.
+
+Candidate core test CMake blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 does not register these three donor-only suites. Donor core test CMake registers all three. The donor test graph is therefore materially richer; test-source presence alone must not be conflated with candidate reachability.
+
+### Historical execution evidence for exact runtime/test blobs
+
+The alternate branch fix/evolution-authenticated-replay-final-20261030 at HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1 contains the exact runtime and test blobs listed above:
+- cognitive_runtime.cpp cf00acb6abd52308343f3a0e7016e6173b945603;
+- cognitive_cycle.cpp f191dd610d6cbe1621756c35e7c13af2054a7266;
+- brain_action_execution.cpp 3b66bafb438cd28790e6f25611b96c86f1eff05c;
+- action_execution.cpp af5bed6cec9ed1309b24ed3d50241fb4c0d33bff;
+- cognitive_runtime_learning_integration_suite.cpp 656de56b1368e40afb090778a7a5504ab4208056;
+- cognitive_runtime_goal_feedback_suite.cpp 15a6bdffe37ae7df6c625ea9737fda4c0bf08a7f;
+- brain_action_consequence_integration_suite.cpp 7616082579d53e3579cae8e87895bdb3dadba66f;
+- tests/CMakeLists.txt cbfd1fde52fffa6eeac025da2b7ddcb5ab493261.
+
+These exact suites were compiled and passed in the post-fix historical CI:
+- Brain CI #1826: native-brain and sanitizer jobs; test #23 (runtime learning integration), #59 (goal feedback), #64 (action consequence) all Passed in both jobs.
+- JARVIS Brain Tests #975: brain and sanitizer jobs; tests #23, #59 and #64 all Passed in both jobs.
+- Brain ThreadSanitizer #957: TSAN job; tests #23, #59 and #64 all Passed.
+- Each of those five test jobs reported 71/71 tests passed (100%).
+
+This is real behavioral evidence for those exact source/test/CMake blobs on the e737cae7 alternate branch. It is not a test result for PR #203, not a result for frozen donor HEAD c1da222e, and not a baseline/adoption decision. The earlier PR #97 donor HEAD itself returned no workflow runs/status in the connector.
+
+### Capability interpretation and limits
+
+The runtime integration suite demonstrates a fixture-driven closed loop with observed outcomes, context-conditioned learning, regime-shift adaptation and persistence that changes a later action decision. That is materially stronger evidence than API presence or a simple worker-queue test. It still uses two predefined candidate actions and deterministic callbacks; it does not demonstrate autonomous task discovery, open-world perception, real hardware execution, robust multi-agent coordination, or held-out generalization across a broad task distribution. The test's polling windows are bounded (approximately one second for result/feedback waits), and the environment model is synthetic.
+
+The historical CI proves that these tests passed under native, sanitizer and ThreadSanitizer jobs in that branch. It does not certify external adapter safety or eliminate the runtime's previously identified stop/drain feedback-loss, queue-starvation, cancellation, idempotency and restart-reconciliation risks.
+
+No source was changed. Current PR #203 remains documentation-only and the cognitive-runtime path remains OPEN.
