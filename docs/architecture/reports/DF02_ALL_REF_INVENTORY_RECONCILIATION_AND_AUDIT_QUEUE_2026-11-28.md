@@ -122,3 +122,39 @@ Consequences:
 - Retention/retirement evidence is incomplete: no per-path retention rationale, archival owner, deprecation decision or deletion authority is recorded. Do not delete or prune historical variants.
 
 This is a governance/evidence gap, not permission for the Builder to invent owners or make retention decisions. The Builder can continue technical semantic adjudication and prepare evidence-backed recommendations; owner assignment, authority and retention acceptance remain explicit Director decisions.
+
+ 
+## Builder coverage map for the 159-path inventory — 2026-11-28
+
+The following high-priority cohorts have bounded source/test/build evidence reports. Status is deliberately PARTIAL: a report or passing historical test does not close provenance, owner, authority, retention, reverse-consumer and independent-verification requirements for every path.
+
+| Inventory path/cohort | Durable evidence report | Builder status |
+|---|---|---|
+| core/cpp/tests/CMakeLists.txt; core/cpp/CMakeLists.txt | DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md; DF02_CORE_CPP_LIBRARY_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md | PARTIAL — candidate/donor/alternate graphs and test-source identities reconciled for inspected refs; all 40 CMake variants not yet semantically adjudicated |
+| core/cpp/src/brain.cpp; core/cpp/include/jarvis/core/brain.hpp; core/cpp/src/brain_restored_api.cpp | DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md | PARTIAL — API/TU ownership and donor deep test evidence; full reverse-consumer and authority closure open |
+| core/cpp/src/process_isolation.cpp; core/cpp/include/jarvis/core/process_isolation.hpp; process-isolation tests | DF02_PROCESS_ISOLATION_VARIANT_ADJUDICATION_2026-11-27.md; DF02_PROCESS_ISOLATION_CHILD_LIFECYCLE_AND_CONTROL_ADJUDICATION_2026-11-27.md | PARTIAL — candidate/donor/alternate semantics and e737 CI evidence; adversarial lifecycle/control tests and owner/authority open |
+| core/cpp/src/cognitive_runtime.cpp; cognitive_runtime.hpp; runtime integration tests | DF02_COGNITIVE_RUNTIME_VARIANT_AND_CLOSED_LOOP_ADJUDICATION_2026-11-27.md | PARTIAL — closed-loop test contract and historical e737 CI; current candidate CTest and broader semantic/generalization evidence open |
+| core/cpp/src/memory.cpp; core/cpp/include/jarvis/core/memory.hpp; memory tests | DF02_MEMORY_RETRIEVAL_CONSOLIDATION_VARIANT_ADJUDICATION_2026-11-28.md; DF02_MEMORY_LEARNING_EVOLUTION_PERSISTENCE_INTEGRATION_VARIANT_ADJUDICATION_2026-11-27.md | PARTIAL — retrieval, journal variants, CI and failure-path defects; recovery failure, metadata degradation, nonfinite scoring, portable serialization and multi-writer integrity open |
+| core/cpp/src/association_model.cpp; core/cpp/src/causal_model.cpp; phase-5 suite | DF02_ASSOCIATION_CONTEXTUAL_GENERALIZATION_AND_CAUSAL_HYPOTHESIS_ADJUDICATION_2026-11-27.md | PARTIAL — exact donor test passed historically; intervention/counterfactual causal validity and nonfinite input validation open |
+| core/cpp/src/brain_prediction_context.cpp; phase-10 suite | DF02_CONTEXTUAL_PREDICTION_NUMERIC_CALIBRATION_ADJUDICATION_2026-11-27.md | PARTIAL — contextual donor test passed historically; candidate test source differs; calibration/generalization/contamination tests open |
+| core/cpp/src/developmental_learning.cpp; developmental environment suites | DF02_DEVELOPMENTAL_LEARNING_CONTEXT_TRANSFER_ADJUDICATION_2026-11-27.md | PARTIAL — context-bounded synthetic learning tests passed historically; open-world transfer and safety remain unproven |
+| core/cpp/src/affective_state.cpp; affective learning/state tests | DF02_AFFECTIVE_STATE_APPRAISAL_LEARNING_ADJUDICATION_2026-11-27.md | PARTIAL — historical donor suites passed; calibration, evidence-floor and long-duration stability remain open |
+| core/cpp/src/attention.cpp; attention learning tests | DF02_ATTENTION_SALIENCE_FEEDBACK_PERSISTENCE_ADJUDICATION_2026-11-27.md | PARTIAL — historical donor test passed; fairness/starvation, numeric robustness and calibrated utility remain open |
+| core/cpp/src/action_execution.cpp; brain_action_execution.cpp; action consequence tests | DF02_ACTION_EXECUTION_AND_CONSEQUENCE_PERSISTENCE_ADJUDICATION_2026-11-27.md | PARTIAL — historical action/consequence tests passed; persistence failure semantics and real actuator safety remain open |
+| core/cpp evolution controller, runner, coordinator, adoption journal, orchestrator, safety and associated headers/tests | DF02_EVOLUTION_TEST_CONTRACT_ADJUDICATION_2026-11-27.md; DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md; DF02_EVOLUTION_CONTROLLER_TRANSACTION_AND_ROLLBACK_ADJUDICATION_2026-11-27.md; DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md; related coordinator/runner/adoption reports | PARTIAL — candidate/donor/third-lineage test contracts and historical e737 execution; full trust-key lifecycle, durable failure atomicity, branch ownership and authority open |
+| engineering/cpp/include/jarvis/engineering/message_bus.hpp; engineering/cpp/src/message_bus.cpp; agent.hpp; coordinator.cpp | DF02_ENGINEERING_MESSAGE_BUS_TASK_LEDGER_AUTHORITY_ADJUDICATION_2026-11-28.md | PARTIAL — exact candidate/donor API and authority deltas inspected; runtime adoption/retirement prohibited and not decided |
+
+No cohort above is marked COMPLETE or CLOSED. The 159-path CSV remains the structural inventory; this table is a partial coverage index, not a substitute for a 159-row semantic/authority closure ledger.
+
+## Remaining high-priority queue after these bounded cohorts
+
+Continue with the highest-dispersion paths not yet covered by a complete exact report, especially:
+- engineering/cpp/CMakeLists.txt and engineering/cpp/tests/CMakeLists.txt (all 35 variants and their parent-level includes);
+- core/cpp/src/evolution_controller.cpp and evolution_experiment_runner.cpp, including all 19/17 variants, source-to-header contract and exact alternate CI;
+- core/cpp/include/jarvis/core/evolution_experiment.hpp, evolution_experiment_runner.hpp and evolution_experiment_coordinator.hpp;
+- core/cpp/src/evolution_adoption_journal.cpp and evolution_orchestrator.cpp, including replay, atomicity and recovery failure paths;
+- core/cpp/src/cognitive_cycle.cpp and associated headers/tests, including execution ordering, feedback timing and exception paths;
+- core/cpp/src/knowledge.cpp and core/cpp/include/jarvis/core/knowledge.hpp;
+- remaining source/test paths in the 159 inventory not listed above.
+
+For each next cohort, preserve the same discipline: immutable candidate/donor/alternate blobs; exact API/implementation/test source comparisons; CMake/TU/symbol reachability; behavioral tests and current-vs-historical CI attribution; reverse consumers; branch-tip provenance; explicit owner/authority/retention status; and independent scrutiny only after Builder self-review. No source path is closed by mention in this table.
