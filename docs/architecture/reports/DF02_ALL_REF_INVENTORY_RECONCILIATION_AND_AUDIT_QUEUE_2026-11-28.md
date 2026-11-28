@@ -81,3 +81,18 @@ This queue establishes reproducible priorities and exact counts only. DF-02 Phas
 ## New completed bounded source cohort
 
 - `core/cpp/src/memory.cpp` and `core/cpp/include/jarvis/core/memory.hpp`: [Memory Retrieval/Consolidation Adjudication](DF02_MEMORY_RETRIEVAL_CONSOLIDATION_VARIANT_ADJUDICATION_2026-11-28.md), SHA `e844e219fe292255a8f2d87c7136708086e46470`. Exact candidate/donor/test/CMake review. Donor retrieval/consolidation improvements and durability/migration risks recorded. Source-only; no path closure.
+
+ 
+## Reconciled 159-path inventory table — 2026-11-28
+
+A repository-resident path-level inventory has now been created from the SHA-verified discovery artifact:
+- File: docs/architecture/ledgers/DF02_159_PATH_INVENTORY_2026-11-28.csv
+- Verified Git blob SHA: 61e0d6c572e6d27a24f2f1cb29d3614f7284ed0a
+- 159 data rows, 159 unique donor paths, no duplicate paths.
+- Same-path candidate statuses: 95 DIVERGENT, 63 CANDIDATE_ABSENT, one IDENTICAL.
+- 96 rows have a candidate blob SHA (95 divergent + one identical); all 159 donor blob SHAs are syntactically valid 40-character Git blob identifiers.
+- Each row carries donor/candidate blob SHA where present, same-path status, distinct blob-version count across tips, present/absent tip counts, donor-identical/divergent tip counts, symbol-match count and exact-path-reference count.
+
+The ledger is a reconciled **path inventory**, not the completed semantic/authority closure ledger. It does not include every alternate blob SHA or every branch name inline; the original artifact's 798 path/blob ownership rows and full branch/tip provenance remain the source for those details. All 159 paths remain semantically OPEN until exact variants, declarations/definitions, compiled/test/workflow reachability, reverse consumers, owner/authority, provenance and retention are individually adjudicated. Candidate absence is not retirement authority; same-path identity is not semantic equivalence.
+
+The 159-row CSV was fetched back and validated after writing: 160 lines including header, 159 unique data paths, expected status counts, valid donor SHA shape and no duplicate paths. This validation is structural only; it does not independently re-derive every row against all 798 ownership records.
