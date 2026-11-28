@@ -108,3 +108,17 @@ Concrete counterexample:
 - The inventory artifact's full-path reference matches for this donor path contain documentation references but omit these CMake basename references.
 
 Accordingly, exact_path_reference_rows in the 159-path CSV is a lower-bound literal-reference count, not a proof of non-reachability when zero. A full closure pass must parse CMake source arguments/target registration, workflow commands, scripts, generated-source rules and include relationships by normalized basename/path. The path inventory remains useful for blob identity and variant ownership, but build reachability is still OPEN.
+
+ 
+### Explicit code-owner / authority / retention evidence check — 2026-11-28
+
+The repository has no root CODEOWNERS, .github/CODEOWNERS, root OWNERS or .github/OWNERS file (all four exact GitHub contents lookups returned 404). The active governance document assigns Project Director, Project Builder, Independent Reviewer and Blind Fresh Tester responsibilities, but does not assign per-path subsystem maintainers or authorize donor baseline/retention decisions.
+
+Consequences:
+- The 798 path/blob ownership rows and 213 branch-tip inventory establish content provenance and branch reachability, not human code ownership or authority.
+- Branch names, tip counts, commit authorship and source similarity are not evidence that a branch author is the technical owner or that a source variant is approved.
+- No per-path owner can be responsibly inferred from the current repository evidence. The code-owner field is therefore UNASSIGNED / NOT EVIDENCED for the 159-path corpus.
+- Authority to select a baseline, adopt/retire/delete a donor, retain historical branches or change protected/review state remains with the Project Director under the accepted governance.
+- Retention/retirement evidence is incomplete: no per-path retention rationale, archival owner, deprecation decision or deletion authority is recorded. Do not delete or prune historical variants.
+
+This is a governance/evidence gap, not permission for the Builder to invent owners or make retention decisions. The Builder can continue technical semantic adjudication and prepare evidence-backed recommendations; owner assignment, authority and retention acceptance remain explicit Director decisions.
