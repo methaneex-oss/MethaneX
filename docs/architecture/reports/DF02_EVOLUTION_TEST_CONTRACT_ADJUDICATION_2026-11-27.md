@@ -3,7 +3,7 @@
 **Scope:** three frozen candidate/donor evolution test suites, exact content only.  
 **Candidate:** PR #192 `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
-**Disposition:** test-contract divergences established; neither implementation selected; tests not executed.
+**Disposition:** test-contract divergences established; neither implementation selected. The frozen candidate/donor test variants were not executed as those exact refs; six third-lineage alternate test variants passed historical e737cae7 CI.
 
 ## Exact blobs reviewed
 
@@ -75,3 +75,22 @@ Donor additionally checks explicit adoption-journal state and ordered Evaluated/
 ## Boundary
 
 This is source-level test-contract adjudication for three exact files, not a runtime result, independent review, complete 159-path/544-blob semantic closure, source-baseline decision, donor adoption, retirement, DF-02 closure, gate acceptance, or Stage A authorization. No runtime/source files were modified.
+
+ 
+## Third-lineage alternate evolution tests and historical CI — 2026-11-28
+
+The e737cae7f907696ef787a4e85b0dee3a739d71b1 branch does not use either the frozen candidate or frozen donor source blob for six common evolution CTest names. It uses these third-lineage alternate test blobs:
+| CTest | Test source blob | Lines | Assertions |
+|---|---|---:|---:|
+| #49 jarvis_evolution_adoption_journal_suite | ad3c58179cc150d303f5bcbbfa50beb40a1327c6 | 109 | 53 |
+| #44 jarvis_evolution_brain_integration_suite | b065a301397c83bcb460d43fa36421a7bebc9060 | 445 | 105 |
+| #43 jarvis_evolution_canary_controller_suite | 4b867af52e11a15e9d867a35cdefbf9c83333a2a | 128 | 36 |
+| #37 jarvis_evolution_experiment_coordinator_suite | 04507a590b23d64bc03bb94d3c3d76c87092305d | 101 | 17 |
+| #38 jarvis_evolution_experiment_runner_suite | 3338273fe972292c1ea25035ba45fed1be3da378 | 262 | 43 |
+| #46 jarvis_evolution_opportunity_orchestration_suite | a4ece67094aa89f659254e01f226af49ae02f91e | 155 | 26 |
+
+All six tests passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; each of the five jobs reports 71/71. These are execution results for the alternate e737 test blobs, not the frozen candidate or donor blobs in the first table.
+
+The six alternate variants exercise adoption-journal replay, Brain integration, canary state/rollback, coordinator orchestration, process-isolated runner attestation and opportunity orchestration. Their existence demonstrates a third historical lineage, not authority to replace either frozen variant. The six test source SHAs are distinct from both candidate and donor SHAs; the CMake report records the exact three-way identity comparison.
+
+No implementation or test source was changed. The frozen candidate/donor test variants still require exact native execution and independent semantic review. No baseline decision, donor adoption or retirement is implied.
