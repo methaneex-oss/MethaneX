@@ -361,3 +361,10 @@ Two new bounded source-inspection reports were committed and fetched back for co
 - Added `DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`.
 - Exact 24 test blobs inventoried. Candidate integration suite 46 lines/7 assertions; donor 298/97. Donor contract adds durable evaluation gate, legacy replay/rollback protection, prediction feedback, manual rollback, invalid experiment cases, canary persistence and restart reconstruction.
 - Isolation helper is a simple shell fixture, not an adversarial sandbox proof. Fixed fixture paths and missing crash/concurrency/failure injection remain open. CMake registration inspected; no native build/CTest executed.
+
+
+## Immediate continuation — Brain.cpp 35-blob cohort (2026-11-28)
+
+- Added `DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md`; fetched-back SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`.
+- All 35 exact blobs and tip counts inventoried. Candidate method extraction is 48 names including constructor (47 excluding); donor 9 including constructor (8 excluding), reconciling earlier counts. Candidate broad implementation vs donor's split TU ownership compared.
+- Candidate CMake leaves seven donor split TUs unregistered; donor registers them. Reverse consumers (665 symbol-match candidates/34 exact-path candidates), AST/signature, historical semantic variants, authority/retention remain open. No build/test execution.
