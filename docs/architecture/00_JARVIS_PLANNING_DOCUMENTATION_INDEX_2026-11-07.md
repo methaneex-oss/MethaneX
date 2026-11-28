@@ -190,3 +190,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Brain.cpp 35-blob exact variant/ownership adjudication](reports/DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md): exact inventory, method extraction reconciliation and candidate/donor CMake split; reverse consumers/AST/authority remain open. SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`.
 
 - [Brain.hpp 21-blob API and Memory authority adjudication](reports/DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md): candidate const-only Memory access vs donor-added mutable accessor, exact header blob inventory and public API delta; report SHA `4fd4762d172020b5ba791055479fdb843ae5095e`. High-priority authority impact remains open.
+
+- [Cognitive runtime feedback/action variant adjudication](reports/DF02_COGNITIVE_RUNTIME_FEEDBACK_ACTION_VARIANT_ADJUDICATION_2026-11-28.md): exact frozen candidate/donor header/source/tests/CMake; donor's feedback/action/perception integration and runtime starvation/shutdown/failure gaps; blob SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`. Source-only; no path closure.
