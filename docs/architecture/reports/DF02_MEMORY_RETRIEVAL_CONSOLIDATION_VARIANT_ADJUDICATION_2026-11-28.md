@@ -91,3 +91,26 @@ Three additional memory.cpp lineages were compared. They are distinct designs an
 The framed V2 design is directionally stronger because it supplies explicit resynchronization boundaries and accidental-corruption detection. It is not ready for adoption: FNV64 is not cryptographic, the test suite does not exercise framing, incomplete-tail and migration failure paths, and no CI evidence exists. It also lacks fsync/fdatasync and parent-directory durability guarantees; a successful stream flush/rename is not proof of power-loss durability. The preserve-corrupt-tail and quarantine variants have actual corruption tests and CI, but remain legacy unframed formats.
 
 No implementation was copied or adopted. The candidate remains the frozen candidate. These branches are evidence-only; baseline, retention and adoption remain Director decisions.
+
+ 
+## Self-review finding: recovery truncation errors are ignored — 2026-11-28
+
+A further failure-path review found a concrete persistence defect shared by all three journal recovery variants:
+- Preserve-corrupt-tail fffb6c0ad6e43cb0b93b873969449e569b3d3f5e line 84 calls filesystem::resize_file(journal_path_, valid_end, error) and does not check error.
+- Frozen donor quarantine ab42bba1d32d6f48d091787491c72294a4a55bb5 line 61 makes the same unchecked call after copying the suffix to .corrupt.
+- Framed V2 88314ed3a43c765f8a69255ace97afb7df1a6c5e line 140 makes the same unchecked call after detecting an incomplete trailing frame.
+
+The Memory header blob 5401d5bd236cca8d3a93f2815164a7734cf6990f exposes void load() and has no recovery-required/read-only status. In the legacy variants, Memory::persist at fffb line 158 / ab42 line 135 opens the journal for append without checking that load-time truncation succeeded. In the framed variant, persist validates the V2 magic but does not validate that the existing file ends at the last verified frame.
+
+Failure consequence (source-level, not dynamically fault-injected): if quarantine/backup succeeds but resize_file fails, the object still finishes construction with only the verified prefix in memory while the on-disk journal retains the corrupt suffix. A later append can succeed at the file end; the next restart stops at the corrupt record and cannot reach the newly appended event. This can produce silent loss of post-recovery events. In the framed variant, an incomplete trailing frame can similarly remain before newly appended frames if truncation fails, making subsequent frames unreachable on replay.
+
+Required corrective behavior for any future implementation:
+1. Treat truncate failure as a hard recovery failure.
+2. Keep the Memory instance read-only/recovery-required; reject append until the journal is repaired or an explicit recovery action succeeds.
+3. Preserve a durable recovery artifact and report the exact path/size/hash.
+4. Add fault-injection tests for quarantine/backup failure, resize_file failure, append after failed recovery, and restart replay.
+5. For framed V2, add corruption tests for bad checksum, invalid length, invalid payload, incomplete header/frame, interior bad frame followed by valid frame, and legacy migration failure.
+
+Additional forensic issue: the frozen donor quarantine code opens the fixed .corrupt path with ios::app. Repeated recoveries append multiple unreadable suffixes without a generation header or manifest; this is less traceable than the preserve-corrupt-tail branch's collision-avoiding .recovery-backup.N filenames. The current tests remove .corrupt before each run and do not test repeated quarantine generations.
+
+This defect was found during Builder self-review. It is not fixed because the active authorization prohibits runtime/source implementation changes. It remains an explicit technical blocker; the passing CI tests exercise successful recovery, not failure of the recovery operation itself.
