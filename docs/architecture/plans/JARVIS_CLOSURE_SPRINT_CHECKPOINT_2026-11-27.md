@@ -459,3 +459,69 @@ The next bounded task is the remaining highest-value unresolved cohort from the 
 
 ### Next bounded Builder task
 Continue exact semantic/authority adjudication from the 159-path inventory. Do not duplicate existing focused reports. Prioritize remaining high-dispersion cohorts by exact historical blob grouping, source/API lineage, reverse-consumer context, production/test/workflow reachability, provenance, authority and retention. In parallel, re-fetch and record the completion state of workflow run #2859. Do not hand off to independent roles until the complete Builder-resolvable scope and full self-review are finished.
+
+ 
+## Continuation run — 2026-11-28: 159-path inventory, authenticated replay lineage and self-review
+
+### Live state snapshot before this checkpoint write
+- Repository: methaneex-oss/MethaneX.
+- PR #203: OPEN, DRAFT, UNMERGED; mergeable=true at latest metadata read. Mergeability is metadata, not acceptance.
+- Branch: docs/df02-option-a-full-semantic-adjudication-20261125.
+- Base: docs/pr192-independent-findings-response-20261125 at a56526ae5896dfd06293ccab64289fd75507dda5.
+- HEAD immediately before this checkpoint update: 712430c6d4e902127223a38383891f32b02b1727.
+- PR #203 changed files: 59; commits: 331; all modifications in this continuation are documentation/evidence only.
+- Reviews: zero submitted; inline review threads: zero; combined commit status entries: none.
+- Governance freshly re-fetched: docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md, blob f5827c552f36f4647339b3f8dfb38956d146c570. EBT-01 was not found as a standalone repository file; Director-provided EBT-01 principles continue to govern the Builder method.
+- No source/runtime implementation changes; no baseline selection, donor adoption/retirement/deletion, merge, rebase, retarget, cherry-pick, training, deployment, Stage A or gate/Director decision.
+
+### New durable evidence and exact blobs
+1. Reconciled 159-path inventory:
+   - docs/architecture/ledgers/DF02_159_PATH_INVENTORY_2026-11-28.csv
+   - Blob SHA 61e0d6c572e6d27a24f2f1cb29d3614f7284ed0a.
+   - Fetch-back structural validation: 160 lines including header; 159 unique paths; zero duplicate paths; 95 DIVERGENT, 63 CANDIDATE_ABSENT, one IDENTICAL; all 159 donor SHA strings valid; 96 candidate SHAs present.
+   - Rows include donor/candidate blob, same-path status, distinct blob versions, tip presence/absence, donor-identical/divergent tip counts, symbol-match count and exact-path-reference count.
+   - The file is a path inventory only. All 159 paths remain OPEN for semantic/API, TU/build/test/workflow, reverse-consumer, owner/authority, provenance and retention adjudication. Full 798 path/blob ownership and branch/tip details remain in workflow artifact 14956148301, ZIP SHA-256 9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38.
+2. All-ref inventory report updated with the CSV and its limitations: docs/architecture/reports/DF02_ALL_REF_INVENTORY_RECONCILIATION_AND_AUDIT_QUEUE_2026-11-28.md, blob SHA 8793c832825fbc92e261fa2dde1a79c9660ed313.
+3. Restored Brain API report expanded with candidate-present reverse-consumer counts, exact CognitiveCycle/Runtime call sites, candidate/donor TU ownership split, brain_deep_suite assertion contract (68 candidate vs 260 donor), CMake reachability, and MCU/human-cognition references: docs/architecture/reports/DF02_RESTORED_BRAIN_API_OWNERSHIP_VARIANT_ADJUDICATION_2026-11-27.md, blob SHA bcb95e072d0337185c8e61970686764dbbe1ca4a.
+4. Engineering bus/task-ledger report corrected after Builder self-review; agent.hpp identity and test-source inventory corrected; seven donor-ledger integrity gaps and exact line anchors recorded: docs/architecture/reports/DF02_ENGINEERING_MESSAGE_BUS_TASK_LEDGER_AUTHORITY_ADJUDICATION_2026-11-28.md, blob SHA 708259ddcccea6f7ddf492b7ad837e7d480cabc2.
+5. Authenticated trust lifecycle report expanded with historical alternate branch source/test/CMake and exact CI evidence: docs/architecture/reports/DF02_EVOLUTION_TRUST_LIFECYCLE_EXACT_COMPARISON_2026-11-27.md, blob SHA 7423cb9cfbb08f9541774ac3d3c7471c9bd17bf4.
+6. Evolution event replay report updated with the authenticated alternate replay fix and still-open rollback key-binding gap: docs/architecture/reports/DF02_EVOLUTION_EVENT_REPLAY_AUTHORITY_BOUNDARY_ADJUDICATION_2026-11-27.md, blob SHA 3954bff258fe9dbf4eb7fb4b409f988b98a02a0f.
+7. PR #203 description reconciled with current report blobs, 159-path inventory, historical alternate branch test evidence and current-branch test limitations. PR remains draft/open/unmerged.
+
+### Authenticated alternate branch: verified historical regression and correction
+- Earlier branch HEAD cc00afaebb4da58eb75993f0386eaab333e8282d had replay-time code that recreated private isolation attestation from journal metadata. The integration test at evolution_brain_integration_suite.cpp lines 418–421 failed in Brain CI #1824, JARVIS Brain Tests #973 and Brain ThreadSanitizer #955. All test jobs reported 70/71; the runner suite itself passed.
+- Follow-up alternate branch HEAD e737cae7f907696ef787a4e85b0dee3a739d71b1 removed metadata-driven re-attestation and required the original experiment instance to pass the safety gate.
+- Post-fix Brain CI #1826, JARVIS Brain Tests #975 and Brain ThreadSanitizer #957 passed 71/71 in each test job. The separate Native Brain Build #1200 was configure/build only.
+- This is verified evidence on a historical alternate branch, not on current PR #203 and not authority to adopt it.
+- Remaining alternate-lineage gaps: FNV-1a 64-bit executable/artifact fingerprints, no key rotation/revocation or trusted-evaluator deregistration, path-based execv TOCTOU, unchecked setpgid/dup2, basename-based interpreter denylist, and rollback replay not binding event key to the adoption record / latest active adoption.
+
+### Current-branch build and execution limits
+- PR #203 Native Brain Build #2861 passed Configure + Build on commit cb7c78a6d25ebe2d49f4897f960e745619788367; it did not run CTest.
+- PR #203 Native Brain Build #2866 passed Configure + Build on commit 0807e9e7f336f530c20477297e9c9f97a25551e8; it did not run CTest.
+- PR #203 Native Brain Build #2869 on HEAD 712430c6d4e902127223a38383891f32b02b1727: Configure passed; Build was IN_PROGRESS at the last read. Re-fetch before relying on its result.
+- A local clone attempt failed because the execution environment could not resolve github.com (DNS); no local CMake/CTest execution was claimed.
+- The 71/71 results above belong only to the historical alternate branch e737cae7, not PR #203.
+
+### Builder self-review and five review lenses for this continuation slice
+The Builder repeated source fetches, exact blob checks, report fetch-back checks, structural CSV checks and CI-log inspection. Two earlier report defects were corrected: the current agent.hpp candidate identity wording and the incomplete task-ledger test-source inventory. The new donor task-ledger risks were recorded, not silently fixed, because runtime implementation is outside authorization.
+
+1. **Correctness / semantic consistency:** Completed for the edited report claims and 159-row CSV structure. Verified unique path count, status counts, blob identifier shape, candidate/current source identity for inspected paths, and exact report anchors. Remaining limitation: the CSV was structurally checked after write but not fully re-derived row-by-row against all 798 ownership rows; all 159 semantic dispositions remain OPEN.
+2. **Build / tests / reproducibility:** Partial. Current candidate branch has Configure + Build successes on #2861 and #2866; #2869 was still running. No current-branch CTest, sanitizer or behavioral test execution. Historical authenticated branch has five post-fix test jobs at 71/71 and earlier 70/71 failures at cc00afa. Local clone blocked by DNS.
+3. **Security / trust / provenance / persistence:** Source-reviewed donor task-ledger parser/replay/durability gaps and authenticated-evaluator key/fingerprint/process-isolation/rollback gaps. Historical replay regression was fixed and tests passed. No adversarial runtime testing, fuzzing, crash injection or key lifecycle testing was run. Pass incomplete for full project.
+4. **Architecture / cognition / MCU benchmark:** Compared Brain API ownership and actual CognitiveCycle/Runtime call paths with Global Workspace, predictive processing and active-inference literature. The advanced donor/alternate has more credible context retrieval, forecast feedback, goal selection and outcome learning, but no proof of general autonomy, multimodal real-world control or held-out transfer. MCU JARVIS remains fictional and aspirational. Pass incomplete for full project.
+5. **Hostile reviewer:** Checked for donor promotion, stale report SHAs, unsupported test claims, unverified CI attribution, missing source anchors, PR-state drift and premature gate/closure language. Corrected stale report metadata and kept all alternate evidence separate from current PR #203. Remaining hostile-review target is the complete 159-path corpus and all report cross-references; not ready for independent handoff.
+
+### Handoff decision
+The Builder has made substantial bounded progress and self-reviewed these changes, but the full Builder-resolvable DF-02 scope is not clear. Do **not** create or submit Independent Reviewer / Blind Fresh Tester requests yet. Continue the remaining per-path semantic and authority adjudication, cross-report reconciliation, and five full-scope self-review passes. Only after the Builder can defend the complete authorized scope should the two in-repository requests be created. Then wait for their evidence and present only genuine Project Director decisions.
+
+### Status after this continuation
+- DF-02: OPEN.
+- Path inventory: 159/159 reconciled as metadata; 0/159 semantically/authority closed by this inventory alone.
+- Phase 2: PARTIAL.
+- Phase 3: NOT COMPLETE.
+- Phase 4: NOT COMPLETE.
+- DF-09: BLOCKED pending genuine blind-reader execution/CLEAR.
+- DF-11: BLOCKED under accepted governance.
+- DF-12: Project Director decision pending.
+- No baseline selected; no donor adopted/retired/deleted; no Gate A/B clearance; no Foundation acceptance; no Stage A.
+- Actual elapsed execution time: not measurable from available runtime. This checkpoint does not claim ten real hours.
