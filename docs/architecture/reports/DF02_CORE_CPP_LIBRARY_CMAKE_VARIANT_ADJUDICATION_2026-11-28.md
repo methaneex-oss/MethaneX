@@ -4,7 +4,7 @@
 **Candidate:** frozen PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0`.  
 **Donor:** PR #97 HEAD `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`.  
 **Evidence:** discovery artifact #14956148301, re-downloaded and SHA-256 reverified `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`.  
-**Disposition:** source-list and build-owner differences confirmed; exact historical versions enumerated; no native build performed.
+**Disposition:** source-list and build-owner differences confirmed; candidate CMake blob built on PR #203 docs-only branch; alternate 64-source CMake variant built/tested on e737cae7; frozen donor CMake at c1da222 not built; no current-branch CTest.
 
 ## 1. Candidate/donor source ownership
 
@@ -84,3 +84,24 @@ Source entries span 25–64 across variants; 22 blobs are distinct content versi
 | DF-02 | OPEN |
 
 **Disposition:** core library-CMake cohort is source-inventoried, not semantically/authority closed. No baseline, donor adoption, source retirement/deletion, runtime implementation or Stage A authorization.
+
+ 
+## Build evidence and exact donor-versus-alternate CMake dependency diff — 2026-11-28
+
+The CMake blob used by historical alternate branch e737cae7 is 33197f92141a241ff0546af1bf81fbf177a1f3ab. It is **not** the frozen PR #97 donor CMake blob (bc264ce7b4ae489404ca03ea6d9676d0330a6a56), although both contain the same 64 production source entries. Exact unified diff shows only the OpenSSL dependency additions:
+- find_package(OpenSSL REQUIRED COMPONENTS Crypto);
+- target_link_libraries(jarvis_core PUBLIC OpenSSL::Crypto).
+
+This is semantically necessary for the alternate authenticated-evidence runner, which uses OpenSSL HMAC-SHA-256. The frozen donor runner variant does not use that HMAC implementation and its frozen CMake has no OpenSSL link. The e737 alternate branch therefore combines the donor-shaped 64-TU source set with a distinct dependency-wiring variant; do not relabel it as the frozen donor CMake.
+
+Exact build evidence:
+- **Candidate CMake:** PR #203 branch CMake SHA c51816888e1bddb7bc00c59e72529524e27a0717, byte-identical to frozen candidate. Native Brain Build #2861, #2866 and #2869 passed Configure + Build on docs-only commits containing that unchanged source/CMake tree. These jobs did not run CTest.
+- **Alternate 64-TU CMake:** blob 33197f92141a241ff0546af1bf81fbf177a1f3ab built successfully in Native Brain Build #1200; Brain CI #1826 and JARVIS Brain Tests #975 also built and ran the 71-test graph; Brain ThreadSanitizer #957 built and ran tests.
+- **Frozen donor CMake:** blob bc264ce7b4ae489404ca03ea6d9676d0330a6a56 at c1da222 was not independently built in this sprint. Do not attribute e737 build/test results to this exact CMake blob.
+
+Current/frozen graph counts:
+- Candidate c518: 57 production translation units; candidate test CMake 45 executables / 45 CTest registrations.
+- Frozen donor bc264: 64 production translation units; donor test subdirectory 71 executables / 70 CTest registrations plus parent affective_planning include adding one executable/test = 72/71.
+- Alternate e737 CMake 33197: same 64 production source entries, OpenSSL Crypto dependency, same donor test CMake and parent affective_planning script = 72/71.
+
+This is source/build evidence, not an adoption recommendation. The exact 64-source list is shared, but dependency ownership, runner variant and authority lineage differ. No baseline selection or source transplant is authorized.
