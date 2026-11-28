@@ -73,3 +73,7 @@ Priority uses **version dispersion + lexical consumer-match volume + exact-path 
 ## 4. Current disposition
 
 This queue establishes reproducible priorities and exact counts only. DF-02 Phase 2 remains PARTIAL; Phases 3 and 4 remain NOT COMPLETE; no 159-path semantic/authority closure ledger is complete. No implementation selected, adopted, retired, deleted or baseline-authorized. Stage A remains HELD.
+
+## New completed bounded source cohort
+
+- `core/cpp/src/cognitive_runtime.cpp` / `core/cpp/include/jarvis/core/cognitive_runtime.hpp`: [Cognitive Runtime Feedback/Action Adjudication](DF02_COGNITIVE_RUNTIME_FEEDBACK_ACTION_VARIANT_ADJUDICATION_2026-11-28.md), blob SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`. Exact candidate/donor and CMake/test comparison. Donor feedback/action/perception additions and fairness/shutdown/callback risks identified. Source inspection only; no tests. The path remains OPEN.
