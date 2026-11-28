@@ -188,3 +188,5 @@ Stage A remains **NOT STARTED / HELD**. No source baseline selection, donor adop
 - [Evolution-Brain integration test 24-blob adjudication](reports/DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md): exact test blob inventory and candidate/donor lifecycle assertions; donor expands evaluation/replay/rollback/canary persistence contract; no execution. SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`.
 
 - [Brain.cpp 35-blob exact variant/ownership adjudication](reports/DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md): exact inventory, method extraction reconciliation and candidate/donor CMake split; reverse consumers/AST/authority remain open. SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`.
+
+- [Brain.hpp 21-blob API and Memory authority adjudication](reports/DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md): candidate const-only Memory access vs donor-added mutable accessor, exact header blob inventory and public API delta; report SHA `4fd4762d172020b5ba791055479fdb843ae5095e`. High-priority authority impact remains open.
