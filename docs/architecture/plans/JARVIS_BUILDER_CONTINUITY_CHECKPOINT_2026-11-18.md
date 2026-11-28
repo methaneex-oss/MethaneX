@@ -2022,3 +2022,224 @@ The exact-current audit verifies 70 Markdown files, 474 destinations, 180/180 lo
 The live run did not need line-range API fallback because those pages rendered normally; six historical issue-comment anchors used the canonical API. The workflow does not claim browser viewport proof or automated semantic relevance.
 
 The terminal inventory is now the only remaining PR #192 branch-file write. It must be one commit ahead / zero behind, change only the inventory path, retain all 71 changed paths in the complete successor tree, and be followed by fresh all-ref and link-audit workflows on the exact successor. No later branch-file write is permitted.
+
+
+## 2026-11-25 — Project Director decisions and full DF-02 Option A reopening
+
+**Director decisions:** D1= A (DF-09 exact frozen-HEAD Blind Fresh Reader CLEAR pursued); D2= B (reopen full Option A semantic adjudication); D3= A (retain DF-11 waiver and provenance residual, no reconstruction effort); D4= B (prepare clean consolidation PR only after DF-09 CLEAR; no merge authorization).
+
+The prior bounded DF-02 closeout is superseded as the closure standard. DF-02 is **REOPENED / OPEN**. Stage A remains held; donor adoption, source-baseline selection, runtime implementation, integration and merge remain unauthorized.
+
+### Evidence corpus acquisition — Phase 0 complete
+
+- Frozen PR #192 review target: `caf87986dfea7aca75728818651c8687e9f5faf0`.
+- All-ref workflow: `45470173876`; artifact `14956148301`; SHA-256 `9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38`. Downloaded ZIP hash independently matches.
+- Scan: 254 branch refs / 213 unique tips; 159 donor paths; 95 divergent / 63 absent / 1 identical candidate path; 798 path/blob ownership rows.
+- Version reconciliation: 639 non-donor versions = 96 candidate blobs + 544 alternate historical blobs across 88 donor paths. Full exact contents are available for the 159 donor blobs, 96 candidate blobs and 544 alternate blobs. Six donor blobs missing from the scan corpus were retrieved directly by exact SHA.
+- Discovery: 40,048 symbol-match rows, 1,946 exact-path-reference rows, 1,227 blob/path/category records. Discovery remains lexical evidence, not semantic dependency proof.
+- Detailed report: `docs/architecture/reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md`.
+
+### Current progress and next bounded objective
+
+Phase 0 evidence acquisition/integrity is complete. Phase 1 semantic path/version ledger is in progress; Phase 2 consumer/dependency review and Phase 3 duplicate-owner/authority/retention reconciliation are not complete. Start with high-dispersion CMake, Brain/runtime, restored API, evolution lifecycle, coordinator/runner and associated registered integration tests; then cover remaining path cohorts. Record exact blob SHA, branch/tip owners, meaningful semantic delta, consumer role, build/test evidence, ownership, provenance and disposition. Do not claim a path or cluster closed from lexical presence, absence, same-path comparison or report cross-reference alone.
+
+DF-09 remains blocked pending actual blind fresh-reader CLEAR against the frozen target. DF-11 waiver remains retained with provenance residual. DF-12 acceptance and consolidation preparation are Director-reserved until DF-09 CLEAR. No merge is authorized.
+
+
+### 2026-11-25 — Phase 1 high-dispersion cluster triage
+
+Initial exact-content triage covered seven clusters: `brain.cpp` (33 alternate blobs), `brain.hpp` (19), `brain_restored_api.cpp` (18), `evolution_controller.cpp` (17), `evolution_brain_integration_suite.cpp` (22), core test CMake (38), engineering test CMake (33). They represent 180 alternate versions beyond donor/candidate, not 180 independent owners; branch-tip/blob clustering is required.
+
+Observed material variation: evolution lifecycle variants differ in isolation attestation, trusted evaluator/evidence validation, simulated-evidence allowance, adoption replay and compensation/rollback policy; brain runtime/header variants differ in sequence-bound prediction, feedback resolution, memory consolidation, affective/developmental integration and API surfaces; restored API source is not candidate CMake-registered; test CMake variants change registration materially. All 40 core test-CMake versions have distinct target sets. Frozen candidate registers 45 executable/CTest targets versus donor 71 executable targets/70 CTest entries; donor-only test families are evidence of coverage gaps, not an adoption decision. Engineering CMake has 35 versions / 30 unique target sets and divergent architectures.
+
+These findings are documented in report §9. This is triage only. No variant is adjudicated as accepted owner/successor, retired, adopted or selected baseline. Full semantic review of the 544 alternate blob cohort and consumer/authority matrix remains OPEN.
+
+
+### 2026-11-25 — Deeper exact-source comparison for DF-02 Phase 1
+
+- All 17 alternate `EvolutionController::record_evaluation` implementations were extracted and grouped into six policy families: four minimal journal paths; one outcome-re-evaluation/incomplete-validation version; two finite-value/no-isolation versions; five strict isolation+outcome versions; four isolation+simulation-policy versions; and one trusted-evaluator/evidence version. This demonstrates material validation and adoption-trust variation across historical blobs. None is selected as canonical.
+- Candidate `brain.cpp` and `brain_restored_api.cpp` have 40 overlapping Brain method definitions by name. Candidate CMake does not register the restored API translation unit, so this is currently dormant, not a live duplicate-symbol failure. Donor source split has nine Brain definitions in `brain.cpp`, 62 in restored API and zero overlap; donor CMake registers the latter. API ownership split must be resolved before any adoption/integration.
+- All 40 core test-CMake blobs have distinct target sets. Frozen candidate: 45 executable/CTest targets. Donor: 71 executable targets, 70 CTest registrations. Donor-only targets include affective/developmental suites, action-consequence, runtime-learning/goal-feedback, goal-outcome, memory-learning-evolution, ExperienceMemory and DLT trial/long-run. Engineering test-CMake: 35 versions / 30 unique target sets.
+- Report §10 captures exact findings and scope limits. Phase 1 remains OPEN; the 544 alternate blob cohort and all consumer/authority disposition work remain incomplete.
+
+
+### 2026-11-25 — Evolution test-history slice
+
+Exact donor/candidate/alternate blobs were reviewed for three test paths:
+- `evolution_brain_integration_suite.cpp`: 22 alternates; candidate 7 assertions, donor 97, alternates 68–154. Donor scenarios include legacy adoption/rollback replay, evaluation gate negatives, canary rollback, duplicate-evaluation idempotency, persistence/restart and transition replay.
+- `evolution_experiment_runner_suite.cpp`: 17 alternates; candidate 11, donor 17, alternates 13–43. Donor checks isolated attestation, simulated-run clearing, non-isolated rejection and invalid execution outcomes.
+- `evolution_canary_controller_suite.cpp`: 15 alternates; candidate 9, donor 36, alternates 35–42. Donor checks canary threshold/persistence and idempotent replay of evaluation/adoption/rollback journal transitions.
+
+Assertion totals are coverage indicators, not quality or semantic-equivalence scores. Alternate blobs require content/lineage clustering. Findings are in report §11. This slice advances exact behavioral-contract evidence but does not close the 544 alternate versions or DF-02.
+
+
+### 2026-11-25 — Cognitive-cycle, memory continuity and learning source review
+
+Additional exact-source triage covered five paths (28 alternate blobs): cognitive_cycle.cpp (8), memory.cpp (7), knowledge.cpp (6), developmental_learning.cpp (5), evolution.cpp (2).
+
+- Candidate cognitive-cycle source is 161 lines vs donor 776; five alternate versions include structured context, perception, attention/affect, sequence-bound prediction feedback, developmental context and goal-outcome assimilation. Three are earlier small prototypes.
+- Memory candidate vs donor differs in corrupt-tail handling (candidate truncates; donor quarantines before truncation), metadata schema/migration (candidate v1 vs donor v1/v2 with consolidation), append learned-tier/sequence updates, and memory consolidation. The donor journal remains legacy unframed/no-checksum; quarantine preserves unreadable suffix but does not solve framing.
+- Knowledge evidence API type differs; five of six alternates include finite-value/contradiction validation and assessment.
+- Developmental-learning implementation is absent from frozen candidate and present in donor; five alternate versions range 102–563 lines with finite validation, learning-rate and consolidation logic.
+- Evolution rollback differs: candidate resets previous value to baseline; donor preserves pre-rollback current value and exposes bounded restore_previous.
+
+Detailed report §13. This is source-level triage; no historical implementation is accepted, and DF-02 remains OPEN.
+
+
+### 2026-11-25 — Single-alternate source/test cohort
+
+The artifact contains 25 donor paths with exactly one alternate blob (12 production/header, 11 test, two workflows). Targeted exact source diffs found API reduction in causal/self-model headers; a candidate ActionAuthorizer bypass alternate; contradictory-association learning; clamped attention weights; fail-closed low-level evolution adoption; canary policy changed from worst-regression to mean-only; disputed-premise reasoning and confidence propagation; and capability-health removal. Two donor-only source paths—Brain action-execution feedback and contextual prediction—are not frozen-candidate integrations.
+
+The 11 single-alternate tests include candidate-absent affective evidence, cognitive-runtime goal-feedback, developmental-world integration and goal-directed cognition suites; present test paths also show coverage deltas. Counts are indicators, not equivalence. See report §14. This cohort is triaged, not fully authority-dispositioned.
+
+
+### 2026-11-25 — DF-02 cohort count correction
+
+Path overlap was reconciled. `evolution_brain_integration_suite.cpp` belongs to the seven high-dispersion cluster group and the test-history review, but is one path/22 alternate blobs. Cumulative Phase 1 targeted triage is **44 unique paths / 320 alternate blobs** (not the previous double-counted 343). The complete discovery cohort is 544 alternates; **44 paths / 224 blobs remain outside the targeted cohort**. Detailed report §15 lists next priority. This is a coverage/count correction, not semantic closure; DF-02 remains OPEN.
+
+
+### 2026-11-25 — Final targeted triage slice and cohort reconciliation
+
+The final targeted slice covered 22 path clusters / 62 alternate blobs: core CMake, evolution/cognitive API headers, six high-variation integration/persistence suites, engineering message bus/task-dispatch files, cognitive runtime, evolution safety, causal codec, adaptation, and remaining API headers/tests.
+
+Source-level findings: donor cognitive runtime adds bounded validated feedback, sequence-aware resolution, action adapter execute/verify/rollback/consequence observation and selected-plan execution; donor safety gate validates attestation/finite policy and recomputes outcome; typed/escaped causal codec avoids key-value delimiter collisions; adaptation uses relative error and first-observation calibration; engineering message bus adds backpressure and bounded dedup; task coordinator adds ledger-backed versioned claim/start/failure/result flow. Header/API differences include experiment attestation, journal compensation, per-experiment canary, sequence feedback, outcome utility, cognitive workspace representation/affect/action results and memory consolidation.
+
+Test cohort includes absent candidate suites for long-run, persistence, cognitive-runtime learning, action consequence and developmental learning; other donor suites add substantially more replay, persistence, learning and feedback scenarios. Test counts are not equivalence.
+
+Cumulative targeted coverage: **66 unique path clusters / 482 alternate blobs**. Discovery totals 88 paths / 544 alternates; **22 paths / 62 blobs remain untriaged**. Targeted triage does not mean individual semantic disposition. Detailed report §17. DF-02 remains OPEN.
+
+
+### 2026-11-25 — All-ref alternate version triage coverage reached
+
+The final 22 path clusters / 62 alternate blobs were targeted: cognitive runtime action/feedback, evolution safety, causal codec, adaptation, engineering coordinator and API headers, and 12 test cohorts. Exact source comparisons and branch/blob feature inventories are recorded in report §18. This brings Phase 1 **targeted triage coverage to all 88 donor-path clusters / 544 alternate blobs**. Coverage does not mean every version is semantically adjudicated or accepted; exact owner, API/consumer, behavior/build/test, provenance, authority, retention and retirement dispositions remain to be completed.
+
+**Next phase: Phase 2 reverse-consumer/dependency adjudication.** Reconcile 40,048 symbol candidates and 1,946 exact-path candidates by exact context/blob/ref owner. Classify compiled/runtime/test/build/workflow/docs/false positives; trace dependency and duplicate-owner edges; tie conclusions to behavior/build/test and authority. Phase 3 provenance/retention/authority and independent scrutiny remain open. DF-02 remains OPEN; no donor adoption or baseline selection.
+
+
+### 2026-11-25 — Phase 2 reverse-consumer first slice
+
+Candidate-tip graph: 3,441 lexical rows, 111 donor paths, 352 symbols, 193 consumer paths/blobs. Candidate production source registration has 62 C++ translation units (57 core + five engineering); 61 have candidate lexical matches, while `brain_restored_api.cpp` is the unregistered matched source and `brain_novelty.cpp` is the registered source without a donor-symbol match. Candidate test consumer graph has 49 test source paths with matches; 46 are registered and three are not: `brain_smoke.cpp`, `evolution_experiment_test.cpp`, `representation_suite.cpp`.
+
+Historical-only matches: 36,607 rows, 118 donor paths, 270 consumer paths, 942 blobs. All-ref: 40,048 rows / 502 symbols / 346 consumer paths / 1,135 blobs. Exact path refs: 1,946 rows, 159 donor paths, 76 consumer paths/101 blobs; 1,930 docs, 15 workflows, one other. These are documentation/workflow references, not code dependency edges.
+
+The report records candidate/historical specific APIs, lexical false positives, and scope. Phase 2 remains OPEN; exact contextual classification, full dependency/duplicate-owner and authority ledger still required.
+
+
+### 2026-11-25 — Candidate include reachability cross-check
+
+Recursive C++ include analysis over exact candidate blobs and CMake-registered source/test sets: 62 production TUs (57 core + 5 engineering); 61 matched header paths; 59 direct production headers and 61 recursively reachable; 46 registered tests (45 core + one engineering); 43 direct test headers and 60 recursively reachable. All 61 matched headers are reachable from production or registered tests. The orphan candidate `brain_restored_api.cpp` and three unregistered tests remain outside the compiled-source/test graph.
+
+This reconciles build reachability, not semantic dependency/ownership. Phase 2 remains OPEN for exact contextual classification of 352 candidate-present symbols and 73 high-specificity candidate-absent symbols, plus historical-only rows, branch owners and authority.
+
+
+### 2026-11-25 — High-specificity historical consumer triage
+
+Candidate-absent symbols: 150; conservative high-specificity prioritization set: 73. Selected exact historical contexts include `run_isolated_command` (416 rows/8 consumer paths), `has_valid_isolation_attestation` (74/11), canary observation/preview APIs, adoption validation/compensation/rollback/evaluation APIs, prediction feedback/status/context, developmental/affective learning and `EngineeringTaskLedger`, causal codec. Generic tokens remain lexical false-positive/ambiguous until context reviewed. Full table and sample context classifications are in report §22.
+
+This slice is prioritized evidence, not a dependency edge or ownership decision. Phase 2 remains OPEN; exact owner/ref/context, build/test reachability, duplicates and authority must be reconciled.
+
+
+### 2026-11-25 — Phase 2 exact consumer-owner cross-map
+
+- Candidate/historical consumer blob sets are exact: 193 candidate blobs + 942 historical-only = 1,135. Cross-mapped against donor path/blob ownership: 96 candidate + 691 historical exact same-path owner matches (787 total); 97 candidate + 251 historical consumer blobs outside exact donor-path ownership (348 total). Exact branch names/tip SHAs for all 1,135 blobs are in the artifact's occurrence metadata and 213-tip inventory.
+- Historical-only consumer rows concentrate: top five paths 41.8%, top 20 66.4%, top 50 81.7%. Top-20 path/blob/consumer matrix is documented in report §24.
+- 73 high-specificity candidate-absent symbols: 2,410 rows, 2,375 code-context after simple comments/string stripping. Family groups: evolution trust 13/1,217 rows; prediction-feedback 9/272; developmental-affective 29/627; engineering 5/51; causal/knowledge 5/96; other 12/147. Generic tokens are not dependency edges absent exact semantic context.
+- Candidate-present 352 symbols: 3,441 rows, 3,325 code-context, 116 comment/string-only. Candidate exact context and high-frequency generic false-positive examples documented.
+
+Phase 2 remains OPEN; all-ref consumer context, API/dependency/duplicate-owner and branch authority remain incomplete. Phase 3 provenance/retention/retirement remains open.
+
+
+### 2026-11-25 — High-specificity absent-consumer role/path concentration
+
+The 73 prioritized candidate-absent identifiers occur in 105 consumer paths / 44 donor paths: 1,651 source/header rows, 756 test rows, three workflow text rows; 2,375 code-context rows. Most concentrated historical consumers are `brain_restored_api.cpp`, `brain.cpp`, `brain.hpp`, `evolution_controller.cpp`, evolution integration/canary/runner suites and developmental/memory/cognitive paths. Donor identifiers are concentrated in evolution controller/API, developmental-learning and experiment headers/source. Report §27 provides counts and priorities.
+
+This is an exact-context priority queue, not dependency/owner closure. Phase 2 and DF-02 remain OPEN.
+
+
+### 2026-11-25 — Candidate/historical identifier specificity split
+
+Conservative token-shape filter across 502 matched identifiers: 157 high-specificity candidate-present symbols (638 rows, 126 consumers/52 donor paths) and 73 high-specificity candidate-absent symbols (2,410 rows/2,375 code-context). Remaining 272 symbols are lower-specificity/ambiguous; 195 are candidate-present (2,803 rows) and 77 historical-only. These prioritization buckets do not substitute for exact semantic classification.
+
+
+### 2026-11-25 — Candidate-present high-specificity API context
+
+157 higher-specificity candidate-present identifiers account for 638 rows across 126 consumer paths/52 donor paths; 627 are code-context and 11 comment/string-only. Roles: 389 source/header,199 test,49 workflow,one build. Strong names include EvolutionExperiment, CandidateAction, EvolutionModel/Proposal, ExperimentOutcome, EvolutionController, AttentionSignal, ActionAssessment, EvolutionSandbox, CognitiveCycleInput, CognitiveRuntime and AgentMessageBus. Remaining195 candidate-present low-specificity symbols account for 2,803 rows; exact semantic classification remains open. See report §29.
+
+
+### 2026-11-25 — Manual promotion of short historical API names and candidate-only set
+
+Token-shape filter is conservative: 77 lower-specificity absent symbols (2,104 rows) include 21 short but semantically meaningful names manually promoted (1,486 rows) such as `consolidate`, isolation attest/replay, restore/adoption, `observe_strategy`, `await_result`, `prediction_error`, `find_prediction`, `set_context`, `attention_policy`; remaining56 absent low-specific tokens618 rows. Candidate low-specific195 tokens2803 rows still require context review.
+
+Candidate/historical symbol sets: 352 candidate,497 historical,347 shared,five candidate-only (10 rows),150 historical-only. Candidate-only names: `clamp_unit`, `for_parameter`, `jarvis_cognitive_trigger_suite`, `perceive`, `should_rollback`; exact consumers/registration documented in report §31. These are lexical-only findings, not novel-capability or ownership conclusions.
+
+
+### 2026-11-25 — All candidate-absent identifiers context-partitioned
+
+The 150 candidate-absent identifiers are now partitioned: 73 higher-specificity (2,410 rows,2,375 code-context),21 manually prioritized lower-specificity APIs (1,486 rows,1,262 code-context/224 comment-string),51 additional code-context tokens (502 rows),five text-only tokens (116 rows). Total absent-token rows4,514. Context partition is not dependency/authority closure. Candidate-present352 identifiers remain semantically unclosed.
+
+
+### 2026-11-26 — Builder reverse-consumer evidence reconciliation
+
+Frozen artifact #14956148301 was re-downloaded and SHA-256 reverified (9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38). Reconciled the 502 identifier universe into 352 candidate-present (35,534 rows) and 150 candidate-absent (4,514 rows), with exact consumer path/blob and tip-owner dimensions. Selected high-value absent API contexts include isolated experiment execution, evaluation/adoption/rollback replay and validation, canary preview/observation, prediction feedback, developmental learning, durable task ledger and typed causal codec. Report §33 contains counts and selected exact contexts.
+
+This is a reproducible evidence/indexing step. It is not semantic dependency closure: all 1,135 consumer blobs and historical owner/capability/authority relationships remain subject to contextual disposition. DF-02 remains OPEN. No adoption, retirement, baseline, Stage A, merge or PR #192 target change.
+
+
+### 2026-11-26 — §33 arithmetic and scope self-review
+
+Builder independently recomputed §33 cohort/category sums from the frozen scan data: 352+150=502 identifiers; 35,534+4,514=40,048 rows. Category sums agree. Distinct consumer paths/blob/tip counts overlap and are not additive. Artifact digest matches. Three-file report/index/checkpoint change only; no frozen PR #192 files or runtime sources touched. Self-review is not independent review, DF-02 closure, DF-09 CLEAR or Director acceptance.
+
+
+## 2026-11-26 — Documentation/planning foundation freeze
+
+The existing planning lineage is consolidated into one package. To prevent repeated scope expansion and planning churn, **planning is frozen**: no competing roadmap, architecture rewrite or optional review loop is to be opened unless a material contradiction, required gate finding or Project Director decision necessitates it. This is an administrative freeze of planning scope, not engineering acceptance.
+
+Finalization snapshot: `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`. Planning index controlling block updated on the same PR #203 branch.
+
+- Whole-system PR #171: core 00/01 docs recorded as approved at exact revisions; package remains open/draft and full acceptance not claimed.
+- Brain Architecture PR #173: open/draft; whole-architecture acceptance and CF-26/CF-27 remain open.
+- Mechanism Specification PR #174: historical 34-scenario planning baseline accepted at exact SHA; current corrected 54-scenario proposal remains unaccepted; provenance/re-review residuals disclosed.
+- Implementation plan PR #175: non-operative, WP-00–WP-08/R0–R6/I0–I7 planning exists; Gate A NOT CLEARED, Gate B NOT PASSED, source baseline not selected.
+- Documentation Foundation PR #192: frozen SHA `caf87986dfea7aca75728818651c8687e9f5faf0`, open/divergent/non-mergeable. DF-02 full Option A remains OPEN; DF-06 only bounded mechanical scope closed; DF-07 final terminal sync required after branch writes; DF-09 blocked; DF-11 waiver retained; DF-12 Director-only.
+
+DF-02: Phase 0 COMPLETE; Phase 1 targeted triage COMPLETE for all 88 clusters/544 alternate blobs, but not per-version semantic closure; Phase 2 evidence indexing PARTIALLY COMPLETE, exact dependency/edge disposition remains open; Phase 3 duplicate capability/owner and provenance/authority/retention reconciliation NOT COMPLETE; Phase 4 closure ledger and independent scrutiny NOT COMPLETE. All numbers and boundaries are detailed in the report and finalization snapshot.
+
+Current branch PR #203 includes documentation-only report, planning index, checkpoint and foundation-finalization snapshot. No frozen PR #192 file or runtime source is modified. No donor version is selected/adopted/retired/deleted or baseline-authorized.
+
+**Overall:** FOUNDATION DOCUMENTATION CONSOLIDATED / PLANNING FROZEN / ACCEPTANCE PENDING / IMPLEMENTATION NOT AUTHORIZED. Do not report all gates closed. The remaining named blockers are DF-02 semantic closure, exact blind-reader DF-09 CLEAR, final terminal inventory/consistency verification, and Project Director DF-12 acceptance. Do not invent new gates absent a material finding or Director decision.
+
+
+## 2026-11-26 — canonical planning index and finalization state
+
+Planning/documentation consolidation is Builder-completed as an administrative scope-freeze task. The canonical index now contains one controlling status matrix; repeated prior status snapshots were preserved verbatim in the historical archive and labeled non-controlling. Do not append further duplicated live snapshots.
+
+- Canonical index: `docs/architecture/00_JARVIS_PLANNING_DOCUMENTATION_INDEX_2026-11-07.md`.
+- Historical archive: `docs/architecture/archive/JARVIS_PLANNING_INDEX_HISTORICAL_SNAPSHOTS_2026-11-26.md`.
+- Finalization snapshot: `docs/architecture/plans/JARVIS_DOCUMENTATION_PLANNING_FOUNDATION_FINALIZATION_2026-11-26.md`.
+- DF-02 full Option A report: `docs/architecture/reports/DF02_OPTION_A_FULL_SEMANTIC_ADJUDICATION_2026-11-25.md`.
+
+**Administrative scope freeze is not technical acceptance.** DF-02 phases 3 and 4 remain incomplete; DF-09 exact blind-reader CLEAR remains blocked; DF-12 remains Director-only. DF-11: D3 recorded the requested waiver retention, but accepted governance Rules 17.3 and 20.1 require genuine independent review and prohibit silent waiver. The status is BLOCKED until genuine independent review or a formal governance amendment resolves it. Builder self-review cannot substitute.
+
+The final terminal inventory/status synchronization must be performed after the last write and pinned to the exact branch HEAD. PR #203 remains draft documentation-only; no frozen PR #192 file or runtime source is changed. Stage A remains HELD; no merge, baseline, donor adoption or implementation authorized.
+
+
+## 2026-11-26 — DF-02 Phase 2 exact registration slice
+
+Builder checked exact frozen candidate PR #192 SHA `caf87986dfea7aca75728818651c8687e9f5faf0` against donor PR #97 SHA `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25` for core production/test CMake and selected cognitive/evolution source/test blobs. Evidence is appended in DF-02 report §37.
+
+- Production CMake registration: candidate 57 translation units vs donor 64; seven donor-only translation units (restored Brain API, Brain action execution/prediction context/affective planning, affective state/learning, developmental learning). Candidate restored API file exists but is not registered in candidate CMake. This resolves the false-positive duplicate-source interpretation for this selected source: lexical overlap does not imply a candidate build collision.
+- Test registration: candidate 45 executable targets/45 CTest entries; donor 71 executable targets/70 CTest entries. 26 donor-only targets, grouped in the report; none candidate-only in the exact lists.
+- Exact blob IDs and structural/behavioral deltas for eight production paths and four tests are recorded. Selected tests show material coverage divergence; counts do not establish donor quality or semantic equivalence.
+
+**Disposition:** selected registration/consumer edges adjudicated at frozen refs; Phase 2 remains PARTIAL. This does not close the 159-path matrix, all 1,135 consumer blobs, dependency/ownership/authority/provenance/retention, Phases 3–4, or DF-02. No implementation, baseline, adoption, retirement, merge, or Stage A authorization.
+
+
+## 2026-11-26 — candidate-absent API reverse-consumer slice
+
+DF-02 report §38 records exact source/API/test edges for donor-only action-execution, contextual-prediction, affective-planning and developmental-learning components. Key bounded evidence:
+- Candidate Brain header declares `execute_action`, but frozen candidate has no registered implementation source; donor source provides it and 59 symbol rows (14 consumer paths/59 blobs) locate source/test uses. Donor action-consequence integration suite has four direct call scenarios; candidate lacks its target registration.
+- `predict_with_context`: 19 matches across 4 paths/19 blobs; `plan_with_affect` and `choose_with_developmental_learning`: 42 matches across 5 paths/32 blobs. Donor API/implementation consumers were directly checked.
+- `DevelopmentalLearning`: 476 lexical rows / 10 identifiers / 40 consumer paths / 177 blobs, split source 354, test 111, workflow 11. Donor integration tests directly cover strategy selection, consequences, persistence/restoration and consolidation.
+- Affective state/learning source files have zero lexical symbol matches; recorded as no-symbol-hit, not proof of no dependency. Further type/include/build/manual semantic tracing remains necessary.
+
+This is candidate-vs-donor evidence at frozen refs only. No capability is declared equivalent, selected, adopted, retired or deleted. Phase 2 remains PARTIAL; DF-02 remains OPEN; no implementation/baseline/Stage A/merge authority.
