@@ -109,3 +109,80 @@ No test was run in this slice. Existing API/integration test source and CMake re
 | DF-02 | OPEN |
 
 **Disposition:** `core/cpp/src/brain_restored_api.cpp` remains **OPEN / NO AUTHORITY DECISION**. No source selected, adopted, retired or deleted. This report does not close DF-02, Foundation gates, or authorize Stage A.
+
+ 
+## Builder reverse-consumer and behavioral-test adjudication — 2026-11-28
+
+### Frozen discovery artifact and candidate-present reverse-reference boundary
+
+The original inventory artifact was downloaded again from workflow artifact 14956148301 and SHA-256 verified:
+- ZIP: df02-all-ref-inventory.zip
+- SHA-256: 9902957475c76f4840d1d280c7d4f50537941e9445810afb805132374a328f38
+- Donor path: core/cpp/src/brain_restored_api.cpp
+- 20 exact blobs: candidate 618deb6976eed951eae02b7f0da741e6d730bb0c, donor 7155d4d9c8eef527836fb79bf901aa32ddbae38b, 18 alternates.
+
+The artifact's candidate-symbol reverse-reference scan records 3,616 lexical match rows across 131 consumer paths and 417 consumer blobs:
+- 2,206 source rows;
+- 1,292 test rows;
+- 96 build rows;
+- 20 workflow rows;
+- 2 other rows.
+
+Of those, candidate-tip-present rows are 291: 164 source rows across 42 source paths, 117 test rows across 26 test paths, 5 build rows, 3 workflow rows and 2 other rows. These counts are reverse-reference discovery evidence, not 3,616 semantic calls. Exact content was available for the matched consumer blobs. Candidate-present tests reference 40 distinct donor method names across the 26 test paths. The artifact itself warns that lexical matches may include comments, documentation, tests and non-call identifiers; the following conclusions rely on exact source context and separate CMake/test evidence, not raw match counts.
+
+### Exact current-candidate identity revalidation
+
+The following PR #203 branch files were fetched again and byte-identical to their frozen candidate blobs:
+- core/cpp/src/brain_restored_api.cpp: 618deb6976eed951eae02b7f0da741e6d730bb0c.
+- core/cpp/src/brain.cpp: e9f3758fcc9c0e89b7280ce376db9033d547682d.
+- core/cpp/include/jarvis/core/brain.hpp: 8268ef84e0b361ead536724ba7761904b30ee58f.
+- core/cpp/CMakeLists.txt: c51816888e1bddb7bc00c59e72529524e27a0717.
+
+The current candidate's CognitiveCycle cross-file consumer is blob 3df14c552f2048b0394dc362f7ee7a654a93fb32; its CognitiveRuntime consumer is blob 1a1383cedc42e357dc9efce117328b8d55e30bca. No drift from the frozen candidate was observed in these paths.
+
+### Semantic reverse-consumer findings
+
+1. Candidate CognitiveCycle has real compiled call sites into the Brain API: it records an observation, reads beliefs and causal links, simulates and persists forecasts, reads eligible goals, reflects, reads threat/self-state, plans and assesses decisions. The exact candidate call sites are in cognitive_cycle.cpp lines 35–38, 50–57, 63–69, 79–84 and 142–143. CognitiveRuntime consumes Brain intent and strategy at cognitive_runtime.cpp lines 30–34. These are behavioral call paths, not merely lexical references.
+2. The candidate Brain implementation and the candidate orphan restored-API file are overlapping source owners. Candidate brain.cpp contains 47 unique Brain method names excluding the constructor; candidate brain_restored_api.cpp contains 64. The earlier exact extraction identified 43 shared names. Candidate CMake compiles brain.cpp but excludes brain_restored_api.cpp. The latter must not be added naively: it would duplicate many definitions and is not the compiled candidate authority.
+3. Donor brain.cpp contains eight unique method names excluding the constructor; donor brain_restored_api.cpp contains 68, with zero overlap in the recorded extraction. Donor CMake compiles both files. This is a real source-ownership split, not merely adding an orphan translation unit.
+4. The donor CognitiveCycle is a substantially different pipeline, not just a source split. Exact donor blob f191dd610d6cbe1621756c35e7c13af2054a7266 (777 lines) adds pre-observation retrieval, per-candidate action-outcome retrieval, episodic fallback, sequence-bounded forecast resolution against newly updated beliefs, structured perception, reversible context encoding, intent-guided goal selection, developmental-context transfer and affect-aware planning. Its process_outcome path resolves prediction feedback with optional outcome utility, learns supplied evidence, assimilates goal outcome evidence and returns affective/reflection state.
+5. The donor CognitiveRuntime blob cf00acb6abd52308343f3a0e7016e6173b945603 (226 lines) publishes a current Brain snapshot and affective/attention state into the shared workspace, and has a separate feedback queue and action/feedback processing path. Candidate runtime blob 1a1383cedc42e357dc9efce117328b8d55e30bca (188 lines) only copies the cycle result into workspace and has no separate feedback queue. This is a material integration delta; its stop/drain/fairness risks remain covered by the cognitive-runtime adjudication, not closed here.
+
+### Behavioral-test evidence and reachability
+
+The exact candidate and donor brain_deep_suite.cpp blobs are:
+- Candidate ca8e7012c92822608c3be0539784d281b0578bfd: 181 lines, 68 assert expressions.
+- Donor 1314123ea3b524b24fd6693fc6fb4873b6c550d5: 834 lines, 260 assert expressions.
+
+Both candidate and donor core test CMake register jarvis_brain_deep_suite and its CTest name. Candidate test CMake blob dab0c52ab4dfe15e1e2cbccfa9e6c904abdf54e3 registers it at lines 7–9 and 141. Donor test CMake blob cbfd1fde52fffa6eeac025da2b7ddcb5ab493261 registers it at lines 7–9 and 225, and additionally preserves assert checks in Release with -UNDEBUG at lines 304–313. The candidate CMake does not contain that Release assertion override. This corroborates the separately recorded candidate-vs-donor CMake/test-build difference.
+
+The donor deep suite adds executable behavioral assertions for:
+- attention uncertainty relevance and its causal influence on planning/decision context, including replay reproducibility;
+- forecast learning that changes future predictions, not just recording an error;
+- distinct action-outcome and prediction-feedback affective evidence, avoiding duplicate appraisal;
+- replay reconstruction of learned state;
+- separation of execution reliability from observed task utility;
+- developmental strategy learning from real action consequences, selection impact and persistence across restart/replay;
+- transfer to related contexts, negative consequences, competing actions, deterministic ties, retention of positive and negative evidence, and preservation of negation/polarity boundaries.
+
+These are stronger behavioral specifications than the candidate suite, but no native build or CTest was executed in this Builder run. Assertion count and source content do not establish that the tests pass.
+
+### Corrected capability assessment
+
+The candidate has a compiled cognitive core and real observation/reasoning/planning call paths, but its source ownership is internally split: a large 64-method restored API file is present but uncompiled, while overlapping definitions remain in brain.cpp. The donor consolidates that ownership and adds context-aware perception, memory retrieval, prediction feedback, developmental transfer, affect integration and behavioral tests. Those changes are meaningful progress toward adaptive, context-aware JARVIS behavior. They are not yet evidence of reliable general autonomy: the test suite has not been run, cross-component failure/replay guarantees remain open, and no real-world deployment or held-out task performance is established.
+
+### Updated disposition
+
+| Item | Status |
+|---|---|
+| 20 candidate/donor/alternate blobs and owners | Exact inventory complete for this slice |
+| Candidate-present reverse-reference inventory | Reconciled; semantic classification partial |
+| Candidate/donor Brain TU ownership | Confirmed |
+| Candidate CognitiveCycle and CognitiveRuntime consumer paths | Exact source-inspected |
+| Candidate/donor brain_deep_suite contract and CMake reachability | Exact source-inspected |
+| Donor behavioral suite execution | Not run |
+| All 42 candidate-present source paths / 26 test paths | Not all individually semantically closed |
+| Provenance, branch authority, retention/retirement | Open |
+| DF-02 | OPEN / NO BASELINE OR DONOR DECISION |
+
+No runtime source was changed. No donor was adopted, no baseline was selected, and no gate or Director decision is implied.
