@@ -1,6 +1,6 @@
 # DF-02 Memory Retrieval, Consolidation and Metadata Variant Adjudication — 2026-11-28
 
-**Scope:** frozen candidate/donor `memory.cpp`, `memory.hpp`, memory architecture test and CMake registration. Candidate `caf87986dfea7aca75728818651c8687e9f5faf0`; donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Source inspection plus historical alternate-branch native/sanitizer/TSAN test evidence; no current-candidate CTest.
+**Scope:** frozen candidate/donor `memory.cpp`, `memory.hpp`, memory architecture test and CMake registration. Candidate `caf87986dfea7aca75728818651c8687e9f5faf0`; donor `c1da222e6c94aeb3f2ad000392c21fe4fc81ab25`. Source inspection plus historical CI evidence for quarantine and preserve-corrupt-tail variants; the framed-journal variant remains untested; no current-candidate CTest.
 
 ## Exact blobs
 - Candidate `memory.cpp`: `ba72a897306d4761246d0deab2fbab37c49d372f`; donor `ab42bba1d32d6f48d091787491c72294a4a55bb5`.
@@ -40,3 +40,54 @@ The e737cae7f907696ef787a4e85b0dee3a739d71b1 alternate branch contains the exact
 CTest #9 jarvis_memory_architecture_suite passed in Brain CI #1826 native/sanitizer, JARVIS Brain Tests #975 brain/sanitizer and Brain ThreadSanitizer #957; all five jobs report 71/71. The exact donor memory implementation and donor memory test were executed in that alternate branch. This is not a test result for the frozen candidate memory.cpp ba72a897 or candidate memory.hpp f3662038, and not a current PR #203 CTest result.
 
 The test validates retrieval-kind filtering, exact match, consolidation score and ranking, recurrence, metadata persistence/restore and working-tier transitions. It does not cover the main event journal's raw framing/checksum/record-length integrity, fsync/directory durability, corruption quarantine, concurrent multi-process writers, torn writes, crash injection or journal/metadata divergence. Those risks remain open.
+
+ 
+## Memory journal integrity variants and exact CI provenance — 2026-11-28
+
+Three additional memory.cpp lineages were compared. They are distinct designs and must not be collapsed into a single "journal fix".
+
+### 1. Preserve-corrupt-tail variant
+
+- Branch: fix/memory-journal-preserve-corrupt-tail-20261028.
+- HEAD: 292f406d0ce5bfae85d96e188822212f571750eb.
+- memory.cpp blob: fffb6c0ad6e43cb0b93b873969449e569b3d3f5e.
+- memory_architecture_suite.cpp blob: 5d824f08437916e48749bf539cc94e10c9f44347 (139 lines / 58 assert expressions).
+- It detects that the legacy journal has no record framing/checksum and cannot safely resynchronize after a corrupt middle record. Before truncating to the verified prefix, it copies the complete original file to a collision-avoiding .recovery-backup path. If copying fails, it leaves the original source untouched.
+- The test corrupts the middle record's length field, verifies the active journal retains only the verified prefix, verifies the complete original file is preserved byte-for-byte in the backup, appends a new record, and verifies restart continuity.
+- CTest #9 passed in Brain CI #1532 native/sanitizer, JARVIS Brain Tests #682 brain/sanitizer and Brain ThreadSanitizer #663; all five jobs report 70/70. Exact run IDs: 40710174257, 40710174249, 40710174245. Native Build #907 and Core Verification #1202 also succeeded (run IDs 40710174339 and 40710174287).
+
+### 2. Frozen donor quarantine variant
+
+- Branch: fix/memory-journal-quarantine-20261028.
+- HEAD: 0c1d0b5f01fb448a07e9ca1c091285bc01830845.
+- memory.cpp blob: ab42bba1d32d6f48d091787491c72294a4a55bb5 (the frozen donor source blob).
+- memory_architecture_suite.cpp blob: ecabc6af76c52ed1e4175b151e76fadecae7729d (188 lines / 70 assert expressions; the frozen donor test blob).
+- It preserves the unreadable suffix to a .corrupt file before truncating the active journal to the verified prefix. If quarantine creation/copy/flush fails, it leaves the original journal untouched. The test corrupts the second record's sequence, verifies the first record remains active, verifies the unreadable suffix is quarantined, appends a new record, and verifies restart.
+- CTest #9 passed in Brain CI #1541 native/sanitizer, JARVIS Brain Tests #691 brain/sanitizer and Brain ThreadSanitizer #672; all five jobs report 70/70. Exact run IDs: 40717995663, 40717995648, 40717995783. Native Build #916 and Core Verification #1211 also succeeded (run IDs 40717995627 and 40717995706).
+- This proves the exact frozen donor memory.cpp/test blobs were executed in a historical branch. It does not prove frozen donor parent CMake bc264 was built; the branch used its own CMake variant.
+
+### 3. Framed V2 journal variant — untested
+
+- Branch: fix/memory-journal-framing-20261028.
+- HEAD: b0560edaa72b6d455001be51695731cf988b43b2.
+- memory.cpp blob: 88314ed3a43c765f8a69255ace97afb7df1a6c5e.
+- It adds a V2 magic header, per-record uint64 length, FNV-1a 64-bit checksum, maximum frame size, safe parsing boundaries, legacy unframed read/migration via temporary file and rename, and a fail-closed append guard that refuses to append to a non-V2 existing journal.
+- It skips complete frames with invalid checksum/decoded event while continuing at the declared next boundary; incomplete trailing frames are truncated to the last complete frame.
+- The checksum is FNV-1a 64-bit: useful for accidental corruption detection, not cryptographic integrity/authentication.
+- The branch has no workflow runs or combined status. Its 58-assert memory_architecture_suite blob 5d824 is registered but contains no dedicated assertions for frame magic, length bounds, checksum mismatch, interior-frame corruption recovery, truncated-frame recovery, legacy migration or append refusal. Therefore the core framing behavior is not behaviorally verified.
+
+### Technical comparison and remaining risks
+
+| Property | Preserve-corrupt-tail | Frozen donor quarantine | Framed V2 |
+|---|---|---|---|
+| Record framing/checksum | No | No | Length + FNV64 |
+| Corrupt middle record | Preserve full original backup; truncate active to verified prefix | Quarantine unreadable suffix; truncate active to verified prefix | Skip bad complete frame and continue at next boundary |
+| Incomplete tail | Prefix recovery; original backup retained | Prefix recovery; suffix quarantined | Truncate incomplete trailing frame |
+| Legacy journal | Native format | Native format | Read + attempted atomic V2 migration |
+| Append to legacy file | Existing legacy behavior | Existing legacy behavior | Fail closed if V2 migration did not produce V2 file |
+| Dedicated corruption/framing tests | Middle-record invalid-length test | Middle-record invalid-sequence test | No dedicated framing/corruption test found |
+| Historical CI | 70/70 in five jobs | 70/70 in five jobs | No runs/status |
+
+The framed V2 design is directionally stronger because it supplies explicit resynchronization boundaries and accidental-corruption detection. It is not ready for adoption: FNV64 is not cryptographic, the test suite does not exercise framing, incomplete-tail and migration failure paths, and no CI evidence exists. It also lacks fsync/fdatasync and parent-directory durability guarantees; a successful stream flush/rename is not proof of power-loss durability. The preserve-corrupt-tail and quarantine variants have actual corruption tests and CI, but remain legacy unframed formats.
+
+No implementation was copied or adopted. The candidate remains the frozen candidate. These branches are evidence-only; baseline, retention and adoption remain Director decisions.
