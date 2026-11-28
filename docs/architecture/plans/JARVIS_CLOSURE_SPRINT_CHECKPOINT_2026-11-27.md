@@ -310,3 +310,11 @@ Two new bounded source-inspection reports were committed and fetched back for co
 
 - Report `DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md`, fetched back SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
 - Brain self-test has two tautological checks; phase-9 verify callback doesn't validate health; self-heal ignores recovery append failure and callbacks lack timeout/isolation. Test inspected, not run.
+
+
+## Immediate continuation — cognitive runtime cohort (2026-11-28)
+
+- Added `docs/architecture/reports/DF02_COGNITIVE_RUNTIME_VARIANT_ADJUDICATION_2026-11-28.md`; fetched back and SHA-verified `e63125c88c747790549ab1c476aa22f94181426c`.
+- Candidate runtime is input-triggered queue/cycle processing; donor adds providers, action adapter/authorization and selected-plan execution, feedback queue, sequence-bound outcomes, goal progression, utility learning and persistence. Donor test contract substantially expands beyond candidate's cycle smoke test.
+- Exact candidate/donor files and test/CMake registration inspected; no build or tests executed.
+- Risks/open: feedback-priority starvation, callbacks that block worker shutdown, missing cancellation/deadline, shutdown discard metrics, workspace mixed-time snapshots, plan/action mapping edge cases, and feedback trust. Path remains OPEN; no adoption or code changes.
