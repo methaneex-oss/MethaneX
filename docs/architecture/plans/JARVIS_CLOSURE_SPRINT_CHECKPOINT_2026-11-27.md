@@ -416,3 +416,46 @@ This is a current evidence checkpoint, not completion or acceptance. The 159-pat
 ## Updated continuation point
 
 The next bounded task is the remaining highest-value unresolved cohort from the exact queue, prioritizing engineering task-ledger/message-bus reverse-consumer and authority/retention closure, then lower-dispersion paths. The 159-path semantic/authority ledger remains incomplete; Phase 2 is partial and Phases 3–4 are not complete. PR #203 remains OPEN/DRAFT/UNMERGED with no runtime changes, merge, rebase, retarget, adoption, retirement, Gate A/B, Stage A or acceptance.
+
+ 
+## Continuation run — Builder self-review and task-ledger deep inspection (2026-11-28)
+
+### Governance revalidation for this run
+- Repository governance freshly fetched and read from the active PR #203 branch: docs/governance/JARVIS_PROJECT_GOVERNANCE_AND_BUILDER_RULES.md, blob SHA f5827c552f36f4647339b3f8dfb38956d146c570.
+- Applied Rules 2.1–2.7 (continuity, mechanisms over scripted behavior, JARVIS not a chatbot, evidence language); 4.1–4.3 (authority hierarchy and no donor promotion); 5.1–5.6 (system dataflow and capability evidence); 6.3–6.5 (persistent, held-out learning evidence); 7.1–7.3 (human/MCU comparative discipline); 8.1 (implementation gate); 17.1–17.4 (role separation); 18.1–18.3 (handoff order); 19.1–19.4 (scope control); 20.1–20.3 (completion evidence); 22.1–22.7 (fresh revalidation and independent role obligations).
+- EBT-01 was not discoverable as a standalone file in docs/governance or repository code search during this run. The Director-provided EBT-01 operating principles were applied: independent thinking, ownership, scope discipline, evidence-based communication, professional disagreement and autonomous correction. No repository path or SHA is invented for EBT-01.
+- Authorized scope remains additive/reconciliatory audit evidence and checks only. Runtime/source implementation, donor adoption/retirement/deletion, baseline selection, merge/rebase/retarget/cherry-pick, training, deployment, Stage A, Gate A/B acceptance and Director decisions remain excluded.
+
+### Exact live repository state after this run's edits
+- Repository: methaneex-oss/MethaneX.
+- PR #203: OPEN, DRAFT, UNMERGED; mergeable=true at latest metadata read. Mergeability metadata is not acceptance or merge authorization.
+- Branch: docs/df02-option-a-full-semantic-adjudication-20261125.
+- Base: docs/pr192-independent-findings-response-20261125 at a56526ae5896dfd06293ccab64289fd75507dda5.
+- Latest HEAD: 34af3055705f68a3d816cdceb0bd9ff7f02639d5.
+- PR changed files: 58, all documentation paths. The two commits added in this continuation modify only the existing engineering message-bus/task-ledger audit report.
+- PR reviews: zero submitted; inline review threads: zero.
+- Combined commit statuses: no status entries.
+- Workflow run #2857 on parent HEAD 29dee5c2f5dcb1d0d7e6292b34013dc44a0c1ed5 succeeded. Its only substantive steps were Configure and Build; it did not run CTest or behavioral tests.
+- Workflow run #2859 was triggered for HEAD 34af3055705f68a3d816cdceb0bd9ff7f02639d5 and was IN_PROGRESS at the last read. Re-fetch before relying on its outcome.
+- The previous checkpoint's mergeable=false observation was stale/unstable; current live metadata reads now report mergeable=true. No remediation was performed.
+
+### Builder work performed and self-review corrections
+- Re-fetched candidate PR #192 and donor PR #97 exact blobs for engineering message_bus.hpp/.cpp, agent.hpp, coordinator.cpp and CMakeLists.txt.
+- Re-fetched donor task_ledger.hpp/.cpp, task_ledger_suite.cpp, coordinator.hpp and agent.cpp; exact blob SHAs and source anchors are recorded in DF02_ENGINEERING_MESSAGE_BUS_TASK_LEDGER_AUTHORITY_ADJUDICATION_2026-11-28.md.
+- Self-review found two report-quality defects and corrected them:
+  1. The agent.hpp table wording incorrectly implied a current-branch metadata-only difference. Current PR #203 agent.hpp is byte-identical to frozen candidate blob b71c525a97790f460535713d85a705db086c55ac.
+  2. The prior 404 applied only to a guessed message_bus_suite.cpp path. Donor task_ledger_suite.cpp exists, is registered in donor CMake, and was fetched/inspected. Its exact blob is e90c062261c95ff99d4b1bdcb55ce7bfad0512ec.
+- The deeper donor ledger review identified seven source-level gaps: unchecked integer narrowing in parse_integer (lines 133–140); incomplete immutable task-field comparison during replay (284–294); no legal transition validation during replay (284–294); stale prior-attempt evidence retained across requeue (446–464); no non-empty result revision or artifact/digest validation in completion (385–404); stream flush without fsync (304–309); and no checksum/authentication of complete journal records. These are static observations, not demonstrated exploits or executed failures.
+- Updated report was committed and fetched back; latest report blob SHA 708259ddcccea6f7ddf492b7ad837e7d480cabc2. Fetch-back assertions confirmed the corrected API identity, test inventory, findings and exact line anchors are present.
+- No runtime/source code was changed. The donor defects were recorded, not fixed, because implementation is not authorized and donor adoption is not authorized.
+
+### Self-review outcome and remaining Builder work
+- The engineering message-bus/task-ledger report is internally corrected for the identified inaccuracies and has exact source anchors. This does not close the cohort: path authority, historical blob dispositions, reverse consumers, retention/retirement, and native behavioral execution remain open.
+- No independent reviewer or fresh-reader request has yet been created. Per the Director's instruction, create those repository handoffs only after all Builder-resolvable work has been completed and the Builder self-review is clear across the full authorized scope.
+- Full DF-02 159-path semantic/authority ledger remains incomplete. Phase 2 remains PARTIAL; Phase 3 and Phase 4 remain NOT COMPLETE; DF-02 remains OPEN.
+- DF-09 remains BLOCKED pending a genuine blind fresh-reader CLEAR against frozen PR #192 SHA caf87986dfea7aca75728818651c8687e9f5faf0. The current connector exposes no workflow-dispatch operation.
+- DF-11 remains BLOCKED under accepted governance. DF-12 remains reserved for Project Director.
+- The five whole-scope final review passes have not been completed. The above is one bounded Builder self-review/correction cycle, not a claim that the full 159-path audit is clean.
+
+### Next bounded Builder task
+Continue exact semantic/authority adjudication from the 159-path inventory. Do not duplicate existing focused reports. Prioritize remaining high-dispersion cohorts by exact historical blob grouping, source/API lineage, reverse-consumer context, production/test/workflow reachability, provenance, authority and retention. In parallel, re-fetch and record the completion state of workflow run #2859. Do not hand off to independent roles until the complete Builder-resolvable scope and full self-review are finished.
