@@ -1223,3 +1223,12 @@ A separate scalar-feedback path directly mutates EvolutionModel parameters witho
 Report: [DF02 Self-Test Diagnostic Validity and Healing-Transaction Adjudication](DF02_SELF_TEST_DIAGNOSTIC_AND_HEALING_TRANSACTION_ADJUDICATION_2026-11-27.md), verified SHA `2228b492b75ecf5927e66e6e3ea5f6c013fa2dc9`.
 
 Brain self-test has two tautological checks (journal-readable, goals-readable) and only six shallow invariants. Phase-9 repair verifier merely checks component name and a Boolean, not health; self-heal ignores recovery-event append failure and callbacks are in-process/unbounded. Test source inspected, not run.
+
+
+## 14. Cognitive runtime variant adjudication (2026-11-28)
+
+Report: [DF02 Cognitive Runtime Variant Adjudication](DF02_COGNITIVE_RUNTIME_VARIANT_ADJUDICATION_2026-11-28.md), fetched-back SHA `e63125c88c747790549ab1c476aa22f94181426c`.
+
+Candidate runtime is a submitted-cycle queue/worker with priority input, bounded result queue and workspace publication. Donor adds runtime perception providers, selected-plan action adapters/authorization/verification, asynchronous prediction/evidence/goal feedback, sequence-bound prediction outcomes, signed utility, feedback metrics, and workspace refresh from current brain state. Donor's tests exercise these mechanisms and persistence, whereas candidate's runtime suite is a 32-cycle queue smoke contract and lacks donor's goal-feedback test. CMake test registrations compared; no build/CTest executed.
+
+Open risks include feedback starvation of input work, synchronous callback hangs/no cancellation, discarded-queue shutdown accounting, non-atomic workspace snapshot assembly, repeated/mismatched plan-action mapping, and broader feedback provenance. No implementation selected or path closed.
