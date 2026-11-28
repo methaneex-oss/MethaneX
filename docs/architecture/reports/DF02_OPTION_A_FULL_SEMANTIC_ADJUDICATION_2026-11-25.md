@@ -1276,3 +1276,8 @@ Report: [DF02 Brain.cpp Exact Variant and Translation-Unit Ownership Adjudicatio
 ## 22. Brain.hpp 21-blob API/authority adjudication and correction (2026-11-28)
 
 Report: [DF02 Brain.hpp Exact Variant and API Authority Adjudication](DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md), verified SHA `4fd4762d172020b5ba791055479fdb843ae5095e`. Exact 21 header blobs/212 tip-presence rows inventoried. Candidate header exposes only const Memory accessor; donor adds mutable `Memory& memory() noexcept` alongside const accessor. This reverses the earlier report wording and expands direct journal/store mutation authority. The restored Brain API report was corrected. Consumer/integrity impact remains high-priority OPEN.
+
+
+## 23. Cognitive-runtime feedback/action variant adjudication (2026-11-28)
+
+Report: [DF02 Cognitive Runtime Feedback/Action Variant Adjudication](DF02_COGNITIVE_RUNTIME_FEEDBACK_ACTION_VARIANT_ADJUDICATION_2026-11-28.md), fetched-back blob SHA `54108cd05bec044050be5d6e6f55a748ddae0cf2`. Exact candidate/donor runtime header/source/test/CMake blobs compared. Donor adds sequence-bound prediction/goal feedback, perception-provider installation, selected-plan action execution, adapter authorization/verification/rollback callbacks, action evidence, expanded metrics and workspace updates; runtime suite expands from 87 to 356 lines plus an 84-line goal-feedback suite. Risks recorded: feedback starvation, priority starvation, blocking in-process callbacks, start-thread failure state, shutdown-feedback loss, heuristic executor reliability, mixed workspace snapshots and missing fault injection. No native tests run; historical variants, authority, reverse consumers and DF-02 remain open.
