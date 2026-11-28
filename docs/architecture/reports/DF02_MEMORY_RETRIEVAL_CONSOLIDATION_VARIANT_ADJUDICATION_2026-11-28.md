@@ -162,3 +162,12 @@ A final numeric-input review found a concrete correctness defect in both frozen 
 The test suites do not include NaN or infinity salience/confidence inputs. The metadata reader rejects non-finite persisted metadata fields, but that does not protect event-derived defaults: NaN can enter through Event.data, be written to the journal, and be re-derived after restart.
 
 Required future correction: reject or normalize non-finite event numeric fields at append and replay boundaries; ensure all MemoryRecord scoring inputs and computed scores are finite before sorting; use a comparator with a total, strict weak ordering; add NaN, +Inf, -Inf and corrupt-persisted-event tests. No runtime change was authorized or made. This is a real correctness gap in both candidate and donor, not merely a donor-specific difference.
+
+ 
+## Evidence reliability versus operational reliability — exact behavioral delta
+
+The frozen candidate memory test source is blob 2a9eb061427c622260304d09f45089e1debef294 (61 lines / 27 assert expressions) and contains no evidence_reliability case. The frozen donor test source is blob ecabc6af76c52ed1e4175b151e76fadecae7729d (188 lines / 70 assertions).
+
+At donor test lines 102–114, an action_outcome event deliberately carries operational reliability=0.1 and evidence_reliability=0.9. The donor Memory::default_confidence prioritizes evidence_reliability, then confidence, then reliability, so the resulting MemoryRecord confidence must exceed 0.8. The frozen candidate Memory::default_confidence only reads reliability and would assign 0.1 for the same event. This is a concrete semantic distinction: failure to execute reliably is not the same as low reliability of the observed consequence evidence.
+
+The donor test passed CTest #9 in the five quarantine-branch CI jobs (Brain CI #1541 native/sanitizer, JARVIS Brain Tests #691 brain/sanitizer, Brain ThreadSanitizer #672). This is exact donor memory/test source evidence, not a current candidate pass. The candidate's 27-assert suite does not exercise this distinction. No source was changed.
