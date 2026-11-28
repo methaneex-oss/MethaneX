@@ -668,3 +668,36 @@ The 26 CTest names absent from candidate registration map to 25 unique source fi
 
 ### Builder self-review status
 The source/blob attribution was rechecked after the initial CMake wording. The frozen donor CMake and alternate e737 CMake are now explicitly distinguished; the memory persistence test is correctly attributed to its alternate blob, not the donor blob. The 71-test matrix and all report blob references are durable. Full 159-path semantic/authority closure and five full-scope review passes remain incomplete; independent reviewer/fresh-reader requests remain deferred.
+
+ 
+## Continuation — code ownership/authority gap and cross-domain test evidence (2026-11-28)
+
+### Per-path owner / authority / retention evidence
+Exact contents lookups for CODEOWNERS, .github/CODEOWNERS, OWNERS and .github/OWNERS returned 404 on both the active PR #203 branch and its base branch. The active governance file defines Director/Builder/Reviewer/Tester roles but does not assign per-path subsystem maintainers.
+- The 798 path/blob ownership rows and 213 branch-tip inventory establish provenance and branch reachability, not human code ownership.
+- No per-path owner is evidenced; do not infer owner from branch name, tip count or commit author.
+- No per-path retention rationale, archive owner, deprecation decision or deletion authority is recorded.
+- Baseline selection, donor adoption/retirement/deletion and retention decisions remain Project Director authority. The Builder must not invent owners or prune historical branches.
+- All-ref inventory report with this explicit gap: blob 5ab4bde55a000f9d061ee95202b5aa61c8461051.
+
+### Additional source/test evidence reports
+- Core library CMake lineage/build: blob 5d08514fe317230f2fbc8d246d272c4e1565e821.
+- Core test CMake and 71-test matrix: blob 55acf9645e78f8a679c5fe16bafdf8c93659d7af.
+- Developmental learning/context transfer: blob ab924c73f86984e37691d71ea2823aa189b3020e.
+- Memory-learning-evolution persistence: blob 5f92f367300402f965a6d1f02d3d5e9e4415c987.
+- Affective state/appraisal learning: blob 58aa96d870aa9c6d41c68828209a3b78d8d9137e.
+- Attention salience/feedback: blob b7cc9174c3a8acf97c318c5ad310a18a17188c4d.
+- Restored Brain API/deep behavior: blob d1b875ebcbb5ec8762cd66a05bbcaf791489599b.
+
+The 71-test matrix confirms all historical e737 tests passed; the 26 tests absent from candidate registration include runtime learning, memory/evolution persistence, affective/attention learning, developmental environment, goal feedback and action consequence suites. The exact test source variant is recorded per report; 24 candidate-absent test source blobs match frozen donor, one memory/evolution test uses an alternate blob, and DLT-002 train/verify share a source file. These historical passes are not current PR #203 tests.
+
+### Latest live PR snapshot before this checkpoint update
+- PR #203: OPEN, DRAFT, UNMERGED, mergeable=true.
+- Branch docs/df02-option-a-full-semantic-adjudication-20261125; base docs/pr192-independent-findings-response-20261125.
+- HEAD immediately before this checkpoint update: ea7203c5f35e7de7d1fc9329bba8c46ef16a7eac.
+- 59 changed files, 355 commits; no reviews or inline review threads; combined status has no entries.
+- Native Brain Build #2891 was IN_PROGRESS. No current-branch CTest result is claimed.
+- The PR description has not yet been refreshed with the latest code-owner report and the latest report blob list; refresh after this checkpoint commit.
+
+### Builder disposition
+The Builder has reconciled several high-value source/test/build cohorts and their historical CI attribution, but the complete 159-path semantic/authority ledger is still OPEN. Per-path human ownership and retention are not evidenced by repository metadata; these require Director decisions after the Builder's technical findings are complete. Do not create Independent Reviewer or Blind Fresh Tester requests until the Builder-resolvable corpus and full self-review are clear.
