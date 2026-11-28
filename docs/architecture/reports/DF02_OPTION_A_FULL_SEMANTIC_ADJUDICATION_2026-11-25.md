@@ -1266,3 +1266,8 @@ Report: [DF02 Core C++ Library-CMake Variant Adjudication](DF02_CORE_CPP_LIBRARY
 ## 20. Evolution-Brain integration test 24-blob adjudication (2026-11-28)
 
 Report: [DF02 Evolution-Brain Integration Test Variant Adjudication](DF02_EVOLUTION_BRAIN_INTEGRATION_TEST_VARIANT_ADJUDICATION_2026-11-28.md), verified SHA `adf81d1f1da99c74554093e4ad8db1566faf66d1`. Exact 24 test blobs and tip-owner counts inventoried. Frozen candidate suite is 46 lines/7 asserts; donor is 298 lines/97 asserts. Donor adds evaluation-before-adoption, legacy replay/rollback protection, prediction feedback, failed-gate cases, manual rollback, canary/restart persistence and identity checks. The isolation helper uses a simple shell fixture, not hostile evaluator verification; fixed journal paths and crash/concurrency coverage remain open. Source-only; no tests executed.
+
+
+## 21. Brain.cpp 35-blob exact variant adjudication (2026-11-28)
+
+Report: [DF02 Brain.cpp Exact Variant and Translation-Unit Ownership Adjudication](DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md), verified SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`. All 35 blobs and tip counts inventoried; regex method-surface grouping reconciles prior counts by excluding constructor. Candidate Brain.cpp has 47 non-constructor method names; donor has eight. Candidate CMake leaves restored API/action/prediction/affective/developmental TUs unregistered; donor splits seven TUs. Reverse consumer context, AST/signatures, historical semantic/authority/retention and build remain open.
