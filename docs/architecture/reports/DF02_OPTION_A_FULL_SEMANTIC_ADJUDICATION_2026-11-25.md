@@ -1271,3 +1271,8 @@ Report: [DF02 Evolution-Brain Integration Test Variant Adjudication](DF02_EVOLUT
 ## 21. Brain.cpp 35-blob exact variant adjudication (2026-11-28)
 
 Report: [DF02 Brain.cpp Exact Variant and Translation-Unit Ownership Adjudication](DF02_BRAIN_CPP_35_BLOB_VARIANT_ADJUDICATION_2026-11-28.md), verified SHA `b4c2401fa950d9b7e24bff32441347fbb39858d7`. All 35 blobs and tip counts inventoried; regex method-surface grouping reconciles prior counts by excluding constructor. Candidate Brain.cpp has 47 non-constructor method names; donor has eight. Candidate CMake leaves restored API/action/prediction/affective/developmental TUs unregistered; donor splits seven TUs. Reverse consumer context, AST/signatures, historical semantic/authority/retention and build remain open.
+
+
+## 22. Brain.hpp 21-blob API/authority adjudication and correction (2026-11-28)
+
+Report: [DF02 Brain.hpp Exact Variant and API Authority Adjudication](DF02_BRAIN_HPP_21_BLOB_VARIANT_AND_MEMORY_AUTHORITY_ADJUDICATION_2026-11-28.md), verified SHA `4fd4762d172020b5ba791055479fdb843ae5095e`. Exact 21 header blobs/212 tip-presence rows inventoried. Candidate header exposes only const Memory accessor; donor adds mutable `Memory& memory() noexcept` alongside const accessor. This reverses the earlier report wording and expands direct journal/store mutation authority. The restored Brain API report was corrected. Consumer/integrity impact remains high-priority OPEN.
