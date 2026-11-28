@@ -237,3 +237,19 @@ The donor coordinator trusts result.accepted and passes result.revision and resu
 Capability verdict: the engineering subproject contains useful primitives—bounded message transport, operator console, task state ledger, eligibility/ranking and synchronous execution boundary—but it is not yet a real autonomous multi-agent workforce. There is no concrete agent implementation in this target, no message-bus-to-agent execution adapter, no durable message queue, and no outcome-driven agent selection. Under the MCU JARVIS benchmark, this is a control-plane foundation, not a capable adaptive agent workforce. Do not describe it as a working autonomous multi-agent system.
 
 No runtime source was changed. The integration gaps and failure-recording defect remain open for future authorized implementation.
+
+ 
+## Message-bus accepted-versus-processed semantics — 2026-11-28
+
+The donor message_bus.cpp blob 94700db67f43c8bdb0bcc774f1fb0464f5bff81c lines 64–115 marks a message accepted after the recipient handler returns true. AgentCommunicationEndpoint::receive at line 126 returns true once it appends the message to an in-memory pending_messages deque. The bus then stores the message in accepted_messages_ and acknowledges same-ID retries without redelivery (lines 101–115). AgentCommunicationEndpoint::drain at line 127 removes all pending messages and returns them; there is no acknowledgement, negative acknowledgement, requeue or durable processing receipt.
+
+Concrete loss scenario:
+1. Sender sends message ID M; endpoint receive enqueues M and returns true.
+2. Bus stores M in accepted_messages_ and reports "message delivered".
+3. Endpoint is destroyed or drain() removes M and the consumer crashes before processing it.
+4. Sender retries M to a re-registered endpoint with the same run/workspace/agent identity.
+5. The bus finds M in accepted_messages_ and returns "duplicate retry acknowledged without redelivery"; the new endpoint never receives M.
+
+Therefore the bus provides bounded deduplication of successful in-memory enqueue, not durable delivery, at-least-once processing or exactly-once execution. The 65,536-entry FIFO eventually evicts old IDs, after which an old retry may be delivered again. There is no durable queue, ack-after-processing, retry lease, dead-letter path or recovery after process restart. The operator console's receive() drains the endpoint queue without an acknowledgement contract.
+
+Required future semantics must be named precisely: either durable at-least-once delivery with consumer acknowledgements/idempotent handlers, or explicitly best-effort in-memory enqueue with a documented loss window. Do not describe the current result as verified task execution or reliable message processing.
