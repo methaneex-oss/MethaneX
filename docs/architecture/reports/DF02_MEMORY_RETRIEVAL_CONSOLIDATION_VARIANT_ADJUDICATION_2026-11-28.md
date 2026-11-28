@@ -128,3 +128,23 @@ A final test-contract review corrected the interpretation of the "rebuild learne
 Capability implication: event recall survives sidecar loss, but learned memory organization does not. This may be acceptable as a documented fallback only if the system surfaces degraded memory state and the user/agent knows that semantic/episodic organization and salience/ confidence/consolidation have been lost. Current API/test contract does not surface that distinction. A future authorized fix needs either journal-backed learning metadata, validated replay/reconstruction rules, or explicit degraded-state reporting plus recovery tooling; corrupt-sidecar fault injection is required.
 
 No runtime change was made. This is a technical capability gap for future Builder implementation authorization and remains open.
+
+ 
+## Serialization portability and multi-writer integrity — 2026-11-28
+
+The donor memory format is a native binary serialization, not a defined portable wire/storage schema:
+- memory.cpp blob ab42bba1... lines 22–23 writes string lengths as raw uint64_t bytes.
+- Lines 24–25 writes Scalar tags, bool, int64_t and double using native object representation.
+- Lines 26–27 writes event sequence, timestamp_ns and attribute count as raw native integers.
+- Lines 28–29 writes metadata sequence, tier and floating-point fields the same way.
+- The metadata magic values are raw uint64_t constants. The V2 journal branch similarly writes its magic, frame length and FNV64 checksum as raw uint64_t values.
+
+There is no explicit byte-order marker, canonical endian conversion, floating-point encoding contract, bool encoding contract, or schema/ABI portability test. Same-host restart passes do not establish safe migration between architectures/toolchains. This matters if the memory journal is expected to move between device/server builds or survive long-lived upgrades.
+
+Multi-writer integrity is also not established:
+- memory.hpp blob 5401d5bd... exposes an instance-local shared_mutex; it does not provide a path-scoped or OS-level file lock.
+- Each Memory instance can independently open the same journal in append mode. The per-instance mutex does not serialize two Memory objects or separate processes sharing a path.
+- persist_metadata_snapshot uses a fixed .tmp path and rename; concurrent instances can collide on that temp file.
+- No concurrent-writer, two-instance same-path, cross-process, or crash-during-snapshot test exists in the inspected suite.
+
+The current tests construct/reconstruct Memory sequentially, not concurrently. Required future checks: define a versioned portable encoding, add cross-architecture golden-file tests, use a single-writer/path-lock or transactional append design, unique temp names, and inject process interruption around journal/metadata writes and renames. No runtime change was authorized or made.
