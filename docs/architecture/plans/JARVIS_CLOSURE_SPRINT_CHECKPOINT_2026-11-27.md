@@ -596,3 +596,23 @@ The Builder rechecked the donor-only action-consequence test by basename after t
 - 59 changed files, 341 commits; no reviews or inline review threads; combined status has no entries.
 - Native Brain Build #2878 was IN_PROGRESS at last read. It is a docs-only head build; no current-branch CTest result is claimed.
 - Latest core test-CMake report blob: 5557728701e952a226b0d2973cdc4de624c8b7f2.
+
+ 
+## Continuation — full 71-test matrix and candidate/donor coverage delta (2026-11-28)
+
+The CMake report now contains a full source-to-test mapping for all 71 CTest entries from the historical e737cae7 branch:
+- Report: docs/architecture/reports/DF02_CORE_CPP_TEST_CMAKE_VARIANT_ADJUDICATION_2026-11-28.md
+- Latest blob SHA: 6b981de5867e889dcd368e99ad492da710ddf88a.
+- Matrix fetch-back validation: 71 rows, 71 Passed, 45 candidate CTest registrations, 26 donor/alternate-only registrations.
+- The 71st test is reconciled: test #1 jarvis_affective_planning_suite comes from the donor parent-level include of tests/affective_planning.cmake; the remaining 70 are from tests/CMakeLists.
+- Candidate full graph: 45 executables / 45 CTest registrations. Donor/alternate full graph: 72 executables / 71 CTest registrations (71/70 from tests subdirectory plus one parent-level target/test).
+- The 26 donor/alternate-only CTest suites include attention learning, runtime learning integration, memory-learning-evolution persistence, developmental learning, affective learning/decision, goal feedback, developmental brain/world integration, action consequence integration, and DLT trial/persistence. All passed in the historical e737 alternate CI, but they are absent from candidate CMake. This is a behavioral-evidence delta, not automatic authority to adopt.
+- The 45 common test names also passed in the e737 alternate CI. This does not prove the frozen candidate's own source/test blobs pass, because the alternate branch includes divergent donor implementations and test source variants.
+- Exact CI source: Brain CI #1826 native-brain job 123987534801; all 71 tests Passed. The same 71/71 summary was independently confirmed in the sanitizer, JARVIS Brain Tests brain/sanitizer, and TSAN jobs.
+
+Latest PR #203 state before this checkpoint update:
+- HEAD immediately before this checkpoint update: d3d6c696d866d5457e753e8b0ef50909df3a029f.
+- PR remains OPEN/DRAFT/UNMERGED, mergeable=true; 59 changed files, 343 commits; no reviews or inline review threads; combined status has no entries.
+- Native Brain Build #2880 was IN_PROGRESS at last read. It is a docs-only head build; no current-branch CTest result is claimed.
+
+The full test matrix is a real improvement in behavioral evidence and build-graph reconciliation. The broader 40-blob parent-CMake inclusion family and 159-path semantic/authority closure remain open.
