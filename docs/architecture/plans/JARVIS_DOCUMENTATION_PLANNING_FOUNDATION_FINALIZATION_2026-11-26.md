@@ -104,3 +104,8 @@ A further candidate-absent developmental-learning production/header and donor in
 ## Builder evidence update — 2026-11-28 (not acceptance)
 
 A further 40-blob C++ test-CMake cohort was fetched and source-feature reconciled. Candidate target/CTest graph is 45/45; donor 71/70; Release assertion preservation exists in 16 historical variants and the donor but not the frozen candidate. The report distinguishes aliases and workflow/manual targets from missing routine CTest coverage. No native build or tests were executed; semantic/authority closure remains open.
+
+
+## Builder evidence update — 2026-11-28 (not acceptance)
+
+The core library-CMake historical cohort (22 exact blobs) was inventoried. Candidate source list has 57 translation units; donor has 64, including seven donor-only Brain/affective/developmental TUs. Historical source/options variants remain partially adjudicated, and native build/test execution was not available. This is evidence advancement, not Foundation acceptance.
